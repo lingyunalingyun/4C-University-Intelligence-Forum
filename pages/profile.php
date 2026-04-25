@@ -80,7 +80,11 @@ include '../includes/header.php';
       <?php if ($profile['bio']): ?>
         <div style="font-size:14px;color:var(--txt-2);margin-bottom:8px"><?= h($profile['bio']) ?></div>
       <?php endif; ?>
-      <div style="font-size:12px;color:var(--txt-3)">注册于 <?= date('Y-m-d', strtotime($profile['created_at'])) ?></div>
+      <div style="font-size:12px;color:var(--txt-3)">注册于 <?= date('Y-m-d', strtotime($profile['created_at'])) ?>
+        <?php if ($profile['scid']): ?>
+          &nbsp;·&nbsp; <span style="font-family:monospace;letter-spacing:1px;color:var(--txt-3)">SCID: <?= h($profile['scid']) ?></span>
+        <?php endif; ?>
+      </div>
     </div>
 
     <div style="display:flex;gap:24px;text-align:center;align-items:center">

@@ -2,6 +2,7 @@
 // 用户表
 $conn->query("CREATE TABLE IF NOT EXISTS users (
     id              INT AUTO_INCREMENT PRIMARY KEY,
+    scid            VARCHAR(8)   DEFAULT NULL UNIQUE,
     username        VARCHAR(50)  NOT NULL UNIQUE,
     email           VARCHAR(100) NOT NULL UNIQUE,
     password        VARCHAR(255) NOT NULL,
@@ -22,6 +23,23 @@ $conn->query("CREATE TABLE IF NOT EXISTS users (
     banned_by       INT          DEFAULT NULL,
     created_at      DATETIME     DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+
+// 老库兼容：补 scid 列
+$conn->query("ALTER TABLE users ADD COLUMN IF NOT EXISTS scid VARCHAR(8) DEFAULT NULL UNIQUE");
+
+// 为没有 scid 的用户自动生成
+$no_scid = $conn->query("SELECT id FROM users WHERE scid IS NULL");
+if ($no_scid) {
+    $chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    while ($row = $no_scid->fetch_assoc()) {
+        do {
+            $code = '';
+            for ($i = 0; $i < 8; $i++) $code .= $chars[random_int(0, strlen($chars)-1)];
+            $check = $conn->query("SELECT id FROM users WHERE scid='$code'");
+        } while ($check && $check->num_rows > 0);
+        $conn->query("UPDATE users SET scid='$code' WHERE id={$row['id']}");
+    }
+}
 
 // 板块表（parent_id=0 为一级分区）
 $conn->query("CREATE TABLE IF NOT EXISTS sections (

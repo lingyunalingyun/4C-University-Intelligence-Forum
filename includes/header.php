@@ -13,8 +13,11 @@ if ($is_logged_in && isset($conn)) {
 
     // 封禁检测（到期自动解封）
     $_SESSION['is_banned'] = 0;
-    $ban_res = $conn->query("SELECT is_banned,ban_reason,ban_until FROM users WHERE id=$uid_h");
+    $ban_res = $conn->query("SELECT is_banned,ban_reason,ban_until,role FROM users WHERE id=$uid_h");
     if ($ban_res && $ban_row = $ban_res->fetch_assoc()) {
+        // 同步角色（避免改数据库后需要重新登录）
+        $_SESSION['role'] = $ban_row['role'];
+        $current_role     = $ban_row['role'];
         if (!empty($ban_row['is_banned'])) {
             $until = $ban_row['ban_until'];
             if ($until !== null && strtotime($until) <= time()) {

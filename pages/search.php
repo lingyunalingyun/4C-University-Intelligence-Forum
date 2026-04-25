@@ -14,10 +14,11 @@ $total = 0;
 if ($q !== '') {
     $safe = $conn->real_escape_string($q);
     if ($type === 'user') {
-        $total_r = $conn->query("SELECT COUNT(*) as cnt FROM users WHERE username LIKE '%$safe%' OR school LIKE '%$safe%'");
+        $scid_cond = "username LIKE '%$safe%' OR school LIKE '%$safe%' OR scid = '$safe'";
+        $total_r = $conn->query("SELECT COUNT(*) as cnt FROM users WHERE $scid_cond");
         $total   = (int)($total_r ? $total_r->fetch_assoc()['cnt'] : 0);
         $offset  = ($page-1)*$per;
-        $ur = $conn->query("SELECT id,username,avatar,school,exp,role FROM users WHERE username LIKE '%$safe%' OR school LIKE '%$safe%' ORDER BY exp DESC LIMIT $per OFFSET $offset");
+        $ur = $conn->query("SELECT id,username,avatar,school,exp,role,scid FROM users WHERE $scid_cond ORDER BY (scid='$safe') DESC, exp DESC LIMIT $per OFFSET $offset");
         if ($ur) while ($r = $ur->fetch_assoc()) $users[] = $r;
     } else {
         $total_r = $conn->query("SELECT COUNT(*) as cnt FROM posts p WHERE p.status='published' AND (p.title LIKE '%$safe%' OR p.content LIKE '%$safe%' OR p.tags LIKE '%$safe%')");
@@ -81,6 +82,7 @@ include '../includes/header.php';
             <a href="profile.php?id=<?= $u['id'] ?>" style="font-weight:600;color:var(--txt)"><?= h($u['username']) ?></a>
             <?= level_badge($u['exp']) ?> <?= role_badge($u['role']) ?>
             <?php if ($u['school']): ?><div style="font-size:12px;color:var(--txt-2)"><?= h($u['school']) ?></div><?php endif; ?>
+            <?php if ($u['scid']): ?><div style="font-size:11px;color:var(--txt-3);font-family:monospace;letter-spacing:1px">SCID: <?= h($u['scid']) ?></div><?php endif; ?>
           </div>
           <a href="profile.php?id=<?= $u['id'] ?>" class="btn btn-outline btn-sm">查看主页</a>
         </div>

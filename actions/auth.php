@@ -74,8 +74,17 @@ if ($action === 'register') {
 
     $hashed = password_hash($password, PASSWORD_DEFAULT);
     $verified = EMAIL_VERIFY_REQUIRED ? 0 : 1;
-    $stmt = $conn->prepare("INSERT INTO users (username,email,password,school,email_verified) VALUES (?,?,?,?,?)");
-    $stmt->bind_param('ssssi', $username, $email, $hashed, $school, $verified);
+
+    // 生成唯一 SCID
+    $chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    do {
+        $scid = '';
+        for ($i = 0; $i < 8; $i++) $scid .= $chars[random_int(0, strlen($chars)-1)];
+        $chk = $conn->query("SELECT id FROM users WHERE scid='$scid'");
+    } while ($chk && $chk->num_rows > 0);
+
+    $stmt = $conn->prepare("INSERT INTO users (scid,username,email,password,school,email_verified) VALUES (?,?,?,?,?,?)");
+    $stmt->bind_param('sssssi', $scid, $username, $email, $hashed, $school, $verified);
     $stmt->execute();
     $new_id = $stmt->insert_id;
     $stmt->close();

@@ -56,11 +56,16 @@ if (empty($recommended)) {
     if ($rec_res) while ($r = $rec_res->fetch_assoc()) $recommended[] = $r;
 }
 
-// 最新帖子
+// 最新帖子（支持本校/全站切换）
+$user_school = $_SESSION['school'] ?? '';
+$scope       = $_GET['scope'] ?? ($user_school ? 'school' : 'all');
 $latest = [];
+$school_cond = ($scope === 'school' && $user_school !== '')
+    ? "AND u.school = '" . $conn->real_escape_string($user_school) . "'"
+    : '';
 $lat_res = $conn->query("SELECT p.*,u.username,u.avatar,s.name as section_name
     FROM posts p JOIN users u ON u.id=p.user_id JOIN sections s ON s.id=p.section_id
-    WHERE p.status='published'
+    WHERE p.status='published' $school_cond
     ORDER BY p.created_at DESC LIMIT 20");
 if ($lat_res) while ($r = $lat_res->fetch_assoc()) $latest[] = $r;
 
@@ -99,10 +104,20 @@ include 'includes/header.php';
     <?php endif; ?>
 
     <div class="card">
-      <div class="card-header">🕐 最新帖子</div>
+      <div class="card-header">
+        🕐 最新帖子
+        <?php if (!empty($user_school)): ?>
+        <div class="scope-tabs" style="margin-left:auto">
+          <a href="?scope=school" class="scope-tab <?= $scope==='school'?'active':'' ?>">🏫 <?= h($user_school) ?></a>
+          <a href="?scope=all"    class="scope-tab <?= $scope==='all'   ?'active':'' ?>">全站</a>
+        </div>
+        <?php endif; ?>
+      </div>
       <div class="post-list" style="padding:12px 8px 8px">
         <?php if (empty($latest)): ?>
-          <div class="empty-state"><div class="icon">📭</div><p>还没有帖子，快来发第一帖！</p></div>
+          <div class="empty-state"><div class="icon">📭</div>
+            <p><?= ($scope==='school'&&$user_school) ? '本校还没有帖子，<a href="?scope=all">查看全站</a>或者<a href="pages/publish.php">来发第一帖</a>！' : '还没有帖子，快来发第一帖！' ?></p>
+          </div>
         <?php else: ?>
           <?php foreach ($latest as $p): ?>
             <?= render_post_item($p, '') ?>

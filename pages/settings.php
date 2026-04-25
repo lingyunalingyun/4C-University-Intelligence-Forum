@@ -54,7 +54,13 @@ include '../includes/header.php';
           </div>
           <div class="form-group">
             <label>学校</label>
-            <input type="text" name="school" value="<?= h($user['school']) ?>" maxlength="50" placeholder="选填">
+            <div class="school-picker" id="sp">
+              <input type="text" id="sp-search" autocomplete="off"
+                     placeholder="输入关键词搜索学校…"
+                     value="<?= h($user['school']) ?>">
+              <input type="hidden" name="school" id="sp-value" value="<?= h($user['school']) ?>">
+              <div class="school-dropdown" id="sp-drop"></div>
+            </div>
           </div>
           <div class="form-group">
             <label>个人简介</label>
@@ -123,4 +129,40 @@ function previewAvatar(input) {
 }
 </script>
 
+<?php
+$schools = require '../config/schools.php';
+?>
+<script>
+(function(){
+  var schools = <?= json_encode($schools, JSON_UNESCAPED_UNICODE) ?>;
+  var search = document.getElementById('sp-search');
+  var val    = document.getElementById('sp-value');
+  var drop   = document.getElementById('sp-drop');
+
+  function render(q) {
+    var list = q ? schools.filter(function(s){ return s.indexOf(q) !== -1; }) : schools;
+    if (!list.length) { drop.style.display='none'; return; }
+    drop.innerHTML = list.slice(0,30).map(function(s){
+      var hl = q ? s.replace(q,'<mark>'+q+'</mark>') : s;
+      return '<div class="school-opt" data-v="'+s+'">'+hl+'</div>';
+    }).join('');
+    drop.style.display = 'block';
+  }
+
+  search.addEventListener('input', function(){ render(search.value); });
+  search.addEventListener('focus', function(){ render(search.value); });
+
+  drop.addEventListener('click', function(e){
+    var opt = e.target.closest('.school-opt');
+    if (!opt) return;
+    search.value = opt.dataset.v;
+    val.value    = opt.dataset.v;
+    drop.style.display = 'none';
+  });
+
+  document.addEventListener('click', function(e){
+    if (!e.target.closest('#sp')) drop.style.display = 'none';
+  });
+})();
+</script>
 <?php include '../includes/footer.php'; ?>

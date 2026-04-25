@@ -8,7 +8,7 @@ if ($action === 'login') {
     $password = $_POST['password'] ?? '';
     $redirect = $_POST['redirect'] ?? '';
 
-    $stmt = $conn->prepare("SELECT id,username,password,role,avatar,is_banned,email_verified FROM users WHERE email=?");
+    $stmt = $conn->prepare("SELECT id,username,password,role,avatar,school,is_banned,email_verified FROM users WHERE email=?");
     $stmt->bind_param('s', $email);
     $stmt->execute();
     $user = $stmt->get_result()->fetch_assoc();
@@ -28,6 +28,7 @@ if ($action === 'login') {
     $_SESSION['username'] = $user['username'];
     $_SESSION['role']     = $user['role'];
     $_SESSION['avatar']   = $user['avatar'];
+    $_SESSION['school']   = $user['school'];
 
     // 登录经验 & 连续登录
     $today = date('Y-m-d');
@@ -83,6 +84,7 @@ if ($action === 'register') {
     $_SESSION['username'] = $username;
     $_SESSION['role']     = 'user';
     $_SESSION['avatar']   = '';
+    $_SESSION['school']   = $school;
 
     header('Location: ../index.php'); exit;
 }

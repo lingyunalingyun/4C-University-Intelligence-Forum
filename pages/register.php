@@ -42,7 +42,12 @@ include '../includes/header.php';
       </div>
       <div class="form-group">
         <label>学校（选填）</label>
-        <input type="text" name="school" placeholder="如：桂林理工大学" maxlength="50">
+        <div class="school-picker" id="sp">
+          <input type="text" id="sp-search" autocomplete="off" placeholder="输入关键词搜索学校…">
+          <input type="hidden" name="school" id="sp-value">
+          <div class="school-dropdown" id="sp-drop"></div>
+        </div>
+        <div class="form-hint">选择后，首页默认显示本校内容</div>
       </div>
       <div class="form-group">
         <label>密码</label>
@@ -62,4 +67,40 @@ include '../includes/header.php';
   </div>
 </div>
 
+<?php
+$schools = require '../config/schools.php';
+?>
+<script>
+(function(){
+  var schools = <?= json_encode($schools, JSON_UNESCAPED_UNICODE) ?>;
+  var search = document.getElementById('sp-search');
+  var val    = document.getElementById('sp-value');
+  var drop   = document.getElementById('sp-drop');
+
+  function render(q) {
+    var list = q ? schools.filter(function(s){ return s.indexOf(q) !== -1; }) : schools;
+    if (!list.length) { drop.style.display='none'; return; }
+    drop.innerHTML = list.slice(0,30).map(function(s){
+      var hl = q ? s.replace(q,'<mark>'+q+'</mark>') : s;
+      return '<div class="school-opt" data-v="'+s+'">'+hl+'</div>';
+    }).join('');
+    drop.style.display = 'block';
+  }
+
+  search.addEventListener('input', function(){ render(search.value); });
+  search.addEventListener('focus', function(){ render(search.value); });
+
+  drop.addEventListener('click', function(e){
+    var opt = e.target.closest('.school-opt');
+    if (!opt) return;
+    search.value = opt.dataset.v;
+    val.value    = opt.dataset.v;
+    drop.style.display = 'none';
+  });
+
+  document.addEventListener('click', function(e){
+    if (!e.target.closest('#sp')) drop.style.display = 'none';
+  });
+})();
+</script>
 <?php include '../includes/footer.php'; ?>

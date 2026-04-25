@@ -265,8 +265,19 @@ async function markSolved() {
   location.reload();
 }
 function sharePost() {
-  navigator.clipboard?.writeText(location.href);
-  showToast('链接已复制！');
+  var url = location.href;
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(url).then(function(){ showToast('链接已复制！'); });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = url;
+    ta.style.cssText = 'position:fixed;opacity:0';
+    document.body.appendChild(ta);
+    ta.focus(); ta.select();
+    try { document.execCommand('copy'); showToast('链接已复制！'); }
+    catch(e) { prompt('请手动复制链接：', url); }
+    document.body.removeChild(ta);
+  }
 }
 async function toggleFollow(uid) {
   if (!isLoggedIn) { location.href='login.php'; return; }

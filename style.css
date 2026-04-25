@@ -118,20 +118,8 @@ a:hover { color: var(--primary-dk); }
   padding: 0 3px;
 }
 
-.nav-avatar-wrap { position: relative; }
-.nav-avatar { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; cursor: pointer; border: 2px solid var(--border); }
-.nav-dropdown {
-  display: none; position: absolute; right: 0; top: calc(100% + 8px);
-  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r-lg);
-  box-shadow: var(--shadow-lg); min-width: 140px; overflow: hidden; z-index: 300;
-}
-.nav-dropdown.open { display: block; }
-.nav-dropdown a {
-  display: block; padding: 9px 16px; color: var(--txt); font-size: 13px;
-  transition: background .15s;
-}
-.nav-dropdown a:hover { background: var(--bg-2); }
-.nav-dropdown .logout-link { color: var(--danger); }
+.nav-avatar { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; cursor: pointer; border: 2px solid var(--border); transition: border-color .15s; }
+.nav-avatar:hover { border-color: var(--primary); }
 
 /* ── Ban Banner ── */
 .ban-banner {

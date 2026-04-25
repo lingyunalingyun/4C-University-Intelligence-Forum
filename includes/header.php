@@ -76,19 +76,11 @@ if ($is_logged_in && isset($conn)) {
           🔔<?php if ($unread_count > 0): ?><span class="badge"><?= $unread_count > 99 ? '99+' : $unread_count ?></span><?php endif; ?>
         </a>
 
-        <div class="nav-avatar-wrap" id="nav-avatar-wrap">
+        <a href="<?= $base ?>pages/profile.php?id=<?= intval($_SESSION['user_id']) ?>">
           <img src="<?= $base ?>uploads/avatars/<?= h($_SESSION['avatar'] ?? '') ?>"
                onerror="this.src='<?= $base ?>assets/default_avatar.svg'"
                class="nav-avatar" alt="头像">
-          <div class="nav-dropdown" id="nav-dropdown">
-            <a href="<?= $base ?>pages/profile.php?id=<?= intval($_SESSION['user_id']) ?>">我的主页</a>
-            <a href="<?= $base ?>pages/settings.php">账号设置</a>
-            <?php if ($current_role === 'admin' || $current_role === 'owner'): ?>
-              <a href="<?= $base ?>admin/index.php">管理后台</a>
-            <?php endif; ?>
-            <a href="<?= $base ?>pages/logout.php" class="logout-link">退出登录</a>
-          </div>
-        </div>
+        </a>
       <?php else: ?>
         <a href="<?= $base ?>pages/login.php" class="btn-login">登录</a>
         <a href="<?= $base ?>pages/register.php" class="btn-register">注册</a>

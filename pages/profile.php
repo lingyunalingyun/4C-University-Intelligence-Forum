@@ -95,6 +95,11 @@ include '../includes/header.php';
         </button>
       <?php elseif ($uid === $profile_id): ?>
         <a href="settings.php" class="btn btn-outline btn-sm">⚙️ 设置</a>
+        <?php if ($_SESSION['role'] === 'admin' || $_SESSION['role'] === 'owner'): ?>
+          <a href="../admin/index.php" class="btn btn-outline btn-sm">🛠 后台</a>
+        <?php endif; ?>
+        <a href="logout.php" class="btn btn-outline btn-sm" style="color:var(--danger);border-color:var(--danger)"
+           onclick="return confirm('确定退出登录？')">退出</a>
       <?php endif; ?>
     </div>
   </div>

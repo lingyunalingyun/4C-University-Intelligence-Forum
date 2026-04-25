@@ -77,9 +77,10 @@ if ($is_logged_in && isset($conn)) {
         </a>
 
         <a href="<?= $base ?>pages/profile.php?id=<?= intval($_SESSION['user_id']) ?>">
-          <img src="<?= $base ?>uploads/avatars/<?= h($_SESSION['avatar'] ?? '') ?>"
-               onerror="this.src='<?= $base ?>assets/default_avatar.svg'"
-               class="nav-avatar" alt="头像">
+          <?php $nav_avatar = !empty($_SESSION['avatar'])
+              ? $base . 'uploads/avatars/' . h($_SESSION['avatar'])
+              : $base . 'assets/default_avatar.svg'; ?>
+          <img src="<?= $nav_avatar ?>" class="nav-avatar" alt="头像">
         </a>
       <?php else: ?>
         <a href="<?= $base ?>pages/login.php" class="btn-login">登录</a>

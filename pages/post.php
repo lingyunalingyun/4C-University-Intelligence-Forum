@@ -107,6 +107,18 @@ include '../includes/header.php';
           ⭐ <span id="fav-count"><?= $post['fav_count'] ?></span>
         </button>
         <button class="action-btn" onclick="sharePost()">🔗 分享</button>
+        <div id="share-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:999;align-items:center;justify-content:center">
+          <div style="background:var(--bg-card);border-radius:12px;padding:24px;width:90%;max-width:480px;box-shadow:0 8px 32px rgba(0,0,0,.2)">
+            <div style="font-weight:600;margin-bottom:12px">🔗 分享链接</div>
+            <div style="display:flex;gap:8px">
+              <input id="share-url" type="text" readonly style="flex:1;padding:8px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;background:var(--bg-2);color:var(--txt)">
+              <button onclick="copyShareUrl()" class="btn btn-primary btn-sm">复制</button>
+            </div>
+            <div style="text-align:right;margin-top:12px">
+              <button onclick="document.getElementById('share-modal').style.display='none'" class="btn btn-outline btn-sm">关闭</button>
+            </div>
+          </div>
+        </div>
         <?php if ($uid === $post['user_id'] && !$post['is_solved']): ?>
           <button class="action-btn" onclick="markSolved()">✅ 标记已解决</button>
         <?php endif; ?>
@@ -265,18 +277,19 @@ async function markSolved() {
   location.reload();
 }
 function sharePost() {
-  var url = location.href;
+  var modal = document.getElementById('share-modal');
+  document.getElementById('share-url').value = location.href;
+  modal.style.display = 'flex';
+  modal.onclick = function(e){ if(e.target===modal) modal.style.display='none'; };
+}
+function copyShareUrl() {
+  var input = document.getElementById('share-url');
+  input.select(); input.setSelectionRange(0, 9999);
   if (navigator.clipboard && window.isSecureContext) {
-    navigator.clipboard.writeText(url).then(function(){ showToast('链接已复制！'); });
+    navigator.clipboard.writeText(input.value).then(function(){ showToast('链接已复制！'); });
   } else {
-    var ta = document.createElement('textarea');
-    ta.value = url;
-    ta.style.cssText = 'position:fixed;opacity:0';
-    document.body.appendChild(ta);
-    ta.focus(); ta.select();
     try { document.execCommand('copy'); showToast('链接已复制！'); }
-    catch(e) { prompt('请手动复制链接：', url); }
-    document.body.removeChild(ta);
+    catch(e) { showToast('请手动选中复制'); }
   }
 }
 async function toggleFollow(uid) {

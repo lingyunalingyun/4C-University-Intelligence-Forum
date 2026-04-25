@@ -1,6 +1,7 @@
 config.php
 uploads/*
 !uploads/.gitkeep
+!uploads/avatars/index.php
 config.zip
 *.log
 .DS_Store

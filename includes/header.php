@@ -105,17 +105,3 @@ if ($is_logged_in && isset($conn)) {
 
 <!-- ── 主体内容开始 ── -->
 <main class="main-wrap">
-<script>
-(function(){
-  var wrap = document.getElementById('nav-avatar-wrap');
-  var drop = document.getElementById('nav-dropdown');
-  if (!wrap || !drop) return;
-  wrap.addEventListener('click', function(e){
-    e.stopPropagation();
-    drop.classList.toggle('open');
-  });
-  document.addEventListener('click', function(){
-    drop.classList.remove('open');
-  });
-})();
-</script>

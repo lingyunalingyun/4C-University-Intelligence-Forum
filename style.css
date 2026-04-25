@@ -120,16 +120,12 @@ a:hover { color: var(--primary-dk); }
 
 .nav-avatar-wrap { position: relative; }
 .nav-avatar { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; cursor: pointer; border: 2px solid var(--border); }
-/* 用伪元素填充头像和下拉框之间的空隙，防止鼠标滑过时触发区断开 */
-.nav-avatar-wrap::after {
-  content: ''; position: absolute; top: 100%; left: 0; right: 0; height: 10px;
-}
 .nav-dropdown {
-  display: none; position: absolute; right: 0; top: calc(100% + 10px);
+  display: none; position: absolute; right: 0; top: calc(100% + 8px);
   background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r-lg);
-  box-shadow: var(--shadow-lg); min-width: 140px; overflow: hidden;
+  box-shadow: var(--shadow-lg); min-width: 140px; overflow: hidden; z-index: 300;
 }
-.nav-avatar-wrap:hover .nav-dropdown { display: block; }
+.nav-dropdown.open { display: block; }
 .nav-dropdown a {
   display: block; padding: 9px 16px; color: var(--txt); font-size: 13px;
   transition: background .15s;

@@ -76,14 +76,12 @@ if ($is_logged_in && isset($conn)) {
           🔔<?php if ($unread_count > 0): ?><span class="badge"><?= $unread_count > 99 ? '99+' : $unread_count ?></span><?php endif; ?>
         </a>
 
-        <div class="nav-avatar-wrap">
-          <a href="<?= $base ?>pages/profile.php">
-            <img src="<?= $base ?>uploads/avatars/<?= h($_SESSION['avatar'] ?? '') ?>"
-                 onerror="this.src='<?= $base ?>assets/default_avatar.svg'"
-                 class="nav-avatar" alt="头像">
-          </a>
-          <div class="nav-dropdown">
-            <a href="<?= $base ?>pages/profile.php">我的主页</a>
+        <div class="nav-avatar-wrap" id="nav-avatar-wrap">
+          <img src="<?= $base ?>uploads/avatars/<?= h($_SESSION['avatar'] ?? '') ?>"
+               onerror="this.src='<?= $base ?>assets/default_avatar.svg'"
+               class="nav-avatar" alt="头像">
+          <div class="nav-dropdown" id="nav-dropdown">
+            <a href="<?= $base ?>pages/profile.php?id=<?= intval($_SESSION['user_id']) ?>">我的主页</a>
             <a href="<?= $base ?>pages/settings.php">账号设置</a>
             <?php if ($current_role === 'admin' || $current_role === 'owner'): ?>
               <a href="<?= $base ?>admin/index.php">管理后台</a>
@@ -107,3 +105,17 @@ if ($is_logged_in && isset($conn)) {
 
 <!-- ── 主体内容开始 ── -->
 <main class="main-wrap">
+<script>
+(function(){
+  var wrap = document.getElementById('nav-avatar-wrap');
+  var drop = document.getElementById('nav-dropdown');
+  if (!wrap || !drop) return;
+  wrap.addEventListener('click', function(e){
+    e.stopPropagation();
+    drop.classList.toggle('open');
+  });
+  document.addEventListener('click', function(){
+    drop.classList.remove('open');
+  });
+})();
+</script>

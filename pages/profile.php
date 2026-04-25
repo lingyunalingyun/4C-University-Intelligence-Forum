@@ -100,11 +100,20 @@ include '../includes/header.php';
   </div>
 
   <!-- 经验条 -->
-  <?php $lv = get_level($profile['exp']); $needed = $lv['next_exp'] - $lv['current_exp']; $cur = $profile['exp'] - $lv['current_exp']; $pct = $needed > 0 ? min(100, round($cur/$needed*100)) : 100; ?>
+  <?php
+    $lv_num   = get_level($profile['exp']);
+    $lv_floor = [1=>0, 2=>1000, 3=>5000, 4=>15000, 5=>30000, 6=>50000];
+    $lv_names = [1=>'新手', 2=>'学徒', 3=>'达人', 4=>'精英', 5=>'大神', 6=>'传说'];
+    $cur_floor = $lv_floor[$lv_num];
+    $next_exp  = level_next($profile['exp']);
+    $cur_rel   = $profile['exp'] - $cur_floor;
+    $needed    = $next_exp - $cur_floor;
+    $pct       = $needed > 0 ? min(100, round($cur_rel / $needed * 100)) : 100;
+  ?>
   <div style="margin-top:16px">
     <div style="font-size:12px;color:var(--txt-2);margin-bottom:4px">
-      <?= h($lv['name']) ?> · <?= $profile['exp'] ?> EXP
-      <?php if ($lv['next_name']): ?> · 距 <?= h($lv['next_name']) ?> 还需 <?= $needed-$cur ?> EXP<?php endif; ?>
+      <?= $lv_names[$lv_num] ?> · <?= $profile['exp'] ?> EXP
+      <?php if ($lv_num < 6): ?> · 距 <?= $lv_names[$lv_num+1] ?> 还需 <?= $needed - $cur_rel ?> EXP<?php endif; ?>
     </div>
     <div style="background:var(--bg-2);border-radius:99px;height:6px;overflow:hidden">
       <div style="width:<?= $pct ?>%;background:var(--primary);height:100%;border-radius:99px;transition:.3s"></div>

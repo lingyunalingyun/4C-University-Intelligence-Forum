@@ -77,9 +77,11 @@ if ($is_logged_in && isset($conn)) {
         </a>
 
         <div class="nav-avatar-wrap">
-          <img src="<?= $base ?>uploads/avatars/<?= h($_SESSION['avatar'] ?? '') ?>"
-               onerror="this.src='<?= $base ?>assets/default_avatar.svg'"
-               class="nav-avatar" alt="头像">
+          <a href="<?= $base ?>pages/profile.php">
+            <img src="<?= $base ?>uploads/avatars/<?= h($_SESSION['avatar'] ?? '') ?>"
+                 onerror="this.src='<?= $base ?>assets/default_avatar.svg'"
+                 class="nav-avatar" alt="头像">
+          </a>
           <div class="nav-dropdown">
             <a href="<?= $base ?>pages/profile.php">我的主页</a>
             <a href="<?= $base ?>pages/settings.php">账号设置</a>

@@ -191,7 +191,7 @@ function render_post_item($p, $base) {
           </div>
           <div class="post-footer">
             <span class="author">
-              <img src="<?= $base ?>uploads/avatars/<?= h($p['avatar']) ?>"
+              <img src="<?= avatar_url($p['avatar'], $base) ?>"
                    onerror="this.src='<?= $base ?>assets/default_avatar.svg'" alt="">
               <?= h($p['username']) ?>
             </span>

@@ -46,10 +46,9 @@ function h($str) {
 }
 
 function avatar_url($avatar, $base = '') {
-    if (!empty($avatar) && file_exists($_SERVER['DOCUMENT_ROOT'] . parse_url(SITE_URL, PHP_URL_PATH) . '/uploads/avatars/' . $avatar)) {
-        return $base . 'uploads/avatars/' . $avatar;
-    }
-    return $base . 'assets/default_avatar.svg';
+    return !empty($avatar)
+        ? $base . 'uploads/avatars/' . $avatar
+        : $base . 'assets/default_avatar.svg';
 }
 
 function add_notification($conn, $user_id, $type, $from_user_id, $post_id, $comment_id, $message) {

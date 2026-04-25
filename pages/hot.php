@@ -69,8 +69,7 @@ include '../includes/header.php';
         <?php endif; ?>
         <div class="post-footer">
           <span class="author">
-            <img src="../uploads/avatars/<?= h($p['avatar']) ?>"
-                 onerror="this.src='../assets/default_avatar.svg'" alt="">
+            <img src="<?= avatar_url($p['avatar'], '../') ?>" alt="">
             <?= h($p['username']) ?>
           </span>
           <span><?= time_ago($p['created_at']) ?></span>

@@ -36,8 +36,7 @@ include '../includes/header.php';
 
           <div class="form-group" style="display:flex;align-items:center;gap:20px;flex-wrap:wrap">
             <img id="avatar-preview"
-                 src="../uploads/avatars/<?= h($user['avatar']) ?>"
-                 onerror="this.src='../assets/default_avatar.svg'"
+                 src="<?= avatar_url($user['avatar'], '../') ?>"
                  style="width:72px;height:72px;border-radius:50%;object-fit:cover;cursor:pointer"
                  onclick="document.getElementById('avatar-input').click()">
             <div>

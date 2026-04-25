@@ -66,8 +66,7 @@ include '../includes/header.php';
 <!-- 用户信息卡 -->
 <div class="card mb-20" style="padding:24px">
   <div style="display:flex;align-items:flex-start;gap:20px;flex-wrap:wrap">
-    <img src="../uploads/avatars/<?= h($profile['avatar']) ?>"
-         onerror="this.src='../assets/default_avatar.svg'"
+    <img src="<?= avatar_url($profile['avatar'], '../') ?>"
          style="width:80px;height:80px;border-radius:50%;object-fit:cover;flex-shrink:0">
     <div style="flex:1;min-width:200px">
       <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px">
@@ -150,8 +149,7 @@ include '../includes/header.php';
       <div class="empty-state"><div class="icon">👤</div><p>暂无数据</p></div>
     <?php else: foreach ($items as $u): ?>
       <div class="flex-center gap-12" style="padding:10px 0;border-bottom:1px solid var(--border)">
-        <img src="../uploads/avatars/<?= h($u['avatar']) ?>"
-             onerror="this.src='../assets/default_avatar.svg'"
+        <img src="<?= avatar_url($u['avatar'], '../') ?>"
              style="width:40px;height:40px;border-radius:50%;object-fit:cover">
         <div style="flex:1">
           <a href="profile.php?id=<?= $u['id'] ?>" style="font-weight:600"><?= h($u['username']) ?></a>

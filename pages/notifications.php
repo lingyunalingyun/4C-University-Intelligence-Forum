@@ -49,8 +49,7 @@ include '../includes/header.php';
         elseif ($n['type']==='follow') $link = 'profile.php?id='.$n['from_user_id'];
       ?>
       <div class="notif-item <?= $n['is_read']?'':'notif-unread' ?>">
-        <img src="../uploads/avatars/<?= h($n['avatar']) ?>"
-             onerror="this.src='../assets/default_avatar.svg'" alt="">
+        <img src="<?= avatar_url($n['avatar'], '../') ?>" alt="">
         <div style="flex:1">
           <span style="font-weight:600"><?= h($n['username']) ?></span>
           <span style="color:var(--txt-2)"> <?= $label ?></span>

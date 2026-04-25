@@ -75,8 +75,7 @@ include '../includes/header.php';
       <?php else: ?>
         <?php foreach ($users as $u): ?>
         <div class="flex-center gap-12" style="padding:12px 0;border-bottom:1px solid var(--border)">
-          <img src="../uploads/avatars/<?= h($u['avatar']) ?>"
-               onerror="this.src='../assets/default_avatar.svg'"
+          <img src="<?= avatar_url($u['avatar'], '../') ?>"
                style="width:44px;height:44px;border-radius:50%;object-fit:cover;flex-shrink:0">
           <div style="flex:1">
             <a href="profile.php?id=<?= $u['id'] ?>" style="font-weight:600;color:var(--txt)"><?= h($u['username']) ?></a>
@@ -121,7 +120,7 @@ function render_post_item($p, $base, $kw='') {
         </div>
         <div class="post-footer">
           <span class="author">
-            <img src="<?= $base ?>uploads/avatars/<?= h($p['avatar']) ?>"
+            <img src="<?= avatar_url($p['avatar'], $base) ?>"
                  onerror="this.src='<?= $base ?>assets/default_avatar.svg'" alt="">
             <?= h($p['username']) ?>
           </span>

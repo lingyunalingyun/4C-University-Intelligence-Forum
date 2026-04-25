@@ -69,8 +69,7 @@ include '../includes/header.php';
     <div class="post-detail">
       <h1 class="post-detail-title"><?= h($post['title']) ?></h1>
       <div class="post-detail-meta">
-        <img src="../uploads/avatars/<?= h($post['avatar']) ?>"
-             onerror="this.src='../assets/default_avatar.svg'" alt="">
+        <img src="<?= avatar_url($post['avatar'], '../') ?>" alt="">
         <a href="profile.php?id=<?= $post['user_id'] ?>" style="color:var(--txt);font-weight:600"><?= h($post['username']) ?></a>
         <?= role_badge($post['role']) ?>
         <?= level_badge($post['exp']) ?>
@@ -128,8 +127,7 @@ include '../includes/header.php';
         <input type="hidden" name="post_id" value="<?= $post_id ?>">
         <input type="hidden" name="parent_id" value="0">
         <div class="flex-center gap-12">
-          <img src="../uploads/avatars/<?= h($_SESSION['avatar']??'') ?>"
-               onerror="this.src='../assets/default_avatar.svg'" style="width:36px;height:36px;border-radius:50%;object-fit:cover;flex-shrink:0">
+          <img src="<?= avatar_url($_SESSION['avatar']??'', '../') ?>" style="width:36px;height:36px;border-radius:50%;object-fit:cover;flex-shrink:0">
           <div style="flex:1">
             <textarea name="content" placeholder="写下你的评论..." rows="3" required style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:var(--r);font-size:14px;resize:none;font-family:inherit;outline:none;background:var(--bg-2)"></textarea>
             <div style="text-align:right;margin-top:8px">
@@ -148,8 +146,7 @@ include '../includes/header.php';
       <div class="comment-list">
         <?php foreach ($comments as $c): ?>
         <div class="comment-item" id="c<?= $c['id'] ?>">
-          <img src="../uploads/avatars/<?= h($c['avatar']) ?>"
-               onerror="this.src='../assets/default_avatar.svg'" alt="">
+          <img src="<?= avatar_url($c['avatar'], '../') ?>" alt="">
           <div style="flex:1">
             <div class="comment-body">
               <div class="comment-header">
@@ -167,8 +164,7 @@ include '../includes/header.php';
             <!-- 子回复 -->
             <?php foreach ($c['replies'] as $rep): ?>
             <div class="comment-item comment-reply mt-8">
-              <img src="../uploads/avatars/<?= h($rep['avatar']) ?>"
-                   onerror="this.src='../assets/default_avatar.svg'" alt="">
+              <img src="<?= avatar_url($rep['avatar'], '../') ?>" alt="">
               <div class="comment-body">
                 <div class="comment-header">
                   <a href="profile.php?id=<?= $rep['user_id'] ?>" class="comment-author"><?= h($rep['username']) ?></a>
@@ -209,8 +205,7 @@ include '../includes/header.php';
     <div class="card mb-16">
       <div class="card-header">👤 发帖人</div>
       <div class="card-body" style="text-align:center">
-        <img src="../uploads/avatars/<?= h($post['avatar']) ?>"
-             onerror="this.src='../assets/default_avatar.svg'"
+        <img src="<?= avatar_url($post['avatar'], '../') ?>"
              style="width:60px;height:60px;border-radius:50%;object-fit:cover;margin:0 auto 10px">
         <div style="font-weight:600;margin-bottom:4px"><?= h($post['username']) ?></div>
         <?php if ($post['school']): ?><div style="font-size:12px;color:var(--txt-2)"><?= h($post['school']) ?></div><?php endif; ?>

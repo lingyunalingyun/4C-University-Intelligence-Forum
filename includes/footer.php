@@ -12,5 +12,20 @@
     <div class="footer-copy">© 2026 <?= SITE_NAME ?> · 为高校学生打造的智慧交流社区</div>
   </div>
 </footer>
+<script>
+function toggleTheme() {
+  var html = document.documentElement;
+  var isDark = html.getAttribute('data-theme') === 'dark';
+  var next = isDark ? 'light' : 'dark';
+  html.setAttribute('data-theme', next);
+  localStorage.setItem('theme', next);
+  document.getElementById('theme-toggle').textContent = next === 'dark' ? '☀️' : '🌙';
+}
+// 初始化图标
+(function(){
+  var btn = document.getElementById('theme-toggle');
+  if (btn) btn.textContent = localStorage.getItem('theme') === 'dark' ? '☀️' : '🌙';
+})();
+</script>
 </body>
 </html>

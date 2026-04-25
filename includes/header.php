@@ -37,6 +37,12 @@ if ($is_logged_in && isset($conn)) {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title><?= isset($page_title) ? h($page_title).' - ' : '' ?><?= SITE_NAME ?></title>
 <link rel="stylesheet" href="<?= $base ?>style.css">
+<script>
+  (function(){
+    var t = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', t);
+  })();
+</script>
 <link rel="icon" href="<?= $base ?>assets/logo.svg" type="image/svg+xml">
 </head>
 <body>
@@ -69,6 +75,7 @@ if ($is_logged_in && isset($conn)) {
 
     <!-- 右侧用户区 -->
     <div class="nav-user">
+      <button id="theme-toggle" class="theme-btn" onclick="toggleTheme()" title="切换主题">🌙</button>
       <?php if ($is_logged_in): ?>
         <a href="<?= $base ?>pages/publish.php" class="btn-publish">✏️ 发帖</a>
 

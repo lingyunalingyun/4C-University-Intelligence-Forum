@@ -31,6 +31,24 @@
   --shadow-lg:  0 10px 15px rgba(0,0,0,.1), 0 4px 6px rgba(0,0,0,.05);
 }
 
+/* ── 深色主题 ── */
+[data-theme="dark"] {
+  --primary:    #60a5fa;
+  --primary-dk: #3b82f6;
+  --primary-lt: #1e3a5f;
+  --bg:         #0f172a;
+  --bg-card:    #1e293b;
+  --bg-2:       #162032;
+  --border:     #334155;
+  --border-hi:  #60a5fa;
+  --txt:        #e2e8f0;
+  --txt-2:      #94a3b8;
+  --txt-3:      #64748b;
+  --shadow:     0 1px 3px rgba(0,0,0,.3), 0 1px 2px rgba(0,0,0,.2);
+  --shadow-md:  0 4px 6px rgba(0,0,0,.3);
+  --shadow-lg:  0 10px 15px rgba(0,0,0,.4);
+}
+
 /* ── Reset ── */
 *, *::before, *::after { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
@@ -354,7 +372,21 @@ a:hover { color: var(--primary-dk); }
 .profile-stats .label { font-size: 12px; opacity: .8; }
 
 /* ── Tabs ── */
-.tabs { display: flex; gap: 0; border-bottom: 2px solid var(--border); margin-bottom: 20px; }
+.tabs {
+  display: flex; gap: 4px; margin-bottom: 20px;
+  background: var(--bg-2); padding: 4px; border-radius: 12px;
+  border: 1px solid var(--border);
+}
+.tab {
+  flex: 1; text-align: center; padding: 8px 12px; border-radius: 8px;
+  font-size: 14px; font-weight: 500; color: var(--txt-2);
+  transition: all .2s; white-space: nowrap;
+}
+.tab:hover:not(.active) { color: var(--txt); background: var(--bg-card); }
+.tab.active {
+  background: var(--bg-card); color: var(--primary); font-weight: 600;
+  box-shadow: 0 1px 4px rgba(0,0,0,.1);
+}
 .tab-btn {
   padding: 10px 20px; border: none; background: transparent; cursor: pointer;
   font-size: 14px; color: var(--txt-2); border-bottom: 2px solid transparent; margin-bottom: -2px;
@@ -512,3 +544,12 @@ a:hover { color: var(--primary-dk); }
 }
 .scope-tab.active { background: var(--primary); color: #fff !important; border-color: var(--primary); }
 .scope-tab:hover:not(.active) { background: var(--bg-2); color: var(--txt); }
+
+/* ── Theme Toggle ── */
+.theme-btn {
+  background: none; border: 1px solid var(--border); border-radius: 8px;
+  width: 34px; height: 34px; cursor: pointer; font-size: 16px;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .15s, border-color .15s; color: inherit;
+}
+.theme-btn:hover { background: var(--bg-2); border-color: var(--primary); }

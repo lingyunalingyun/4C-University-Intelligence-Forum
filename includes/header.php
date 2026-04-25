@@ -70,6 +70,9 @@ if ($is_logged_in && isset($conn)) {
       <a href="<?= $base ?>pages/hot.php">热榜</a>
       <?php if ($is_logged_in): ?>
         <a href="<?= $base ?>pages/ai_assistant.php">AI助手</a>
+        <?php if ($current_role === 'admin' || $current_role === 'owner'): ?>
+          <a href="<?= $base ?>admin/index.php">管理后台</a>
+        <?php endif; ?>
       <?php endif; ?>
     </nav>
 

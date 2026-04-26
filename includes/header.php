@@ -31,6 +31,13 @@ if ($is_logged_in && isset($conn)) {
 
     $n_res = $conn->query("SELECT COUNT(*) as cnt FROM notifications WHERE user_id=$uid_h AND is_read=0");
     if ($n_res) $unread_count = (int)$n_res->fetch_assoc()['cnt'];
+
+    $msg_unread = 0;
+    $mur = $conn->query("SELECT COUNT(*) as cnt FROM messages m
+        JOIN conversation_members cm ON cm.conversation_id=m.conversation_id AND cm.user_id=$uid_h
+        WHERE m.user_id!=$uid_h AND m.is_recalled=0
+        AND (cm.last_read_at IS NULL OR m.created_at > cm.last_read_at)");
+    if ($mur) $msg_unread = (int)$mur->fetch_assoc()['cnt'];
 }
 ?>
 <!DOCTYPE html>
@@ -76,6 +83,9 @@ if ($is_logged_in && isset($conn)) {
       <?php if ($is_logged_in): ?>
         <a href="<?= $base ?>pages/my_clubs.php">我的社团</a>
         <a href="<?= $base ?>pages/ai_assistant.php">AI助手</a>
+        <a href="<?= $base ?>pages/messages.php" style="position:relative">
+          私信<?php if (!empty($msg_unread) && $msg_unread > 0): ?><span class="badge" style="top:-6px;right:-10px"><?= $msg_unread > 99 ? '99+' : $msg_unread ?></span><?php endif; ?>
+        </a>
         <?php if ($current_role === 'admin' || $current_role === 'owner'): ?>
           <a href="<?= $base ?>admin/index.php">管理后台</a>
         <?php endif; ?>

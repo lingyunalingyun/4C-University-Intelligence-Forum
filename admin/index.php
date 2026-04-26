@@ -43,7 +43,8 @@ include '../includes/header.php';
     <a href="sections.php" class="btn btn-outline btn-sm">🗂️ 板块管理</a>
     <a href="homepage.php" class="btn btn-outline btn-sm">🖼️ 主页管理</a>
     <a href="clubs.php"   class="btn btn-outline btn-sm">🏛️ 社团管理</a>
-    <a href="logs.php"    class="btn btn-outline btn-sm">📋 操作记录</a>
+    <a href="logs.php"     class="btn btn-outline btn-sm">📋 操作记录</a>
+    <a href="messages.php" class="btn btn-outline btn-sm">💬 消息管理</a>
   </div>
 </div>
 

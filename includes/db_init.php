@@ -258,6 +258,37 @@ $_col = $conn->query("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS
 if ($_col && $_col->num_rows === 0)
     $conn->query("ALTER TABLE clubs ADD COLUMN banner VARCHAR(255) DEFAULT ''");
 
+// 私信 & 群组
+$conn->query("CREATE TABLE IF NOT EXISTS conversations (
+    id         INT AUTO_INCREMENT PRIMARY KEY,
+    type       ENUM('private','group') DEFAULT 'private',
+    name       VARCHAR(100) DEFAULT '',
+    avatar     VARCHAR(255) DEFAULT '',
+    created_by INT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+
+$conn->query("CREATE TABLE IF NOT EXISTS conversation_members (
+    id              INT AUTO_INCREMENT PRIMARY KEY,
+    conversation_id INT NOT NULL,
+    user_id         INT NOT NULL,
+    last_read_at    DATETIME DEFAULT NULL,
+    joined_at       DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uq_conv_user (conversation_id, user_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+
+$conn->query("CREATE TABLE IF NOT EXISTS messages (
+    id              INT AUTO_INCREMENT PRIMARY KEY,
+    conversation_id INT NOT NULL,
+    user_id         INT NOT NULL,
+    content         TEXT NOT NULL,
+    is_recalled     TINYINT(1) DEFAULT 0,
+    recalled_at     DATETIME DEFAULT NULL,
+    created_at      DATETIME DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_conv_id (conversation_id),
+    INDEX idx_created (created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+
 // 密码重置
 $conn->query("CREATE TABLE IF NOT EXISTS password_resets (
     id         INT AUTO_INCREMENT PRIMARY KEY,

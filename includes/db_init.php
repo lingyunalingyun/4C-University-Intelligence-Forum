@@ -199,6 +199,16 @@ $conn->query("CREATE TABLE IF NOT EXISTS club_join_requests (
     UNIQUE KEY uq_club_join (club_id, user_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
 
+// 社团动态
+$conn->query("CREATE TABLE IF NOT EXISTS club_posts (
+    id         INT AUTO_INCREMENT PRIMARY KEY,
+    club_id    INT NOT NULL,
+    user_id    INT NOT NULL,
+    title      VARCHAR(200) NOT NULL,
+    content    TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+
 // 踢出记录
 $conn->query("CREATE TABLE IF NOT EXISTS club_kick_logs (
     id         INT AUTO_INCREMENT PRIMARY KEY,

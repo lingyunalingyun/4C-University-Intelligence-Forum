@@ -44,9 +44,14 @@ include '../includes/header.php';
   <a href="club.php?id=<?= $c['id'] ?>" style="text-decoration:none">
     <div class="card" style="padding:0;overflow:hidden;transition:transform .15s,box-shadow .15s" onmouseenter="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 20px rgba(0,0,0,.1)'" onmouseleave="this.style.transform='';this.style.boxShadow=''">
       <div style="padding:18px 20px 14px;display:flex;gap:14px;align-items:center">
-        <div style="width:48px;height:48px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff;font-weight:700;flex-shrink:0">
-          <?= mb_substr($c['name'], 0, 1) ?>
-        </div>
+        <?php if (!empty($c['avatar'])): ?>
+          <img src="../uploads/clubs/<?= h($c['avatar']) ?>"
+               style="width:48px;height:48px;border-radius:50%;object-fit:cover;border:1.5px solid var(--border);flex-shrink:0">
+        <?php else: ?>
+          <div style="width:48px;height:48px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff;font-weight:700;flex-shrink:0">
+            <?= mb_substr($c['name'], 0, 1) ?>
+          </div>
+        <?php endif; ?>
         <div style="flex:1;min-width:0">
           <div style="font-size:16px;font-weight:700;color:var(--txt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis"><?= h($c['name']) ?></div>
           <div style="font-size:12px;color:var(--txt-2);margin-top:2px">🏫 <?= h($c['school']) ?></div>

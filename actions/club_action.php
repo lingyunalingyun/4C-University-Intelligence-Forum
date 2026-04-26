@@ -342,4 +342,33 @@ if ($action === 'admin_reject_name') {
     redirect_back('../admin/clubs.php?tab=names', '已拒绝改名申请');
 }
 
+// ── 以社团名义发布动态 ────────────────────────────────────
+if ($action === 'club_post') {
+    $club_id = intval($_POST['club_id'] ?? 0);
+    $back    = '../pages/club.php?id=' . $club_id;
+    $my_role = get_my_role($conn, $club_id, $uid);
+    if (!in_array($my_role, ['president','vice_president'])) redirect_back($back, '', '只有社长/副社长才能发布动态');
+
+    $title   = trim($_POST['title']   ?? '');
+    $content = trim($_POST['content'] ?? '');
+    if (!$title || !$content) redirect_back($back, '', '标题和内容不能为空');
+
+    $t_esc = $conn->real_escape_string($title);
+    $c_esc = $conn->real_escape_string($content);
+    $conn->query("INSERT INTO club_posts (club_id,user_id,title,content) VALUES ($club_id,$uid,'$t_esc','$c_esc')");
+    redirect_back($back, '动态已发布');
+}
+
+// ── 删除社团动态 ──────────────────────────────────────────
+if ($action === 'club_post_delete') {
+    $club_id      = intval($_POST['club_id']      ?? 0);
+    $club_post_id = intval($_POST['club_post_id'] ?? 0);
+    $back         = '../pages/club.php?id=' . $club_id;
+    $my_role      = get_my_role($conn, $club_id, $uid);
+    if (!in_array($my_role, ['president','vice_president'])) redirect_back($back, '', '无权限');
+
+    $conn->query("DELETE FROM club_posts WHERE id=$club_post_id AND club_id=$club_id");
+    redirect_back($back, '动态已删除');
+}
+
 redirect_back('../pages/clubs.php', '', '未知操作');

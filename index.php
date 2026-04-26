@@ -3,209 +3,222 @@ require_once 'config.php';
 require_once 'includes/helpers.php';
 $page_title = '首页';
 
-// 热帖榜（按浏览+点赞加权，最近7天）
-$hot_posts = [];
-$hot_res = $conn->query("SELECT p.id,p.title,p.like_count,p.views,p.comment_count,
-    u.username, s.name as section_name
-    FROM posts p
-    JOIN users u ON u.id=p.user_id
-    JOIN sections s ON s.id=p.section_id
-    WHERE p.status='published' AND p.created_at > DATE_SUB(NOW(),INTERVAL 7 DAY)
-    ORDER BY (p.views * 0.3 + p.like_count * 2 + p.comment_count) DESC
-    LIMIT 10");
-if ($hot_res) while ($r = $hot_res->fetch_assoc()) $hot_posts[] = $r;
-
-// 活跃板块（发帖最多的一级分区）
-$active_sections = [];
-$as_res = $conn->query("SELECT s.id,s.name,s.icon,s.color,COUNT(p.id) as cnt
-    FROM sections s
-    LEFT JOIN sections sub ON sub.parent_id=s.id
-    LEFT JOIN posts p ON p.section_id=sub.id AND p.status='published' AND p.created_at > DATE_SUB(NOW(),INTERVAL 3 DAY)
-    WHERE s.parent_id=0
-    GROUP BY s.id ORDER BY cnt DESC LIMIT 4");
-if ($as_res) while ($r = $as_res->fetch_assoc()) $active_sections[] = $r;
-
-// 为你推荐（已登录：按兴趣标签匹配；未登录：最新精选）
-$recommended = [];
-if ($is_logged_in ?? false) {
-    $uid = intval($_SESSION['user_id']);
-    $tags_res = $conn->query("SELECT tag FROM user_interests WHERE user_id=$uid ORDER BY weight DESC LIMIT 10");
-    $tags = [];
-    if ($tags_res) while ($r = $tags_res->fetch_assoc()) $tags[] = $r['tag'];
-
-    if (!empty($tags)) {
-        $tag_cond = implode(',', array_fill(0, count($tags), '?'));
-        $types    = str_repeat('s', count($tags));
-        $stmt     = $conn->prepare("SELECT p.*,u.username,u.avatar,s.name as section_name
-            FROM posts p JOIN users u ON u.id=p.user_id JOIN sections s ON s.id=p.section_id
-            WHERE p.status='published' AND p.tags REGEXP CONCAT('(', ?, ')')
-            ORDER BY p.created_at DESC LIMIT 10");
-        $tag_pattern = implode('|', array_map(function($t){ return preg_quote($t); }, $tags));
-        $stmt->bind_param('s', $tag_pattern);
-        $stmt->execute();
-        $res = $stmt->get_result();
-        while ($r = $res->fetch_assoc()) $recommended[] = $r;
-        $stmt->close();
-    }
-}
-if (empty($recommended)) {
-    $rec_res = $conn->query("SELECT p.*,u.username,u.avatar,s.name as section_name
-        FROM posts p JOIN users u ON u.id=p.user_id JOIN sections s ON s.id=p.section_id
-        WHERE p.status='published' AND p.is_featured=1
-        ORDER BY p.created_at DESC LIMIT 10");
-    if ($rec_res) while ($r = $rec_res->fetch_assoc()) $recommended[] = $r;
-}
-
-// 最新帖子（支持本校/全站切换）
-$user_school = $_SESSION['school'] ?? '';
-$scope       = $_GET['scope'] ?? ($user_school ? 'school' : 'all');
-$latest = [];
-$school_cond = ($scope === 'school' && $user_school !== '')
-    ? "AND u.school = '" . $conn->real_escape_string($user_school) . "'"
-    : '';
-$lat_res = $conn->query("SELECT p.*,u.username,u.avatar,s.name as section_name
-    FROM posts p JOIN users u ON u.id=p.user_id JOIN sections s ON s.id=p.section_id
-    WHERE p.status='published' $school_cond
-    ORDER BY p.created_at DESC LIMIT 20");
-if ($lat_res) while ($r = $lat_res->fetch_assoc()) $latest[] = $r;
-
-// 一级分区
-$main_sections = [];
-$ms_res = $conn->query("SELECT * FROM sections WHERE parent_id=0 ORDER BY sort_order");
-if ($ms_res) while ($r = $ms_res->fetch_assoc()) $main_sections[] = $r;
+// 读取管理员配置的槽位
+$slots = [];
+$sr = $conn->query("SELECT hs.position,
+    p.id, p.title, p.content, p.created_at, p.views, p.like_count, p.comment_count,
+    u.username, u.avatar,
+    s.name as section_name, s.color as section_color
+    FROM homepage_slots hs
+    JOIN posts p ON p.id = hs.post_id AND p.status = 'published'
+    JOIN users u ON u.id = p.user_id
+    JOIN sections s ON s.id = p.section_id
+    ORDER BY hs.position ASC");
+if ($sr) while ($r = $sr->fetch_assoc()) $slots[] = $r;
 
 include 'includes/header.php';
 ?>
 
-<!-- ── 四大分区入口 ── -->
-<div class="section-grid">
-<?php foreach ($main_sections as $sec): ?>
-  <a href="pages/section.php?slug=<?= h($sec['slug']) ?>" class="section-card" style="border-top-color:<?= h($sec['color']) ?>">
-    <div class="section-icon"><?= h($sec['icon']) ?></div>
-    <div class="section-name"><?= h($sec['name']) ?></div>
-    <div class="section-desc"><?= h(mb_substr($sec['description'], 0, 30)) ?></div>
-  </a>
-<?php endforeach; ?>
-</div>
-
-<div class="layout-2col">
-  <!-- ── 主内容 ── -->
-  <div class="col-main">
-
-    <?php if (!empty($recommended)): ?>
-    <div class="card mb-24">
-      <div class="card-header">⭐ <?= ($is_logged_in ?? false) ? '为你推荐' : '精选内容' ?></div>
-      <div class="post-list" style="padding:12px 8px 8px">
-        <?php foreach ($recommended as $p): ?>
-          <?= render_post_item($p, '') ?>
-        <?php endforeach; ?>
-      </div>
-    </div>
-    <?php endif; ?>
-
-    <div class="card">
-      <div class="card-header">
-        🕐 最新帖子
-        <?php if (!empty($user_school)): ?>
-        <div class="scope-tabs" style="margin-left:auto">
-          <a href="?scope=school" class="scope-tab <?= $scope==='school'?'active':'' ?>">🏫 <?= h($user_school) ?></a>
-          <a href="?scope=all"    class="scope-tab <?= $scope==='all'   ?'active':'' ?>">全站</a>
-        </div>
-        <?php endif; ?>
-      </div>
-      <div class="post-list" style="padding:12px 8px 8px">
-        <?php if (empty($latest)): ?>
-          <div class="empty-state"><div class="icon">📭</div>
-            <p><?= ($scope==='school'&&$user_school) ? '本校还没有帖子，<a href="?scope=all">查看全站</a>或者<a href="pages/publish.php">来发第一帖</a>！' : '还没有帖子，快来发第一帖！' ?></p>
-          </div>
-        <?php else: ?>
-          <?php foreach ($latest as $p): ?>
-            <?= render_post_item($p, '') ?>
-          <?php endforeach; ?>
-        <?php endif; ?>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- ── 侧边栏 ── -->
-  <div class="col-side">
-    <!-- 热帖榜 -->
-    <div class="card mb-16">
-      <div class="card-header">🔥 热帖榜</div>
-      <div class="card-body">
-        <?php if (empty($hot_posts)): ?>
-          <p class="text-muted" style="font-size:13px">暂无热帖</p>
-        <?php else: ?>
-        <ul class="hot-list">
-          <?php foreach ($hot_posts as $i => $hp): ?>
-          <li>
-            <span class="hot-rank <?= $i < 3 ? 'top-3' : '' ?>"><?= $i+1 ?></span>
-            <a href="pages/post.php?id=<?= $hp['id'] ?>" class="hot-title"><?= h($hp['title']) ?></a>
-          </li>
-          <?php endforeach; ?>
-        </ul>
-        <?php endif; ?>
-      </div>
-    </div>
-
-    <!-- 活跃板块 -->
-    <div class="card">
-      <div class="card-header">📌 活跃板块</div>
-      <div class="card-body">
-        <ul class="active-sections">
-          <?php foreach ($active_sections as $as): ?>
-          <li>
-            <a href="pages/section.php?slug=<?= h($as['slug']) ?>" class="active-sect-name">
-              <?= h($as['icon']) ?> <?= h($as['name']) ?>
-            </a>
-            <span class="active-sect-count"><?= $as['cnt'] ?> 帖</span>
-          </li>
-          <?php endforeach; ?>
-        </ul>
-      </div>
-    </div>
-  </div>
-</div>
-
-<?php
-function render_post_item($p, $base) {
-    $tags_arr = array_filter(array_map('trim', explode(',', $p['tags'])));
-    ob_start(); ?>
-    <div class="post-item <?= $p['is_pinned'] ? 'post-pinned' : ($p['is_featured'] ? 'post-featured' : '') ?>">
-      <div class="post-item-top">
-        <div class="post-meta-left">
-          <a href="<?= $base ?>pages/post.php?id=<?= $p['id'] ?>" class="post-title-link">
-            <?= $p['is_pinned'] ? '<span style="color:var(--warning)">📌 </span>' : '' ?>
-            <?= h($p['title']) ?>
-            <?= $p['is_solved'] ? '<span class="post-solved"></span>' : '' ?>
-          </a>
-          <?php if (!empty($p['summary'])): ?>
-            <div class="post-summary"><?= h($p['summary']) ?></div>
-          <?php endif; ?>
-          <div class="post-tags">
-            <span class="tag tag-section"><?= h($p['section_name']) ?></span>
-            <?php foreach (array_slice($tags_arr, 0, 3) as $tag): ?>
-              <span class="tag"><?= h($tag) ?></span>
-            <?php endforeach; ?>
-          </div>
-          <div class="post-footer">
-            <span class="author">
-              <img src="<?= avatar_url($p['avatar'], $base) ?>"
-                   onerror="this.src='<?= $base ?>assets/default_avatar.svg'" alt="">
-              <?= h($p['username']) ?>
-            </span>
-            <span><?= time_ago($p['created_at']) ?></span>
-            <div class="post-stats">
-              <span>👁 <?= $p['views'] ?></span>
-              <span>👍 <?= $p['like_count'] ?></span>
-              <span>💬 <?= $p['comment_count'] ?></span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <?php return ob_get_clean();
+<style>
+.home-hero {
+    display: block;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16/9;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    text-decoration: none;
+    transition: transform .2s, box-shadow .2s;
+    background: var(--bg-2);
 }
+.home-hero:hover { transform: scale(1.008); box-shadow: 0 8px 32px rgba(0,0,0,0.18); }
 
-include 'includes/footer.php';
+.home-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+.home-grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+@media(max-width: 900px) { .home-grid-3 { grid-template-columns: 1fr 1fr; } }
+@media(max-width: 640px) { .home-grid-2, .home-grid-3 { grid-template-columns: 1fr; } }
+
+.home-card {
+    display: block;
+    position: relative;
+    aspect-ratio: 16/9;
+    border-radius: 10px;
+    overflow: hidden;
+    text-decoration: none;
+    background: var(--bg-2);
+    transition: transform .2s, box-shadow .2s;
+}
+.home-card:hover { transform: translateY(-3px); box-shadow: 0 6px 24px rgba(0,0,0,0.16); }
+
+.home-card-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+.home-card-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 52px;
+    opacity: .5;
+}
+.home-card-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,.82) 0%, rgba(0,0,0,.22) 55%, transparent 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 16px;
+    color: #fff;
+}
+.home-hero .home-card-overlay { padding: 28px; }
+
+.home-card-section-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    background: var(--primary);
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    align-self: flex-start;
+}
+.home-card-title {
+    font-size: 15px;
+    font-weight: 700;
+    margin: 0 0 5px;
+    line-height: 1.35;
+    color: #fff;
+    text-shadow: 0 1px 4px rgba(0,0,0,.5);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.home-hero .home-card-title { font-size: 24px; -webkit-line-clamp: 3; }
+.home-card-meta { font-size: 12px; color: rgba(255,255,255,.75); }
+
+.home-empty {
+    text-align: center;
+    padding: 80px 0 60px;
+    color: var(--txt-2);
+}
+.home-empty-icon { font-size: 52px; margin-bottom: 14px; }
+.home-more-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 13px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    color: var(--txt-2);
+    text-decoration: none;
+    font-size: 14px;
+    margin-bottom: 32px;
+    transition: border-color .15s, color .15s;
+}
+.home-more-btn:hover { border-color: var(--primary); color: var(--primary); }
+</style>
+
+<?php if (empty($slots)): ?>
+<div class="home-empty">
+  <div class="home-empty-icon">🏗️</div>
+  <p style="margin:0 0 16px">管理员尚未配置首页内容</p>
+  <a href="square.php" class="btn btn-primary">前往广场浏览帖子</a>
+</div>
+
+<?php else:
+  $hero   = $slots[0];
+  $row2   = array_slice($slots, 1, 2);
+  $row3   = array_slice($slots, 3);
+  $hero_img = extract_cover_image($hero['content']);
+?>
+
+<!-- 主图（全宽 16:9） -->
+<a href="pages/post.php?id=<?= $hero['id'] ?>" class="home-hero home-card">
+  <?php if ($hero_img): ?>
+    <img src="<?= h($hero_img) ?>" class="home-card-img" alt="">
+  <?php else: ?>
+    <div class="home-card-placeholder"
+         style="background:linear-gradient(135deg,<?= h($hero['section_color']) ?>33,<?= h($hero['section_color']) ?>11)">
+      🎓
+    </div>
+  <?php endif; ?>
+  <div class="home-card-overlay">
+    <span class="home-card-section-tag"><?= h($hero['section_name']) ?></span>
+    <h2 class="home-card-title"><?= h($hero['title']) ?></h2>
+    <div class="home-card-meta">
+      <?= h($hero['username']) ?> &nbsp;·&nbsp; <?= time_ago($hero['created_at']) ?>
+      &nbsp;&nbsp; 👁 <?= $hero['views'] ?> &nbsp; 👍 <?= $hero['like_count'] ?>
+    </div>
+  </div>
+</a>
+
+<?php if (!empty($row2)): ?>
+<!-- 双栏 -->
+<div class="home-grid-2">
+  <?php foreach ($row2 as $s):
+    $img = extract_cover_image($s['content']); ?>
+  <a href="pages/post.php?id=<?= $s['id'] ?>" class="home-card">
+    <?php if ($img): ?>
+      <img src="<?= h($img) ?>" class="home-card-img" alt="">
+    <?php else: ?>
+      <div class="home-card-placeholder"
+           style="background:linear-gradient(135deg,<?= h($s['section_color']) ?>33,<?= h($s['section_color']) ?>11)">🎓</div>
+    <?php endif; ?>
+    <div class="home-card-overlay">
+      <span class="home-card-section-tag"><?= h($s['section_name']) ?></span>
+      <h3 class="home-card-title"><?= h($s['title']) ?></h3>
+      <div class="home-card-meta"><?= h($s['username']) ?> · <?= time_ago($s['created_at']) ?></div>
+    </div>
+  </a>
+  <?php endforeach; ?>
+</div>
+<?php endif; ?>
+
+<?php if (!empty($row3)): ?>
+<!-- 三栏（含超出部分） -->
+<div class="home-grid-3">
+  <?php foreach ($row3 as $s):
+    $img = extract_cover_image($s['content']); ?>
+  <a href="pages/post.php?id=<?= $s['id'] ?>" class="home-card">
+    <?php if ($img): ?>
+      <img src="<?= h($img) ?>" class="home-card-img" alt="">
+    <?php else: ?>
+      <div class="home-card-placeholder"
+           style="background:linear-gradient(135deg,<?= h($s['section_color']) ?>33,<?= h($s['section_color']) ?>11)">🎓</div>
+    <?php endif; ?>
+    <div class="home-card-overlay">
+      <span class="home-card-section-tag"><?= h($s['section_name']) ?></span>
+      <h3 class="home-card-title"><?= h($s['title']) ?></h3>
+      <div class="home-card-meta"><?= h($s['username']) ?> · <?= time_ago($s['created_at']) ?></div>
+    </div>
+  </a>
+  <?php endforeach; ?>
+</div>
+<?php endif; ?>
+
+<?php endif; ?>
+
+<a href="square.php" class="home-more-btn">前往广场，浏览全部帖子 →</a>
+
+<?php include 'includes/footer.php'; ?>

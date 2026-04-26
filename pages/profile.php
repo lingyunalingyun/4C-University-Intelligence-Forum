@@ -54,6 +54,13 @@ if ($tab === 'posts') {
     if ($r) while ($row = $r->fetch_assoc()) $items[] = $row;
 }
 
+// 社团信息
+$profile_club = null;
+$pcr = $conn->query("SELECT c.id, c.name, c.avatar, c.school, cm.role
+    FROM club_members cm JOIN clubs c ON c.id=cm.club_id
+    WHERE cm.user_id=$profile_id AND c.status='active' LIMIT 1");
+if ($pcr) $profile_club = $pcr->fetch_assoc();
+
 $level = get_level($profile['exp']);
 $page_title = $profile['username'] . ' 的主页';
 include '../includes/header.php';
@@ -76,6 +83,31 @@ include '../includes/header.php';
       </div>
       <?php if ($profile['school']): ?>
         <div style="font-size:13px;color:var(--txt-2);margin-bottom:4px">🏫 <?= h($profile['school']) ?></div>
+      <?php endif; ?>
+      <?php if ($profile_club): ?>
+        <?php
+          $club_role_label = ['president'=>'社长','vice_president'=>'副社长','member'=>'成员'];
+          $club_role_color = ['president'=>'linear-gradient(135deg,#f59e0b,#d97706)','vice_president'=>'linear-gradient(135deg,#8b5cf6,#6d28d9)','member'=>'linear-gradient(135deg,#3b82f6,#1d4ed8)'];
+          $cr = $profile_club['role'];
+          $club_av = !empty($profile_club['avatar']) ? '../uploads/clubs/' . h($profile_club['avatar']) : null;
+        ?>
+        <a href="club.php?id=<?= $profile_club['id'] ?>" style="display:inline-flex;align-items:center;gap:8px;margin-bottom:6px;text-decoration:none;
+            background:<?= $club_role_color[$cr] ?>;border-radius:20px;padding:4px 12px 4px 5px;
+            box-shadow:0 2px 8px rgba(0,0,0,.15);transition:opacity .2s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+          <?php if ($club_av): ?>
+            <img src="<?= $club_av ?>" style="width:22px;height:22px;border-radius:50%;object-fit:cover;border:1.5px solid rgba(255,255,255,.5)">
+          <?php else: ?>
+            <div style="width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff">
+              <?= mb_substr($profile_club['name'],0,1) ?>
+            </div>
+          <?php endif; ?>
+          <span style="font-size:12px;font-weight:600;color:#fff;line-height:1">
+            <?= h($profile_club['name']) ?>
+          </span>
+          <span style="font-size:10px;color:rgba(255,255,255,.8);background:rgba(0,0,0,.15);border-radius:10px;padding:1px 6px;line-height:1.4">
+            <?= $club_role_label[$cr] ?>
+          </span>
+        </a>
       <?php endif; ?>
       <?php if ($profile['bio']): ?>
         <div style="font-size:14px;color:var(--txt-2);margin-bottom:8px"><?= h($profile['bio']) ?></div>
@@ -186,31 +218,4 @@ function showToast(msg) {
 }
 </script>
 
-<?php
-function render_post_item($p, $base) {
-    $tags_arr = array_filter(array_map('trim', explode(',', $p['tags'])));
-    ob_start(); ?>
-    <div class="post-item">
-      <div class="post-meta-left">
-        <a href="<?= $base ?>pages/post.php?id=<?= $p['id'] ?>" class="post-title-link">
-          <?= h($p['title']) ?>
-          <?= $p['is_solved'] ? ' <span style="font-size:11px;background:#dcfce7;color:#166534;padding:2px 6px;border-radius:4px">✅ 已解决</span>' : '' ?>
-        </a>
-        <?php if (!empty($p['summary'])): ?>
-          <div class="post-summary"><?= h($p['summary']) ?></div>
-        <?php endif; ?>
-        <div class="post-footer">
-          <span><?= time_ago($p['created_at']) ?></span>
-          <span style="font-size:12px;color:var(--txt-3)"><?= h($p['section_name']) ?></span>
-          <div class="post-stats">
-            <span>👁 <?= $p['views'] ?></span>
-            <span>👍 <?= $p['like_count'] ?></span>
-            <span>💬 <?= $p['comment_count'] ?></span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <?php return ob_get_clean();
-}
-
-include '../includes/footer.php';
+<?php include '../includes/footer.php'; ?>

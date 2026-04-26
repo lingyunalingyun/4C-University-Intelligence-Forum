@@ -68,10 +68,13 @@ if ($is_logged_in && isset($conn)) {
     <!-- 导航链接 -->
     <nav class="nav-links">
       <a href="<?= $base ?>index.php">首页</a>
+      <a href="<?= $base ?>square.php">广场</a>
       <a href="<?= $base ?>pages/explore.php">发现</a>
       <a href="<?= $base ?>pages/section.php">分区</a>
       <a href="<?= $base ?>pages/hot.php">热榜</a>
+      <a href="<?= $base ?>pages/clubs.php">社团</a>
       <?php if ($is_logged_in): ?>
+        <a href="<?= $base ?>pages/my_clubs.php">我的社团</a>
         <a href="<?= $base ?>pages/ai_assistant.php">AI助手</a>
         <?php if ($current_role === 'admin' || $current_role === 'owner'): ?>
           <a href="<?= $base ?>admin/index.php">管理后台</a>

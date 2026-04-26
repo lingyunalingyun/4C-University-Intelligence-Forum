@@ -41,6 +41,9 @@ include '../includes/header.php';
     <a href="users.php"    class="btn btn-outline btn-sm">👥 用户管理</a>
     <a href="posts.php"    class="btn btn-outline btn-sm">📝 帖子管理</a>
     <a href="sections.php" class="btn btn-outline btn-sm">🗂️ 板块管理</a>
+    <a href="homepage.php" class="btn btn-outline btn-sm">🖼️ 主页管理</a>
+    <a href="clubs.php"   class="btn btn-outline btn-sm">🏛️ 社团管理</a>
+    <a href="logs.php"    class="btn btn-outline btn-sm">📋 操作记录</a>
   </div>
 </div>
 

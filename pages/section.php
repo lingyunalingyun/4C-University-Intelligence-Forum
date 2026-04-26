@@ -8,12 +8,58 @@ $sort   = $_GET['sort']  ?? 'new';
 $page   = max(1, (int)($_GET['page'] ?? 1));
 $per    = 20;
 
+// 无 slug → 展示全部分区概览
+if ($slug === '') {
+    $page_title = '全部分区';
+    include '../includes/header.php';
+
+    $all_sections = [];
+    $ar = $conn->query("SELECT * FROM sections WHERE parent_id=0 ORDER BY sort_order");
+    if ($ar) while ($r = $ar->fetch_assoc()) {
+        $r['subs'] = [];
+        $sr2 = $conn->query("SELECT * FROM sections WHERE parent_id={$r['id']} ORDER BY sort_order");
+        if ($sr2) while ($s2 = $sr2->fetch_assoc()) $r['subs'][] = $s2;
+        $cnt_r = $conn->query("SELECT COUNT(*) as c FROM posts p
+            JOIN sections sub ON sub.id=p.section_id AND sub.parent_id={$r['id']}
+            WHERE p.status='published'");
+        $r['post_count'] = $cnt_r ? (int)$cnt_r->fetch_assoc()['c'] : 0;
+        $all_sections[] = $r;
+    }
+    ?>
+    <h2 style="margin:0 0 20px">🗂️ 全部分区</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px">
+      <?php foreach ($all_sections as $sec): ?>
+      <div class="card" style="border-top:4px solid <?= h($sec['color']) ?>;padding:0">
+        <a href="section.php?slug=<?= h($sec['slug']) ?>" style="display:flex;align-items:center;gap:12px;padding:16px 20px;text-decoration:none">
+          <span style="font-size:32px"><?= h($sec['icon']) ?></span>
+          <div>
+            <div style="font-size:16px;font-weight:700;color:var(--txt)"><?= h($sec['name']) ?></div>
+            <div style="font-size:12px;color:var(--txt-2);margin-top:2px"><?= h(mb_substr($sec['description'],0,30)) ?></div>
+          </div>
+          <div style="margin-left:auto;font-size:12px;color:var(--txt-3)"><?= $sec['post_count'] ?> 帖</div>
+        </a>
+        <?php if (!empty($sec['subs'])): ?>
+        <div style="padding:8px 20px 14px;display:flex;flex-wrap:wrap;gap:6px;border-top:1px solid var(--border)">
+          <?php foreach ($sec['subs'] as $s2): ?>
+            <a href="section.php?slug=<?= h($sec['slug']) ?>&sub=<?= h($s2['slug']) ?>"
+               class="tag" style="font-size:12px"><?= h($s2['icon']) ?> <?= h($s2['name']) ?></a>
+          <?php endforeach; ?>
+        </div>
+        <?php endif; ?>
+      </div>
+      <?php endforeach; ?>
+    </div>
+    <?php
+    include '../includes/footer.php';
+    exit;
+}
+
 // 获取一级分区
 $stmt = $conn->prepare("SELECT * FROM sections WHERE slug=? AND parent_id=0");
 $stmt->bind_param('s', $slug); $stmt->execute();
 $section = $stmt->get_result()->fetch_assoc();
 $stmt->close();
-if (!$section) { header('Location: ../index.php'); exit; }
+if (!$section) { header('Location: section.php'); exit; }
 
 // 子分区列表
 $subs = [];
@@ -134,41 +180,4 @@ include '../includes/header.php';
   </div>
 </div>
 
-<?php
-function render_post_item($p, $base) {
-    $tags_arr = array_filter(array_map('trim', explode(',', $p['tags'])));
-    ob_start(); ?>
-    <div class="post-item <?= $p['is_pinned'] ? 'post-pinned' : '' ?>">
-      <div class="post-meta-left">
-        <a href="<?= $base ?>pages/post.php?id=<?= $p['id'] ?>" class="post-title-link">
-          <?= $p['is_pinned'] ? '<span style="color:var(--warning)">📌 </span>' : '' ?>
-          <?= h($p['title']) ?>
-          <?= $p['is_solved'] ? ' <span style="font-size:11px;background:#dcfce7;color:#166534;padding:2px 6px;border-radius:4px">✅ 已解决</span>' : '' ?>
-        </a>
-        <?php if (!empty($p['summary'])): ?>
-          <div class="post-summary"><?= h($p['summary']) ?></div>
-        <?php endif; ?>
-        <div class="post-tags">
-          <?php foreach (array_slice($tags_arr,0,3) as $tag): ?>
-            <span class="tag"><?= h($tag) ?></span>
-          <?php endforeach; ?>
-        </div>
-        <div class="post-footer">
-          <span class="author">
-            <img src="<?= avatar_url($p['avatar'], $base) ?>"
-                 onerror="this.src='<?= $base ?>assets/default_avatar.svg'" alt="">
-            <?= h($p['username']) ?>
-          </span>
-          <span><?= time_ago($p['created_at']) ?></span>
-          <div class="post-stats">
-            <span>👁 <?= $p['views'] ?></span>
-            <span>👍 <?= $p['like_count'] ?></span>
-            <span>💬 <?= $p['comment_count'] ?></span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <?php return ob_get_clean();
-}
-
-include '../includes/footer.php';
+<?php include '../includes/footer.php'; ?>

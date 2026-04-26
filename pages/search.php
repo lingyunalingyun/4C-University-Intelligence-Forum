@@ -103,40 +103,4 @@ include '../includes/header.php';
 
 <?php endif; ?>
 
-<?php
-function render_post_item($p, $base, $kw='') {
-    $tags_arr = array_filter(array_map('trim', explode(',', $p['tags'])));
-    ob_start(); ?>
-    <div class="post-item">
-      <div class="post-meta-left">
-        <a href="<?= $base ?>pages/post.php?id=<?= $p['id'] ?>" class="post-title-link">
-          <?= h($p['title']) ?>
-        </a>
-        <?php if (!empty($p['summary'])): ?>
-          <div class="post-summary"><?= h($p['summary']) ?></div>
-        <?php endif; ?>
-        <div class="post-tags">
-          <?php foreach (array_slice($tags_arr,0,3) as $tag): ?>
-            <a href="search.php?q=<?= urlencode($tag) ?>" class="tag"><?= h($tag) ?></a>
-          <?php endforeach; ?>
-        </div>
-        <div class="post-footer">
-          <span class="author">
-            <img src="<?= avatar_url($p['avatar'], $base) ?>"
-                 onerror="this.src='<?= $base ?>assets/default_avatar.svg'" alt="">
-            <?= h($p['username']) ?>
-          </span>
-          <span><?= time_ago($p['created_at']) ?></span>
-          <span style="font-size:12px;color:var(--txt-3)"><?= h($p['section_name']) ?></span>
-          <div class="post-stats">
-            <span>👁 <?= $p['views'] ?></span>
-            <span>👍 <?= $p['like_count'] ?></span>
-            <span>💬 <?= $p['comment_count'] ?></span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <?php return ob_get_clean();
-}
-
-include '../includes/footer.php';
+<?php include '../includes/footer.php'; ?>

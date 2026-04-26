@@ -24,8 +24,11 @@ $conn->query("CREATE TABLE IF NOT EXISTS users (
     created_at      DATETIME     DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
 
-// 老库兼容：补 scid 列
-$conn->query("ALTER TABLE users ADD COLUMN IF NOT EXISTS scid VARCHAR(8) DEFAULT NULL UNIQUE");
+// 老库兼容：补 scid 列（兼容不支持 IF NOT EXISTS 的 MySQL 版本）
+$col_check = $conn->query("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='users' AND COLUMN_NAME='scid'");
+if ($col_check && $col_check->num_rows === 0) {
+    $conn->query("ALTER TABLE users ADD COLUMN scid VARCHAR(8) DEFAULT NULL UNIQUE");
+}
 
 // 为没有 scid 的用户自动生成
 $no_scid = $conn->query("SELECT id FROM users WHERE scid IS NULL");
@@ -138,6 +141,106 @@ $conn->query("CREATE TABLE IF NOT EXISTS ai_logs (
     tokens_used INT DEFAULT 0,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+
+// 主页精选槽位（管理员配置）
+$conn->query("CREATE TABLE IF NOT EXISTS homepage_slots (
+    id         INT AUTO_INCREMENT PRIMARY KEY,
+    position   INT NOT NULL UNIQUE,
+    post_id    INT NOT NULL,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+
+// 社团系统
+$conn->query("CREATE TABLE IF NOT EXISTS clubs (
+    id           INT AUTO_INCREMENT PRIMARY KEY,
+    name         VARCHAR(100) NOT NULL,
+    description  TEXT,
+    school       VARCHAR(100) NOT NULL,
+    president_id INT NOT NULL,
+    member_count INT DEFAULT 1,
+    status       ENUM('active','inactive') DEFAULT 'active',
+    created_at   DATETIME DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+
+$conn->query("CREATE TABLE IF NOT EXISTS club_applications (
+    id            INT AUTO_INCREMENT PRIMARY KEY,
+    user_id       INT NOT NULL,
+    name          VARCHAR(100) NOT NULL,
+    school        VARCHAR(100) NOT NULL,
+    description   TEXT,
+    purpose       TEXT,
+    status        ENUM('pending','approved','rejected') DEFAULT 'pending',
+    reject_reason TEXT,
+    reviewed_by   INT DEFAULT NULL,
+    reviewed_at   DATETIME DEFAULT NULL,
+    club_id       INT DEFAULT NULL,
+    created_at    DATETIME DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+
+$conn->query("CREATE TABLE IF NOT EXISTS club_members (
+    id        INT AUTO_INCREMENT PRIMARY KEY,
+    club_id   INT NOT NULL,
+    user_id   INT NOT NULL,
+    role      ENUM('president','vice_president','member') DEFAULT 'member',
+    joined_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uq_club_user (club_id, user_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+
+$conn->query("CREATE TABLE IF NOT EXISTS club_join_requests (
+    id            INT AUTO_INCREMENT PRIMARY KEY,
+    club_id       INT NOT NULL,
+    user_id       INT NOT NULL,
+    message       TEXT,
+    status        ENUM('pending','approved','rejected') DEFAULT 'pending',
+    reviewed_by   INT DEFAULT NULL,
+    reject_reason TEXT,
+    reviewed_at   DATETIME DEFAULT NULL,
+    created_at    DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uq_club_join (club_id, user_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+
+// 踢出记录
+$conn->query("CREATE TABLE IF NOT EXISTS club_kick_logs (
+    id         INT AUTO_INCREMENT PRIMARY KEY,
+    club_id    INT NOT NULL,
+    user_id    INT NOT NULL,
+    kicked_by  INT NOT NULL,
+    reason     TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+
+// 社团改名申请
+$conn->query("CREATE TABLE IF NOT EXISTS club_name_changes (
+    id            INT AUTO_INCREMENT PRIMARY KEY,
+    club_id       INT NOT NULL,
+    user_id       INT NOT NULL,
+    old_name      VARCHAR(100) NOT NULL,
+    new_name      VARCHAR(100) NOT NULL,
+    status        ENUM('pending','approved','rejected') DEFAULT 'pending',
+    reject_reason TEXT,
+    reviewed_by   INT DEFAULT NULL,
+    reviewed_at   DATETIME DEFAULT NULL,
+    created_at    DATETIME DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+
+// 管理员操作日志
+$conn->query("CREATE TABLE IF NOT EXISTS admin_logs (
+    id          INT AUTO_INCREMENT PRIMARY KEY,
+    admin_id    INT NOT NULL,
+    action      VARCHAR(100) NOT NULL,
+    target_type VARCHAR(50)  DEFAULT '',
+    target_id   INT          DEFAULT 0,
+    detail      TEXT,
+    created_at  DATETIME DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+
+// 补 avatar 列（兼容已建表的老库）
+foreach (['clubs','club_applications'] as $_tbl) {
+    $col = $conn->query("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS
+        WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='$_tbl' AND COLUMN_NAME='avatar'");
+    if ($col && $col->num_rows === 0)
+        $conn->query("ALTER TABLE $_tbl ADD COLUMN avatar VARCHAR(255) DEFAULT ''");
+}
 
 // 密码重置
 $conn->query("CREATE TABLE IF NOT EXISTS password_resets (

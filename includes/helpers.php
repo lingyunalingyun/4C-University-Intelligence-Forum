@@ -100,6 +100,63 @@ function ai_tags($title, $content) {
     return $result ? $result : '';
 }
 
+// 从帖子 HTML 内容中提取第一张图片 URL
+function extract_cover_image($content) {
+    if (preg_match('/<img[^>]+src=["\']([^"\']+)["\']/', $content, $m)) {
+        return $m[1];
+    }
+    return '';
+}
+
+// 渲染帖子列表条目（广场/推荐列表共用）
+function render_post_item($p, $base, $kw = '') {
+    $tags_arr = array_filter(array_map('trim', explode(',', $p['tags'])));
+    ob_start(); ?>
+    <div class="post-item <?= $p['is_pinned'] ? 'post-pinned' : ($p['is_featured'] ? 'post-featured' : '') ?>">
+      <div class="post-item-top">
+        <div class="post-meta-left">
+          <a href="<?= $base ?>pages/post.php?id=<?= $p['id'] ?>" class="post-title-link">
+            <?= $p['is_pinned'] ? '<span style="color:var(--warning)">📌 </span>' : '' ?>
+            <?= h($p['title']) ?>
+            <?= $p['is_solved'] ? '<span class="post-solved"></span>' : '' ?>
+          </a>
+          <?php if (!empty($p['summary'])): ?>
+            <div class="post-summary"><?= h($p['summary']) ?></div>
+          <?php endif; ?>
+          <div class="post-tags">
+            <span class="tag tag-section"><?= h($p['section_name']) ?></span>
+            <?php foreach (array_slice($tags_arr, 0, 3) as $tag): ?>
+              <span class="tag"><?= h($tag) ?></span>
+            <?php endforeach; ?>
+          </div>
+          <div class="post-footer">
+            <span class="author">
+              <img src="<?= avatar_url($p['avatar'], $base) ?>"
+                   onerror="this.src='<?= $base ?>assets/default_avatar.svg'" alt="">
+              <?= h($p['username']) ?>
+            </span>
+            <span><?= time_ago($p['created_at']) ?></span>
+            <div class="post-stats">
+              <span>👁 <?= $p['views'] ?></span>
+              <span>👍 <?= $p['like_count'] ?></span>
+              <span>💬 <?= $p['comment_count'] ?></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <?php return ob_get_clean();
+}
+
+// 记录管理员操作日志
+function log_admin_action($conn, $admin_id, $action, $target_type = '', $target_id = 0, $detail = '') {
+    $a  = $conn->real_escape_string($action);
+    $tt = $conn->real_escape_string($target_type);
+    $d  = $conn->real_escape_string($detail);
+    $conn->query("INSERT INTO admin_logs (admin_id,action,target_type,target_id,detail)
+        VALUES ($admin_id,'$a','$tt',$target_id,'$d')");
+}
+
 // 更新用户兴趣权重（浏览/点赞时调用）
 function update_interest($conn, $user_id, $tags_str, $delta = 1.0) {
     if (empty($tags_str) || !$user_id) return;

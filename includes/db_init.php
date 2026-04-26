@@ -252,6 +252,12 @@ foreach (['clubs','club_applications'] as $_tbl) {
         $conn->query("ALTER TABLE $_tbl ADD COLUMN avatar VARCHAR(255) DEFAULT ''");
 }
 
+// 补 banner 列（社团背景图）
+$_col = $conn->query("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS
+    WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='clubs' AND COLUMN_NAME='banner'");
+if ($_col && $_col->num_rows === 0)
+    $conn->query("ALTER TABLE clubs ADD COLUMN banner VARCHAR(255) DEFAULT ''");
+
 // 密码重置
 $conn->query("CREATE TABLE IF NOT EXISTS password_resets (
     id         INT AUTO_INCREMENT PRIMARY KEY,

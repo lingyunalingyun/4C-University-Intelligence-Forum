@@ -43,6 +43,31 @@ include '../includes/header.php';
         <input type="hidden" name="action"  value="club_edit">
         <input type="hidden" name="club_id" value="<?= $cid ?>">
 
+        <!-- 社团背景图 -->
+        <div class="form-group">
+          <label>社团背景图 <span style="font-size:11px;color:var(--txt-3);font-weight:400">（显示在社团列表卡片，建议 16:9 比例）</span></label>
+          <div style="margin-bottom:10px">
+            <?php if (!empty($club['banner'])): ?>
+              <div id="banner-preview-wrap" style="position:relative;width:100%;aspect-ratio:16/9;border-radius:10px;overflow:hidden;background:var(--bg-2)">
+                <img id="banner-preview" src="../uploads/clubs/<?= h($club['banner']) ?>"
+                     style="width:100%;height:100%;object-fit:cover">
+              </div>
+            <?php else: ?>
+              <div id="banner-preview-wrap" style="position:relative;width:100%;aspect-ratio:16/9;border-radius:10px;overflow:hidden;background:linear-gradient(135deg,var(--primary),var(--primary-dk));display:flex;align-items:center;justify-content:center">
+                <img id="banner-preview" src="" style="width:100%;height:100%;object-fit:cover;display:none;position:absolute;inset:0">
+                <span id="banner-placeholder" style="font-size:13px;color:rgba(255,255,255,.7)">未上传背景图，将使用渐变色</span>
+              </div>
+            <?php endif; ?>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <input type="file" name="banner" id="banner-input" accept="image/*"
+                   style="display:none" onchange="previewBanner(this)">
+            <button type="button" class="btn btn-outline btn-sm"
+                    onclick="document.getElementById('banner-input').click()">上传背景图</button>
+            <span style="font-size:12px;color:var(--txt-3)">JPG/PNG/WebP，最大 5MB，未上传则以社团头像填充</span>
+          </div>
+        </div>
+
         <!-- 社团头像 -->
         <div class="form-group">
           <label>社团图片</label>
@@ -113,6 +138,21 @@ function previewImg(input) {
             preview.src = e.target.result;
             preview.style.display = '';
             if (def) def.style.display = 'none';
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+function previewBanner(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            var img = document.getElementById('banner-preview');
+            var ph  = document.getElementById('banner-placeholder');
+            img.src = e.target.result;
+            img.style.display = '';
+            img.style.position = 'absolute';
+            img.style.inset = '0';
+            if (ph) ph.style.display = 'none';
         };
         reader.readAsDataURL(input.files[0]);
     }

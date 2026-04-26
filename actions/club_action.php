@@ -37,6 +37,18 @@ function save_club_avatar($conn) {
     return move_uploaded_file($file['tmp_name'], $dir . $fn) ? $fn : null;
 }
 
+function save_club_banner() {
+    if (!isset($_FILES['banner']) || $_FILES['banner']['error'] !== UPLOAD_ERR_OK) return null;
+    $file = $_FILES['banner'];
+    $ext  = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+    if (!in_array($ext, ['jpg','jpeg','png','gif','webp'])) return null;
+    if ($file['size'] > 5 * 1024 * 1024) return null;
+    $dir = __DIR__ . '/../uploads/clubs/';
+    if (!is_dir($dir)) mkdir($dir, 0755, true);
+    $fn = 'banner_' . uniqid() . '.' . $ext;
+    return move_uploaded_file($file['tmp_name'], $dir . $fn) ? $fn : null;
+}
+
 // ── 申请创建社团 ──────────────────────────────────────────
 if ($action === 'apply_create') {
     $name = trim($_POST['name']        ?? '');
@@ -85,6 +97,16 @@ if ($action === 'club_edit') {
 
     $back = '../pages/club_edit.php?id=' . $club_id;
     $msgs = [];
+
+    // 更换背景图
+    if (isset($_FILES['banner']) && $_FILES['banner']['error'] === UPLOAD_ERR_OK) {
+        $fn = save_club_banner();
+        if ($fn) {
+            $fn_esc = $conn->real_escape_string($fn);
+            $conn->query("UPDATE clubs SET banner='$fn_esc' WHERE id=$club_id");
+            $msgs[] = '背景图已更新';
+        }
+    }
 
     // 更换头图
     if (isset($_FILES['avatar']) && $_FILES['avatar']['error'] === UPLOAD_ERR_OK) {

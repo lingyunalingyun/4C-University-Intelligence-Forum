@@ -33,6 +33,7 @@
 
 /* ── 深色主题 ── */
 [data-theme="dark"] {
+  color-scheme: dark;
   --primary:    #60a5fa;
   --primary-dk: #3b82f6;
   --primary-lt: #1e3a5f;
@@ -263,6 +264,19 @@ a:hover { color: var(--primary-dk); }
 
 .form-group { margin-bottom: 18px; }
 .form-group label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: 500; color: var(--txt-2); }
+input, select, textarea {
+  color: var(--txt);
+  background: var(--bg-2);
+  font-family: inherit;
+}
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--txt);
+  -webkit-box-shadow: 0 0 0 1000px var(--bg-2) inset;
+  transition: background-color 9999s ease-in-out 0s;
+}
+
 .form-group input, .form-group select, .form-group textarea {
   width: 100%; padding: 10px 14px;
   border: 1px solid var(--border); border-radius: var(--r);
@@ -272,7 +286,7 @@ a:hover { color: var(--primary-dk); }
 }
 .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
   border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-lt);
-  background: #fff;
+  background: var(--bg-2);
 }
 .form-group textarea { resize: vertical; min-height: 120px; }
 

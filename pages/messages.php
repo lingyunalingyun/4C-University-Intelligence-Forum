@@ -98,12 +98,19 @@ include '../includes/header.php';
     display:flex; flex-direction:column; background:var(--bg-card);
 }
 .msg-sidebar-top {
-    padding:12px; border-bottom:1px solid var(--border);
-    display:flex; gap:6px; align-items:center;
+    padding:10px 12px; border-bottom:1px solid var(--border);
+    display:flex; flex-direction:column; gap:8px;
 }
 .msg-sidebar-top input {
-    flex:1; padding:7px 10px; border:1.5px solid var(--border); border-radius:8px;
+    width:100%; box-sizing:border-box; padding:7px 10px;
+    border:1.5px solid var(--border); border-radius:8px;
     font-size:13px; background:var(--bg-2);
+}
+.msg-sidebar-top .btn-row {
+    display:flex; gap:6px;
+}
+.msg-sidebar-top .btn-row button {
+    flex:1; padding:5px 0; font-size:12px; border-radius:6px; cursor:pointer;
 }
 .msg-conv-list { flex:1; overflow-y:auto; }
 .msg-conv-item {
@@ -190,8 +197,10 @@ include '../includes/header.php';
 <div class="msg-sidebar">
   <div class="msg-sidebar-top">
     <input type="text" id="conv-search" placeholder="搜索会话…" oninput="filterConvs(this.value)">
-    <button class="btn btn-primary btn-sm" onclick="openNewPrivate()" title="新私信">✉</button>
-    <button class="btn btn-outline btn-sm" onclick="openNewGroup()" title="新群组">👥</button>
+    <div class="btn-row">
+      <button onclick="openNewPrivate()" style="border:none;background:var(--primary);color:#fff">+ 私信</button>
+      <button onclick="openNewGroup()" style="border:1.5px solid var(--border);background:transparent;color:var(--txt)">+ 群组</button>
+    </div>
   </div>
   <div class="msg-conv-list" id="conv-list">
     <?php if (empty($conversations)): ?>

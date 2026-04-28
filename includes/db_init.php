@@ -289,6 +289,13 @@ $conn->query("CREATE TABLE IF NOT EXISTS messages (
     INDEX idx_created (created_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
 
+// 站点设置（key-value，管理员可配置）
+$conn->query("CREATE TABLE IF NOT EXISTS site_settings (
+    `key`       VARCHAR(100) NOT NULL PRIMARY KEY,
+    `value`     TEXT,
+    updated_at  DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+
 // 密码重置
 $conn->query("CREATE TABLE IF NOT EXISTS password_resets (
     id         INT AUTO_INCREMENT PRIMARY KEY,

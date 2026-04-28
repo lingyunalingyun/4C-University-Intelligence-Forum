@@ -23,9 +23,9 @@ $sr->bind_param('i', $section_id); $sr->execute();
 if (!$sr->get_result()->fetch_assoc()) { header('Location: ../pages/publish.php?error=section'); exit; }
 $sr->close();
 
-// 内容净化
-$clean_content = htmlspecialchars($content, ENT_QUOTES, 'UTF-8');
-$clean_tags    = htmlspecialchars($tags,    ENT_QUOTES, 'UTF-8');
+// 净化富文本内容（Quill HTML）和标签
+$clean_content = sanitize_rich_html($content);
+$clean_tags    = htmlspecialchars($tags, ENT_QUOTES, 'UTF-8');
 
 if ($edit_id) {
     // 编辑模式：验证权限

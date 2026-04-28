@@ -123,4 +123,49 @@ if ($is_logged_in && isset($conn)) {
 <?php endif; ?>
 
 <!-- ── 主体内容开始 ── -->
+<?php if ($in_admin):
+    $admin_page = basename($_SERVER['PHP_SELF'], '.php');
+    $nav_groups = [
+        '' => [
+            ['index',    '📊', '数据总览'],
+        ],
+        '内容管理' => [
+            ['users',    '👥', '用户管理'],
+            ['posts',    '📝', '帖子管理'],
+            ['sections', '🗂️', '板块管理'],
+            ['clubs',    '🏛️', '社团管理'],
+        ],
+        '运营' => [
+            ['homepage', '🖼️', '主页精选'],
+            ['messages', '💬', '消息记录'],
+            ['logs',     '📋', '操作日志'],
+        ],
+        '系统' => [
+            ['settings', '🤖', 'AI 设置'],
+        ],
+    ];
+?>
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <div class="admin-sidebar-brand">
+      <span>⚙️</span><span>管理后台</span>
+    </div>
+    <?php foreach ($nav_groups as $group => $items): ?>
+      <?php if ($group): ?><div class="admin-sidebar-group"><?= $group ?></div><?php endif; ?>
+      <?php foreach ($items as $nav_item): list($pg, $icon, $label) = $nav_item; ?>
+        <a href="<?= $base ?>admin/<?= $pg ?>.php"
+           class="admin-nav-item <?= $admin_page === $pg ? 'active' : '' ?>">
+          <span class="admin-nav-icon"><?= $icon ?></span><?= $label ?>
+        </a>
+      <?php endforeach; ?>
+    <?php endforeach; ?>
+    <div class="admin-sidebar-footer">
+      <a href="<?= $base ?>index.php" class="admin-nav-item">
+        <span class="admin-nav-icon">🌐</span>返回前台
+      </a>
+    </div>
+  </aside>
+  <main class="admin-content">
+<?php else: ?>
 <main class="main-wrap">
+<?php endif; ?>

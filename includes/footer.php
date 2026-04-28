@@ -1,6 +1,11 @@
+<?php if (!empty($in_admin)): ?>
+  </main><!-- /.admin-content -->
+</div><!-- /.admin-layout -->
+<?php else: ?>
 </main>
+<?php endif; ?>
 <!-- ── 页脚 ── -->
-<footer class="site-footer">
+<footer class="site-footer" <?= !empty($in_admin) ? 'style="display:none"' : '' ?>>
   <div class="footer-inner">
     <div class="footer-logo">🎓 <?= SITE_NAME ?></div>
     <div class="footer-links">

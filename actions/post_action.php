@@ -23,9 +23,11 @@ if ($action === 'like') {
         $conn->query("UPDATE posts SET like_count=like_count+1 WHERE id=$post_id");
         $liked = true;
         // 通知作者
-        $pr = $conn->query("SELECT user_id FROM posts WHERE id=$post_id");
-        if ($pr && ($po = $pr->fetch_assoc()) && $po['user_id'] != $uid) {
-            add_notification($conn, $po['user_id'], 'like', $uid, $post_id, null, '');
+        $pr = $conn->query("SELECT user_id,tags FROM posts WHERE id=$post_id");
+        if ($pr && ($po = $pr->fetch_assoc())) {
+            if ($po['user_id'] != $uid)
+                add_notification($conn, $po['user_id'], 'like', $uid, $post_id, null, '');
+            if (!empty($po['tags'])) update_interest($conn, $uid, $po['tags'], 1.5);
         }
     }
     $cr = $conn->query("SELECT like_count FROM posts WHERE id=$post_id");
@@ -42,6 +44,9 @@ if ($action === 'like') {
         $conn->query("INSERT IGNORE INTO post_favs (user_id,post_id) VALUES ($uid,$post_id)");
         $conn->query("UPDATE posts SET fav_count=fav_count+1 WHERE id=$post_id");
         $faved = true;
+        $tr = $conn->query("SELECT tags FROM posts WHERE id=$post_id");
+        if ($tr && ($tp = $tr->fetch_assoc()) && !empty($tp['tags']))
+            update_interest($conn, $uid, $tp['tags'], 2.0);
     }
     $cr = $conn->query("SELECT fav_count FROM posts WHERE id=$post_id");
     $count = $cr ? (int)$cr->fetch_assoc()['fav_count'] : 0;

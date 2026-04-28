@@ -2,7 +2,7 @@
 
 <div align="center">
 
-**该项目成品展示链接：https://paperchemis.top**
+**该项目成品展示链接：http://paperchemis.top**
 
 ![PHP](https://img.shields.io/badge/PHP-8.2-777BB4?logo=php&logoColor=white)
 ![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?logo=mysql&logoColor=white)

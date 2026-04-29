@@ -89,6 +89,7 @@ if ($is_logged_in && isset($conn)) {
       <?php if ($is_logged_in): ?>
         <a href="<?= $base ?>pages/my_clubs.php">我的社团</a>
         <a href="<?= $base ?>pages/ai_assistant.php">AI助手</a>
+        <a href="<?= $base ?>pages/support.php">客服</a>
         <a href="<?= $base ?>pages/messages.php" style="position:relative">
           私信<?php if (!empty($msg_unread) && $msg_unread > 0): ?><span class="badge" style="top:-6px;right:-10px"><?= $msg_unread > 99 ? '99+' : $msg_unread ?></span><?php endif; ?>
         </a>
@@ -143,6 +144,7 @@ if ($is_logged_in && isset($conn)) {
         ],
         '运营' => [
             ['homepage', '🖼️', '主页精选'],
+            ['support',  '🎧', '客服工单'],
             ['reports',  '🚩', '举报管理'],
             ['messages', '💬', '消息记录'],
             ['logs',     '📋', '操作日志'],
@@ -154,9 +156,12 @@ if ($is_logged_in && isset($conn)) {
 ?>
 <?php
 $_pending_reports = 0;
+$_pending_support = 0;
 if (isset($conn)) {
     $pr = $conn->query("SELECT COUNT(*) as c FROM reports WHERE status='pending'");
     if ($pr) $_pending_reports = (int)$pr->fetch_assoc()['c'];
+    $sr = $conn->query("SELECT COUNT(*) as c FROM support_tickets WHERE status='open'");
+    if ($sr) $_pending_support = (int)$sr->fetch_assoc()['c'];
 }
 ?>
 <div class="admin-layout">
@@ -173,6 +178,10 @@ if (isset($conn)) {
           <?php if ($pg === 'reports' && $_pending_reports > 0): ?>
             <span style="margin-left:auto;background:var(--danger);color:#fff;font-size:11px;
                          padding:1px 6px;border-radius:10px;font-weight:700"><?= $_pending_reports ?></span>
+          <?php endif; ?>
+          <?php if ($pg === 'support' && $_pending_support > 0): ?>
+            <span style="margin-left:auto;background:var(--danger);color:#fff;font-size:11px;
+                         padding:1px 6px;border-radius:10px;font-weight:700"><?= $_pending_support ?></span>
           <?php endif; ?>
         </a>
       <?php endforeach; ?>

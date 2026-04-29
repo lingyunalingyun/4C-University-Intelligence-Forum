@@ -352,6 +352,31 @@ if ($check && $check->fetch_assoc()['cnt'] == 0) {
     $stmt->close();
 }
 
+// 客服工单系统
+$conn->query("CREATE TABLE IF NOT EXISTS support_tickets (
+    id          INT AUTO_INCREMENT PRIMARY KEY,
+    user_id     INT NOT NULL,
+    category    VARCHAR(50)  NOT NULL DEFAULT '其他',
+    subject     VARCHAR(200) NOT NULL,
+    content     TEXT NOT NULL,
+    ai_context  TEXT,
+    status      ENUM('open','replied','closed') DEFAULT 'open',
+    created_at  DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at  DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_user_id (user_id),
+    INDEX idx_status  (status)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+
+$conn->query("CREATE TABLE IF NOT EXISTS support_replies (
+    id         INT AUTO_INCREMENT PRIMARY KEY,
+    ticket_id  INT NOT NULL,
+    user_id    INT NOT NULL,
+    content    TEXT NOT NULL,
+    is_admin   TINYINT(1) DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_ticket_id (ticket_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+
 // 举报系统
 $conn->query("CREATE TABLE IF NOT EXISTS reports (
     id          INT AUTO_INCREMENT PRIMARY KEY,

@@ -92,6 +92,10 @@ $page_title = $club['name'];
 include '../includes/header.php';
 ?>
 
+<?php if ($can_post): ?>
+<link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
+<?php endif; ?>
+
 <style>
 .club-member-row { display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border); }
 .club-member-row:last-child { border-bottom:none; }
@@ -225,14 +229,15 @@ include '../includes/header.php';
 <div class="card mb-16">
   <div class="card-header">✏️ 以社团名义发布动态</div>
   <div class="card-body">
-    <form action="../actions/club_action.php" method="post">
-      <input type="hidden" name="action"  value="club_post">
-      <input type="hidden" name="club_id" value="<?= $club_id ?>">
+    <form action="../actions/club_action.php" method="post" id="club-post-form">
+      <input type="hidden" name="action"   value="club_post">
+      <input type="hidden" name="club_id"  value="<?= $club_id ?>">
+      <input type="hidden" name="content"  id="club-post-content">
       <div class="form-group">
         <input type="text" name="title" maxlength="100" required placeholder="动态标题…">
       </div>
       <div class="form-group" style="margin-bottom:10px">
-        <textarea name="content" rows="4" required maxlength="2000" placeholder="动态内容…"></textarea>
+        <div id="club-editor" style="min-height:120px"></div>
       </div>
       <div style="text-align:right">
         <button type="submit" class="btn btn-primary btn-sm">发布动态</button>
@@ -276,7 +281,7 @@ include '../includes/header.php';
           <?php endif; ?>
         </div>
         <div style="font-size:15px;font-weight:600;color:var(--txt);margin-bottom:4px"><?= h($cp['title']) ?></div>
-        <div style="font-size:14px;color:var(--txt-2);line-height:1.6;white-space:pre-wrap"><?= h($cp['content']) ?></div>
+        <div class="post-detail-body" style="font-size:14px;color:var(--txt-2);line-height:1.6"><?= render_post_content($cp['content']) ?></div>
       </div>
       <?php endforeach; ?>
     <?php endif; ?>
@@ -486,4 +491,66 @@ function closeTransfer() {
 });
 </script>
 
+<?php if ($can_post): ?>
+<script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
+<script>
+var clubQuill = new Quill('#club-editor', {
+    theme: 'snow',
+    placeholder: '动态内容，支持图文混排、链接、列表…',
+    modules: {
+        toolbar: {
+            container: [
+                [{ header: [1, 2, false] }],
+                ['bold', 'italic', 'underline'],
+                ['blockquote'],
+                [{ list: 'ordered' }, { list: 'bullet' }],
+                ['link', 'image'],
+                ['clean']
+            ],
+            handlers: { image: clubImageUpload }
+        }
+    }
+});
+
+function clubImageUpload() {
+    var input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/jpeg,image/png,image/gif,image/webp';
+    input.click();
+    input.addEventListener('change', function() {
+        var file = input.files[0];
+        if (!file) return;
+        var fd = new FormData();
+        fd.append('image', file);
+        document.body.style.cursor = 'wait';
+        fetch('../api/upload_image.php', { method: 'POST', body: fd })
+            .then(function(r) { return r.json(); })
+            .then(function(d) {
+                document.body.style.cursor = '';
+                if (d.ok) {
+                    var range = clubQuill.getSelection(true);
+                    var idx = range ? range.index : clubQuill.getLength();
+                    clubQuill.insertEmbed(idx, 'image', location.origin + d.url);
+                    clubQuill.setSelection(idx + 1);
+                } else {
+                    alert('图片上传失败：' + d.error);
+                }
+            }).catch(function() {
+                document.body.style.cursor = '';
+                alert('上传失败，请检查网络');
+            });
+    });
+}
+
+document.getElementById('club-post-form').addEventListener('submit', function(e) {
+    if (!clubQuill.getText().trim()) {
+        e.preventDefault();
+        alert('请填写动态内容');
+        clubQuill.focus();
+        return;
+    }
+    document.getElementById('club-post-content').value = clubQuill.root.innerHTML;
+});
+</script>
+<?php endif; ?>
 <?php include '../includes/footer.php'; ?>

@@ -378,8 +378,8 @@ if ($action === 'club_post') {
     if (!in_array($my_role, ['president','vice_president'])) redirect_back($back, '', '只有社长/副社长才能发布动态');
 
     $title   = trim($_POST['title']   ?? '');
-    $content = trim($_POST['content'] ?? '');
-    if (!$title || !$content) redirect_back($back, '', '标题和内容不能为空');
+    $content = sanitize_rich_html(trim($_POST['content'] ?? ''));
+    if (!$title || !strip_tags($content)) redirect_back($back, '', '标题和内容不能为空');
 
     $t_esc = $conn->real_escape_string($title);
     $c_esc = $conn->real_escape_string($content);

@@ -143,6 +143,7 @@ if ($is_logged_in && isset($conn)) {
         ],
         '运营' => [
             ['homepage', '🖼️', '主页精选'],
+            ['reports',  '🚩', '举报管理'],
             ['messages', '💬', '消息记录'],
             ['logs',     '📋', '操作日志'],
         ],
@@ -150,6 +151,13 @@ if ($is_logged_in && isset($conn)) {
             ['settings', '🤖', 'AI 设置'],
         ],
     ];
+?>
+<?php
+$_pending_reports = 0;
+if (isset($conn)) {
+    $pr = $conn->query("SELECT COUNT(*) as c FROM reports WHERE status='pending'");
+    if ($pr) $_pending_reports = (int)$pr->fetch_assoc()['c'];
+}
 ?>
 <div class="admin-layout">
   <aside class="admin-sidebar">
@@ -162,6 +170,10 @@ if ($is_logged_in && isset($conn)) {
         <a href="<?= $base ?>admin/<?= $pg ?>.php"
            class="admin-nav-item <?= $admin_page === $pg ? 'active' : '' ?>">
           <span class="admin-nav-icon"><?= $icon ?></span><?= $label ?>
+          <?php if ($pg === 'reports' && $_pending_reports > 0): ?>
+            <span style="margin-left:auto;background:var(--danger);color:#fff;font-size:11px;
+                         padding:1px 6px;border-radius:10px;font-weight:700"><?= $_pending_reports ?></span>
+          <?php endif; ?>
         </a>
       <?php endforeach; ?>
     <?php endforeach; ?>

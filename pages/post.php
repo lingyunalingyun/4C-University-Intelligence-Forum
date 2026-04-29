@@ -112,6 +112,9 @@ include '../includes/header.php';
           ⭐ <span id="fav-count"><?= $post['fav_count'] ?></span>
         </button>
         <button class="action-btn" id="share-trigger" onclick="openShare()">🔗 分享</button>
+        <?php if ($uid && $uid !== $post['user_id']): ?>
+          <button class="action-btn" onclick="openReportModal('post',<?= $post_id ?>)" style="color:var(--danger)">🚩 举报</button>
+        <?php endif; ?>
         <?php if ($uid === $post['user_id'] && !$post['is_solved']): ?>
           <button class="action-btn" onclick="markSolved()">✅ 标记已解决</button>
         <?php endif; ?>
@@ -508,4 +511,5 @@ function showToast(msg) {
 }
 </script>
 
+<?php include '../includes/report_modal.php'; ?>
 <?php include '../includes/footer.php'; ?>

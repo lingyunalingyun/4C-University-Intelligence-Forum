@@ -136,6 +136,8 @@ include '../includes/header.php';
                 onclick="toggleFollow(<?= $profile_id ?>)">
           <?= $is_following ? '✓ 已关注' : '+ 关注' ?>
         </button>
+        <button class="btn btn-outline btn-sm" style="color:var(--danger);border-color:var(--danger)"
+                onclick="openReportModal('user',<?= $profile_id ?>)">🚩 举报</button>
       <?php elseif ($uid === $profile_id): ?>
         <a href="settings.php" class="btn btn-outline btn-sm">⚙️ 设置</a>
         <?php if ($_SESSION['role'] === 'admin' || $_SESSION['role'] === 'owner'): ?>
@@ -226,4 +228,5 @@ function showToast(msg) {
 }
 </script>
 
+<?php include '../includes/report_modal.php'; ?>
 <?php include '../includes/footer.php'; ?>

@@ -351,3 +351,20 @@ if ($check && $check->fetch_assoc()['cnt'] == 0) {
     }
     $stmt->close();
 }
+
+// 举报系统
+$conn->query("CREATE TABLE IF NOT EXISTS reports (
+    id          INT AUTO_INCREMENT PRIMARY KEY,
+    reporter_id INT NOT NULL,
+    type        ENUM('post','user','comment') NOT NULL,
+    target_id   INT NOT NULL,
+    reason      VARCHAR(100) NOT NULL,
+    detail      TEXT,
+    status      ENUM('pending','handled','dismissed') NOT NULL DEFAULT 'pending',
+    handler_id  INT DEFAULT NULL,
+    handled_at  DATETIME DEFAULT NULL,
+    created_at  DATETIME DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_reporter (reporter_id),
+    INDEX idx_status   (status),
+    INDEX idx_target   (type, target_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");

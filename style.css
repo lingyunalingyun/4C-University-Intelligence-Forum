@@ -77,10 +77,9 @@ a:hover { color: var(--primary-dk); }
   height: var(--nav-h);
 }
 .nav-inner {
-  max-width: 1200px; margin: 0 auto;
   height: 100%;
   display: flex; align-items: center; gap: 16px;
-  padding: 0 20px;
+  padding: 0 32px;
 }
 .nav-logo {
   display: flex; align-items: center; gap: 8px;
@@ -91,7 +90,7 @@ a:hover { color: var(--primary-dk); }
 .logo-icon { font-size: 22px; }
 
 .nav-search {
-  flex: 1; max-width: 380px;
+  flex: 1; max-width: 520px;
   display: flex; gap: 0;
   border: 1px solid var(--border); border-radius: 20px;
   overflow: hidden; background: var(--bg-2);

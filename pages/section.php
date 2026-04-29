@@ -1,4 +1,11 @@
 <?php
+/*
+ * pages/section.php — 分区详情页
+ * 功能：展示指定分区（顶级或子分区）的帖子列表，支持子分区筛选、
+ *       排序（最新/热度/未解决），分页显示，置顶帖优先展示。
+ * 读库：sections / posts / users
+ * 权限：无需登录
+ */
 require_once '../config.php';
 require_once '../includes/helpers.php';
 

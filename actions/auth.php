@@ -1,4 +1,10 @@
 <?php
+/*
+ * actions/auth.php — 用户登录 / 注册 POST 处理
+ * 功能：验证账密、写 Session、登录奖励EXP；注册时生成SCID、写users表。
+ * 写库：users（登录更新last_login / 注册插入新行）
+ * 权限：无需登录（登录/注册动作本身）
+ */
 require_once '../config.php';
 if (session_status() === PHP_SESSION_NONE) session_start();
 $action = $_POST['action'] ?? '';

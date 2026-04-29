@@ -1,4 +1,11 @@
 <?php
+/*
+ * pages/post.php — 帖子详情页
+ * 功能：展示帖子全文、AI摘要、评论列表、点赞/收藏/分享操作，
+ *       支持可见性权限控制（public/followers/following/mutual/private）。
+ * 读库：posts / users / sections / comments / post_likes / post_favs / follows
+ * 权限：根据帖子可见性判断；admin/owner 绕过所有限制
+ */
 require_once '../config.php';
 require_once '../includes/helpers.php';
 if (session_status() === PHP_SESSION_NONE) session_start();

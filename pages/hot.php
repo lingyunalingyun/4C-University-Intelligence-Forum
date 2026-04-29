@@ -1,4 +1,11 @@
 <?php
+/*
+ * pages/hot.php — 热帖榜页面
+ * 功能：按综合热度评分（点赞×3 + 收藏×5 + 评论×2 + 浏览×0.05）排序，
+ *       展示全站 Top50 热帖，支持分区筛选和时间范围（今日/本周/全部）。
+ * 读库：posts / users / sections
+ * 权限：无需登录
+ */
 require_once '../config.php';
 require_once '../includes/helpers.php';
 if (session_status() === PHP_SESSION_NONE) session_start();

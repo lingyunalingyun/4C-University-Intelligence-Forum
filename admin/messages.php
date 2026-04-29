@@ -1,4 +1,11 @@
 <?php
+/*
+ * admin/messages.php — 私信内容查阅后台
+ * 功能：查看全站群组聊天记录，根据 SCID 查询指定用户的私信记录，
+ *       仅用于内容合规审核，不支持修改。
+ * 读库：messages / message_groups / group_members / users
+ * 权限：需 admin/owner 登录
+ */
 require_once '../config.php';
 require_once '../includes/helpers.php';
 if (session_status() === PHP_SESSION_NONE) session_start();

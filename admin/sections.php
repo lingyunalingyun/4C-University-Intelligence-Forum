@@ -1,4 +1,11 @@
 <?php
+/*
+ * admin/sections.php — 分区管理后台
+ * 功能：新增/编辑/删除顶级分区和子分区，设置名称/图标/颜色/排序，
+ *       分区下帖子数统计。
+ * 写库：sections / admin_logs
+ * 权限：需 admin/owner 登录
+ */
 require_once '../config.php';
 require_once '../includes/helpers.php';
 if (session_status() === PHP_SESSION_NONE) session_start();

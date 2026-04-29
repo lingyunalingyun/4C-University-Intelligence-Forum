@@ -1,4 +1,11 @@
 <?php
+/*
+ * admin/users.php — 用户管理后台
+ * 功能：分页列出所有用户，支持关键词搜索/角色筛选，
+ *       修改角色（升/降）、封禁/解封（限时或永久）。
+ * 写库：users / admin_logs
+ * 权限：需 admin/owner 登录（admin 不可操作 owner/admin 账号）
+ */
 require_once '../config.php';
 require_once '../includes/helpers.php';
 if (session_status() === PHP_SESSION_NONE) session_start();

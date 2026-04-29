@@ -1,4 +1,12 @@
 <?php
+/*
+ * pages/profile.php — 用户主页
+ * 功能：展示用户资料、SCID、等级/经验条、角色徽章，
+ *       我的帖子 / 收藏夹 / 点赞夹 Tab，关注/粉丝数（弹窗列表），
+ *       关注、私信操作，黑名单（拉黑/被拉黑互相隐藏）。
+ * 读库：users / posts / follows / post_favs / post_likes / user_blocks
+ * 权限：无需登录（仅自己可见收藏夹/点赞夹）
+ */
 require_once '../config.php';
 require_once '../includes/helpers.php';
 if (session_status() === PHP_SESSION_NONE) session_start();

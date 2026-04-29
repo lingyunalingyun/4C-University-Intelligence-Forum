@@ -1,4 +1,11 @@
 <?php
+/*
+ * pages/settings.php — 个人设置页面
+ * 功能：修改头像/昵称/简介/学校/密码，设置隐私选项（关注列表可见性、
+ *       帖子默认可见性），黑名单管理（列出/解除）。
+ * 读库：users / user_blocks
+ * 权限：需登录
+ */
 require_once '../config.php';
 require_once '../includes/helpers.php';
 if (session_status() === PHP_SESSION_NONE) session_start();

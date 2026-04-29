@@ -1,4 +1,11 @@
 <?php
+/*
+ * admin/clubs.php — 社团管理后台
+ * 功能：审批社团申请（通过/拒绝）、审批改名申请、强制解散社团，
+ *       查看所有社团状态和成员数。
+ * 写库：clubs / club_members / admin_logs
+ * 权限：需 admin/owner 登录
+ */
 require_once '../config.php';
 require_once '../includes/helpers.php';
 if (session_status() === PHP_SESSION_NONE) session_start();

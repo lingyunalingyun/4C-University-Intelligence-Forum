@@ -1,4 +1,11 @@
 <?php
+/*
+ * square.php — 广场页面
+ * 功能：展示全部已发布帖子，支持分区筛选、关键词搜索、排序（最新/热度），
+ *       黑名单过滤、帖子可见性控制，分页显示（每页20条）。
+ * 读库：posts / users / sections / follows / user_blocks
+ * 权限：无需登录，登录后开启可见性过滤
+ */
 require_once 'config.php';
 require_once 'includes/helpers.php';
 $page_title = '广场';

@@ -1,4 +1,11 @@
 <?php
+/*
+ * pages/club_apply.php — 申请创建社团页面
+ * 功能：填写社团名称和介绍，提交申请等待管理员审批，
+ *       每人同时只能加入一个社团（申请前检查）。
+ * 写库：clubs（status=pending）
+ * 权限：需登录，未加入社团的用户
+ */
 require_once '../config.php';
 require_once '../includes/helpers.php';
 if (session_status() === PHP_SESSION_NONE) session_start();

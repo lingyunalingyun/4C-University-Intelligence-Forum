@@ -1,4 +1,14 @@
 <?php
+/*
+ * includes/db_init.php — 数据库初始化
+ * 功能：自动建表（IF NOT EXISTS），初始化4大分区及子分区，
+ *       保证首次运行即可使用，无需手动执行 SQL。
+ * 写库：users / posts / sections / comments / notifications /
+ *       site_settings / ai_logs / admin_logs / homepage_slots /
+ *       user_interests / messages / message_groups / group_members /
+ *       post_likes / post_favs / follows / clubs / club_members 等
+ * 注意：MySQL 不支持 ALTER TABLE ADD COLUMN IF NOT EXISTS，用 INFORMATION_SCHEMA 判断代替
+ */
 // 用户表
 $conn->query("CREATE TABLE IF NOT EXISTS users (
     id              INT AUTO_INCREMENT PRIMARY KEY,

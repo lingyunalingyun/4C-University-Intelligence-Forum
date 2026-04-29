@@ -1,4 +1,11 @@
 <?php
+/*
+ * api/upload_image.php — 图片上传 JSON API
+ * 功能：接收 multipart 上传，校验 MIME 类型（JPG/PNG/GIF/WebP），
+ *       限制 5MB，保存到 uploads/posts/，返回 URL 供 Quill 编辑器插入。
+ * 写库：uploads/posts/（文件系统）
+ * 权限：需登录，被封禁用户拦截
+ */
 require_once '../config.php';
 if (session_status() === PHP_SESSION_NONE) session_start();
 header('Content-Type: application/json');

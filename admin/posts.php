@@ -1,4 +1,11 @@
 <?php
+/*
+ * admin/posts.php — 帖子管理后台
+ * 功能：分页列出所有帖子，支持关键词/分区/状态筛选，
+ *       置顶、精华、删除操作，批量管理。
+ * 写库：posts / admin_logs
+ * 权限：需 admin/owner 登录
+ */
 require_once '../config.php';
 require_once '../includes/helpers.php';
 if (session_status() === PHP_SESSION_NONE) session_start();

@@ -1,4 +1,11 @@
 <?php
+/*
+ * admin/index.php — 管理后台首页（数据仪表板）
+ * 功能：展示全站核心统计（用户/帖子/今日活跃/AI调用），
+ *       最近用户注册、最近帖子列表，快捷功能入口。
+ * 读库：users / posts / ai_logs / admin_logs
+ * 权限：需 admin/owner 登录
+ */
 require_once '../config.php';
 require_once '../includes/helpers.php';
 if (session_status() === PHP_SESSION_NONE) session_start();

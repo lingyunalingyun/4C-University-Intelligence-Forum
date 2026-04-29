@@ -1,4 +1,10 @@
 <?php
+/*
+ * pages/club_edit.php — 社团信息编辑页面
+ * 功能：社长/副社长修改社团介绍，申请改名（需管理员审批），管理成员角色。
+ * 写库：clubs / club_members
+ * 权限：需登录 + 本社团社长或副社长
+ */
 require_once '../config.php';
 require_once '../includes/helpers.php';
 if (session_status() === PHP_SESSION_NONE) session_start();

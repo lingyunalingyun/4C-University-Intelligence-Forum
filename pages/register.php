@@ -1,4 +1,9 @@
 <?php
+/*
+ * pages/register.php — 用户注册页
+ * 功能：展示注册表单（含学校选择器），POST 提交到 actions/auth.php（action=register）。
+ * 权限：无需登录，已登录自动跳首页
+ */
 require_once '../config.php';
 require_once '../includes/helpers.php';
 if (session_status() === PHP_SESSION_NONE) session_start();

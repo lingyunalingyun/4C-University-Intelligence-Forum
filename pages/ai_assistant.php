@@ -1,4 +1,10 @@
 <?php
+/*
+ * pages/ai_assistant.php — AI 智能助手页面
+ * 功能：内嵌 DeepSeek 多轮对话界面，支持历史记录本地保存，
+ *       提供学习/求职/编程等场景快捷引导语。
+ * 权限：需登录，API Key 未配置时显示提示
+ */
 require_once '../config.php';
 require_once '../includes/helpers.php';
 if (session_status() === PHP_SESSION_NONE) session_start();

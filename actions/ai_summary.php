@@ -1,4 +1,11 @@
 <?php
+/*
+ * actions/ai_summary.php — AI 摘要生成 AJAX 接口
+ * 功能：接收帖子标题和内容，调用 DeepSeek 生成50字摘要，
+ *       更新 posts.summary 字段，写入 ai_logs。
+ * 写库：posts（summary）/ ai_logs
+ * 权限：需登录
+ */
 require_once '../config.php';
 require_once '../includes/helpers.php';
 if (session_status() === PHP_SESSION_NONE) session_start();

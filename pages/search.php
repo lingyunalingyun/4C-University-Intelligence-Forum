@@ -1,4 +1,11 @@
 <?php
+/*
+ * pages/search.php — 全站搜索页
+ * 功能：关键词搜索帖子（支持 AI 语义扩词），按分区筛选，分页展示结果，
+ *       SCID 精确查找用户。
+ * 读库：posts / users / sections
+ * 权限：无需登录
+ */
 require_once '../config.php';
 require_once '../includes/helpers.php';
 if (session_status() === PHP_SESSION_NONE) session_start();

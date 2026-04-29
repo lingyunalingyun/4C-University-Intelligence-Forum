@@ -1,4 +1,10 @@
 <?php
+/*
+ * actions/club_action.php — 社团相关动作 AJAX 接口
+ * 功能：申请加入/退出/审批/改名/转让/解散社团，发布/删除社团动态。
+ * 写库：clubs / club_members / club_posts / admin_logs
+ * 权限：不同子操作有不同权限（成员/社长/管理员）
+ */
 require_once '../config.php';
 require_once '../includes/helpers.php';
 if (session_status() === PHP_SESSION_NONE) session_start();

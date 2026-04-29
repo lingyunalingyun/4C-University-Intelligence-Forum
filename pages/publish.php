@@ -1,4 +1,11 @@
 <?php
+/*
+ * pages/publish.php — 发帖 / 编辑帖子页面
+ * 功能：Quill 富文本编辑器，支持分区选择、标签输入、图片上传，
+ *       编辑模式下预填现有内容，提交到 actions/post_save.php。
+ * 读库：sections / posts（编辑模式）
+ * 权限：需登录，被封禁用户拦截
+ */
 require_once '../config.php';
 require_once '../includes/helpers.php';
 if (session_status() === PHP_SESSION_NONE) session_start();

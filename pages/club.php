@@ -1,4 +1,11 @@
 <?php
+/*
+ * pages/club.php — 社团详情页
+ * 功能：展示社团介绍、社长/副社长信息、成员列表（分页），
+ *       社团动态帖子流，申请加入/退出按钮，改名审核状态。
+ * 读库：clubs / club_members / club_posts / users
+ * 权限：无需登录（操作按登录状态切换）
+ */
 require_once '../config.php';
 require_once '../includes/helpers.php';
 if (session_status() === PHP_SESSION_NONE) session_start();

@@ -1,4 +1,10 @@
 <?php
+/*
+ * includes/header.php — 全局页面头部
+ * 功能：Session初始化、导航栏（含登录状态/通知徽章/主题切换）、
+ *       引入 style.css，所有页面 include 此文件输出 HTML <head> 和导航。
+ * 权限：无限制（未登录也可显示，功能按登录状态切换）
+ */
 if (session_status() === PHP_SESSION_NONE) session_start();
 
 $is_logged_in = isset($_SESSION['user_id']);

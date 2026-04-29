@@ -1,4 +1,11 @@
 <?php
+/*
+ * admin/settings.php — AI 配置与统计后台
+ * 功能：查看/更新 DeepSeek API Key（DB动态配置），测试连通性，
+ *       展示 AI 各功能调用统计（今日/累计/分类型），最近调用日志。
+ * 写库：site_settings / ai_logs（只读统计）
+ * 权限：需 admin/owner 登录
+ */
 require_once '../config.php';
 require_once '../includes/helpers.php';
 if (session_status() === PHP_SESSION_NONE) session_start();

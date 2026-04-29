@@ -1,4 +1,11 @@
 <?php
+/*
+ * actions/post_action.php — 帖子互动动作（点赞/收藏/置顶/精华/删除/分享）
+ * 功能：AJAX JSON 接口，处理 like/fav/pin/feature/delete/share 等操作，
+ *       同步更新 posts 计数字段，发送通知。
+ * 写库：posts / post_likes / post_favs / notifications
+ * 权限：需登录；pin/feature/delete 需 admin/owner
+ */
 require_once '../config.php';
 require_once '../includes/helpers.php';
 if (session_status() === PHP_SESSION_NONE) session_start();

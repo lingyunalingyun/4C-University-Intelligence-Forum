@@ -1,4 +1,11 @@
 <?php
+/*
+ * actions/message_action.php — 私信系统动作 AJAX 接口
+ * 功能：发送私信/群组消息、撤回消息（2分钟内）、创建群组、
+ *       轮询未读数、标记已读。
+ * 写库：messages / message_groups / group_members
+ * 权限：需登录，被封禁用户拦截
+ */
 require_once '../config.php';
 require_once '../includes/helpers.php';
 if (session_status() === PHP_SESSION_NONE) session_start();

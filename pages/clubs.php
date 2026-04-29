@@ -1,4 +1,11 @@
 <?php
+/*
+ * pages/clubs.php — 社团广场列表页
+ * 功能：展示全部已审批通过的社团（名称/介绍/成员数/社长），
+ *       支持关键词搜索，已加入社团高亮显示。
+ * 读库：clubs / club_members / users
+ * 权限：无需登录
+ */
 require_once '../config.php';
 require_once '../includes/helpers.php';
 if (session_status() === PHP_SESSION_NONE) session_start();

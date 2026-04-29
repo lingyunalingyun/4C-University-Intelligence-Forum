@@ -1,4 +1,10 @@
 <?php
+/*
+ * actions/homepage_slot_save.php — 首页精选槽位配置接口
+ * 功能：管理员设置/清除首页各位置（1-6）对应的推荐帖子，写入 homepage_slots 表。
+ * 写库：homepage_slots / admin_logs
+ * 权限：需 admin/owner 登录
+ */
 require_once '../config.php';
 if (session_status() === PHP_SESSION_NONE) session_start();
 header('Content-Type: application/json');

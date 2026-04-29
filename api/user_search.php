@@ -1,4 +1,11 @@
 <?php
+/*
+ * api/user_search.php — 用户搜索 JSON API
+ * 功能：根据关键词搜索用户名，返回 JSON 数组（含头像/SCID），
+ *       供私信/群组创建时选择收件人使用。
+ * 读库：users
+ * 权限：需登录
+ */
 require_once '../config.php';
 if (session_status() === PHP_SESSION_NONE) session_start();
 header('Content-Type: application/json');

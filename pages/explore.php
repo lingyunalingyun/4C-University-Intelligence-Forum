@@ -1,4 +1,11 @@
 <?php
+/*
+ * pages/explore.php — 探索/发现页面
+ * 功能：展示所有顶级分区入口（图标+颜色+帖子数），
+ *       引导用户浏览各分区最新内容。
+ * 读库：sections / posts（各分区帖子数统计）
+ * 权限：无需登录
+ */
 require_once '../config.php';
 require_once '../includes/helpers.php';
 if (session_status() === PHP_SESSION_NONE) session_start();

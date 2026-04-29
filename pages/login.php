@@ -1,4 +1,9 @@
 <?php
+/*
+ * pages/login.php — 用户登录页
+ * 功能：展示登录表单，POST 提交到 actions/auth.php（action=login）。
+ * 权限：无需登录，已登录自动跳首页
+ */
 require_once '../config.php';
 require_once '../includes/helpers.php';
 if (session_status() === PHP_SESSION_NONE) session_start();

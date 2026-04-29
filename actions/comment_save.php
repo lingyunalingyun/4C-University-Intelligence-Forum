@@ -1,4 +1,11 @@
 <?php
+/*
+ * actions/comment_save.php — 评论提交 POST 处理
+ * 功能：验证内容，写入 comments 表，更新 posts.comment_count，
+ *       向帖子作者发送通知。
+ * 写库：comments / posts（comment_count）/ notifications
+ * 权限：需登录，被封禁用户拦截
+ */
 require_once '../config.php';
 require_once '../includes/helpers.php';
 if (session_status() === PHP_SESSION_NONE) session_start();

@@ -1,4 +1,11 @@
 <?php
+/*
+ * actions/post_save.php — 发帖 / 编辑帖子 POST 处理
+ * 功能：验证标题/内容，净化富文本，调用 AI 生成摘要和标签，
+ *       写入或更新 posts 表，记录用户兴趣，返回跳转。
+ * 写库：posts / user_interests / ai_logs
+ * 权限：需登录
+ */
 require_once '../config.php';
 require_once '../includes/helpers.php';
 if (session_status() === PHP_SESSION_NONE) session_start();

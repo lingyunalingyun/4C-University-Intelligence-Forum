@@ -1,4 +1,10 @@
 <?php
+/*
+ * actions/ai_test.php — DeepSeek API 连通性测试接口
+ * 功能：管理员后台测试 API Key 是否有效，返回 JSON ok/error。
+ * 写库：无
+ * 权限：需 admin/owner 登录
+ */
 require_once '../config.php';
 require_once '../includes/helpers.php';
 if (session_status() === PHP_SESSION_NONE) session_start();

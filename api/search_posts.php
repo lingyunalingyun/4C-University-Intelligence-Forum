@@ -1,4 +1,11 @@
 <?php
+/*
+ * api/search_posts.php — 帖子搜索 JSON API
+ * 功能：根据关键词模糊搜索帖子标题，返回 JSON 数组，
+ *       供首页精选槽位配置的实时搜索下拉使用。
+ * 读库：posts / users / sections
+ * 权限：需 admin/owner Session（后台专用接口）
+ */
 require_once '../config.php';
 header('Content-Type: application/json; charset=utf-8');
 

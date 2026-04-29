@@ -1,9 +1,21 @@
 <?php
+/*
+ * admin/homepage.php — 首页内容管理后台
+ * 功能：配置首页精选6个帖子槽位（搜索选帖/清除），
+ *       上传/删除首页 Hero 背景大图（存 site_settings/uploads/hero/）。
+ * 写库：homepage_slots / site_settings / uploads/hero/
+ * 权限：需 admin/owner 登录
+ */
 require_once '../config.php';
 require_once '../includes/helpers.php';
 if (session_status() === PHP_SESSION_NONE) session_start();
 if (!isset($_SESSION['user_id'])) { header('Location: ../pages/login.php'); exit; }
 if (!in_array($_SESSION['role'] ?? '', ['admin','owner'])) { header('Location: ../index.php'); exit; }
+
+// 读取当前 Hero 背景图路径
+$hero_bg_current = '';
+$hbr = $conn->query("SELECT `value` FROM site_settings WHERE `key`='hero_bg' LIMIT 1");
+if ($hbr && ($hbr_row = $hbr->fetch_assoc())) $hero_bg_current = $hbr_row['value'];
 
 // 加载6个槽位
 $slots = array_fill(1, 6, null);
@@ -42,6 +54,54 @@ include '../includes/header.php';
   </div>
   <div class="actions">
     <a href="../index.php" target="_blank" class="btn btn-outline btn-sm">预览首页 ↗</a>
+  </div>
+</div>
+
+<!-- ══ Hero 背景图管理 ══ -->
+<div class="card" style="margin-bottom:20px">
+  <div class="card-header">🖼️ 首页背景大图</div>
+  <div class="card-body">
+    <div style="display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap">
+
+      <!-- 当前图片预览 -->
+      <div style="flex-shrink:0">
+        <div style="font-size:12px;color:var(--txt-2);margin-bottom:8px">当前背景图</div>
+        <?php if ($hero_bg_current): ?>
+          <div style="position:relative;width:240px;height:120px;border-radius:var(--r);overflow:hidden;border:1px solid var(--border)">
+            <img src="../<?= h($hero_bg_current) ?>" alt="当前背景图"
+                 style="width:100%;height:100%;object-fit:cover">
+            <div style="position:absolute;inset:0;background:linear-gradient(120deg,rgba(37,99,235,.7),rgba(99,102,241,.6));display:flex;align-items:center;justify-content:center">
+              <span style="color:#fff;font-size:11px;opacity:.8">预览效果</span>
+            </div>
+          </div>
+          <div style="font-size:11px;color:var(--txt-3);margin-top:5px;max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"><?= h($hero_bg_current) ?></div>
+        <?php else: ?>
+          <div style="width:240px;height:120px;border-radius:var(--r);border:2px dashed var(--border);display:flex;align-items:center;justify-content:center;color:var(--txt-3);font-size:13px">
+            未设置背景图<br><span style="font-size:11px">（使用纯色兜底）</span>
+          </div>
+        <?php endif; ?>
+      </div>
+
+      <!-- 上传/删除操作 -->
+      <div style="flex:1;min-width:200px">
+        <div style="font-size:12px;color:var(--txt-2);margin-bottom:8px">上传新背景图</div>
+        <div style="font-size:12px;color:var(--txt-3);margin-bottom:10px;line-height:1.7">
+          建议尺寸：<strong>1920×600</strong> 或更宽，JPG/PNG/WebP，<strong>≤5MB</strong>。<br>
+          图片会被渐变遮罩叠加，建议使用风景、校园等高质量照片。
+        </div>
+        <form id="hero-bg-form" onsubmit="uploadHeroBg(event)" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <input type="file" id="hero-bg-file" name="hero_bg" accept="image/jpeg,image/png,image/webp"
+                 style="font-size:13px;border:1px solid var(--border);border-radius:var(--r);padding:6px 10px;background:var(--bg-2);color:var(--txt);flex:1;min-width:160px">
+          <button type="submit" class="btn btn-primary btn-sm">⬆️ 上传</button>
+          <?php if ($hero_bg_current): ?>
+          <button type="button" class="btn btn-outline btn-sm" onclick="deleteHeroBg()"
+                  style="color:#ef4444;border-color:#ef4444">✕ 删除</button>
+          <?php endif; ?>
+        </form>
+        <div id="hero-bg-msg" style="margin-top:10px;font-size:13px;display:none"></div>
+      </div>
+
+    </div>
   </div>
 </div>
 
@@ -139,6 +199,41 @@ for ($pos = 1; $pos <= 6; $pos++):
 </div>
 
 <script>
+/* Hero 背景图上传 */
+function uploadHeroBg(e) {
+  e.preventDefault();
+  var file = document.getElementById('hero-bg-file').files[0];
+  if (!file) { showHeroMsg('请先选择图片文件', 'error'); return; }
+  if (file.size > 5 * 1024 * 1024) { showHeroMsg('文件大小超过 5MB 限制', 'error'); return; }
+  var fd = new FormData();
+  fd.append('action', 'upload');
+  fd.append('hero_bg', file);
+  showHeroMsg('上传中…', 'info');
+  fetch('../actions/hero_bg_upload.php', { method: 'POST', body: fd })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (d.ok) { showHeroMsg('✅ 上传成功，刷新页面预览', 'ok'); setTimeout(function(){ location.reload(); }, 1200); }
+      else       { showHeroMsg('❌ ' + (d.error || '上传失败'), 'error'); }
+    }).catch(function() { showHeroMsg('❌ 请求异常', 'error'); });
+}
+function deleteHeroBg() {
+  if (!confirm('确认删除首页背景图？删除后恢复为纯色背景。')) return;
+  fetch('../actions/hero_bg_upload.php', {
+    method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: 'action=delete'
+  }).then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (d.ok) location.reload();
+      else showHeroMsg('❌ ' + (d.error || '删除失败'), 'error');
+    });
+}
+function showHeroMsg(msg, type) {
+  var el = document.getElementById('hero-bg-msg');
+  el.style.display = 'block';
+  el.style.color = type === 'ok' ? '#16a34a' : type === 'error' ? '#dc2626' : 'var(--txt-2)';
+  el.textContent = msg;
+}
+
 var timers = {}, selected = {};
 function doSearch(pos, q) {
   clearTimeout(timers[pos]);

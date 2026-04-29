@@ -1,4 +1,11 @@
 <?php
+/*
+ * admin/logs.php — 管理员操作日志后台
+ * 功能：分页展示所有管理员操作记录（时间/操作人/动作/目标/详情），
+ *       支持按操作人筛选。
+ * 读库：admin_logs / users
+ * 权限：需 admin/owner 登录
+ */
 require_once '../config.php';
 require_once '../includes/helpers.php';
 if (session_status() === PHP_SESSION_NONE) session_start();

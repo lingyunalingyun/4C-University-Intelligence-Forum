@@ -1,4 +1,11 @@
 <?php
+/*
+ * actions/forgot_pw.php — 找回密码 / 重置密码 POST 处理
+ * 功能：发送重置邮件（防枚举：无论邮箱是否存在均显示"已发送"），
+ *       token 1小时有效，验证 token 后更新密码哈希。
+ * 写库：users（reset_token / reset_token_expires / password）
+ * 权限：无需登录
+ */
 require_once '../config.php';
 if (session_status() === PHP_SESSION_NONE) session_start();
 

@@ -1,4 +1,10 @@
 <?php
+/*
+ * actions/settings_save.php — 个人设置保存 POST 处理
+ * 功能：保存昵称/简介/学校/头像/密码等个人资料，以及隐私设置。
+ * 写库：users
+ * 权限：需登录（只能修改自己的设置）
+ */
 require_once '../config.php';
 if (session_status() === PHP_SESSION_NONE) session_start();
 if (!isset($_SESSION['user_id'])) { header('Location: ../pages/login.php'); exit; }

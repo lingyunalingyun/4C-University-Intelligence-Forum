@@ -1,4 +1,11 @@
 <?php
+/*
+ * pages/my_clubs.php — 我的社团页面
+ * 功能：展示当前用户所在社团，以及待审批的申请状态，
+ *       提供社团管理入口（社长/副社长）。
+ * 读库：clubs / club_members
+ * 权限：需登录
+ */
 require_once '../config.php';
 require_once '../includes/helpers.php';
 if (session_status() === PHP_SESSION_NONE) session_start();

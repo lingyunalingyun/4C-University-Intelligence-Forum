@@ -1,4 +1,9 @@
-<?php if (!empty($in_admin)): ?>
+<?php
+/*
+ * includes/footer.php — 全局页面底部
+ * 功能：关闭 admin/普通页面的布局容器，输出版权信息和页脚 HTML。
+ */
+if (!empty($in_admin)): ?>
   </main><!-- /.admin-content -->
 </div><!-- /.admin-layout -->
 <?php else: ?>

@@ -1,4 +1,10 @@
 <?php
+/*
+ * actions/follow_toggle.php — 关注 / 取消关注 AJAX 接口
+ * 功能：切换当前用户与目标用户的关注关系，返回 JSON 状态。
+ * 写库：follows
+ * 权限：需登录
+ */
 require_once '../config.php';
 if (session_status() === PHP_SESSION_NONE) session_start();
 header('Content-Type: application/json');

@@ -1,4 +1,10 @@
 <?php
+/*
+ * includes/helpers.php — 全局工具函数库
+ * 功能：等级/角色徽章、时间格式化、HTML净化、头像URL、通知、
+ *       DeepSeek AI调用（摘要/标签/扩词）、帖子渲染、兴趣推荐等公共函数。
+ * 权限：全局 include，无直接访问限制
+ */
 function get_level($exp) {
     if ($exp >= 50000) return 6;
     if ($exp >= 30000) return 5;

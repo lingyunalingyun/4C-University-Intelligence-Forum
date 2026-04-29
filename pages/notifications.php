@@ -1,4 +1,10 @@
 <?php
+/*
+ * pages/notifications.php — 消息通知页面
+ * 功能：展示当前用户的所有通知（点赞/评论/关注/系统），标记已读，分页。
+ * 读库：notifications / users / posts
+ * 权限：需登录
+ */
 require_once '../config.php';
 require_once '../includes/helpers.php';
 if (session_status() === PHP_SESSION_NONE) session_start();

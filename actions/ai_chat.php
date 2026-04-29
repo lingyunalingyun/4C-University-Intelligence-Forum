@@ -1,4 +1,11 @@
 <?php
+/*
+ * actions/ai_chat.php — AI 助手多轮对话 AJAX 接口
+ * 功能：接收用户消息和历史记录，调用 DeepSeek API 返回 AI 回复，
+ *       记录调用日志（ai_logs）。
+ * 写库：ai_logs
+ * 权限：需登录，Key 未配置时返回错误
+ */
 require_once '../config.php';
 require_once '../includes/helpers.php';
 if (session_status() === PHP_SESSION_NONE) session_start();

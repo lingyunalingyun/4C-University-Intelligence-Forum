@@ -1,4 +1,11 @@
 <?php
+/*
+ * api/messages_poll.php — 消息轮询 JSON API
+ * 功能：返回当前用户未读消息总数（私信 + 群组），
+ *       由 header.php 每3秒 AJAX 调用，更新导航栏徽章。
+ * 读库：messages / message_groups / group_members
+ * 权限：需登录，未登录返回 {"unread":0}
+ */
 require_once '../config.php';
 if (session_status() === PHP_SESSION_NONE) session_start();
 header('Content-Type: application/json');

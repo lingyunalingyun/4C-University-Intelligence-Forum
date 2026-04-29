@@ -1,4 +1,11 @@
 <?php
+/*
+ * pages/messages.php — 私信 / 群组消息页面
+ * 功能：展示私信会话列表（含未读数），AJAX 3秒轮询新消息，
+ *       支持撤回（2分钟内），群组聊天，黑名单过滤。
+ * 读库：messages / message_groups / group_members / users
+ * 权限：需登录
+ */
 require_once '../config.php';
 require_once '../includes/helpers.php';
 if (session_status() === PHP_SESSION_NONE) session_start();

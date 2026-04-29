@@ -1,4 +1,11 @@
 <?php
+/*
+ * index.php — 网站首页
+ * 功能：展示 Hero Banner（支持可更换背景大图+视差效果）、编辑推荐帖、
+ *       算法个性化推荐（余弦相似度兴趣模型）、各大分区最新帖子列表。
+ * 读库：posts / users / sections / homepage_slots / user_interests / site_settings
+ * 权限：无需登录，登录后显示个性化推荐
+ */
 require_once 'config.php';
 require_once 'includes/helpers.php';
 $page_title = '首页';
@@ -43,6 +50,11 @@ $total_posts  = (int)($conn->query("SELECT COUNT(*) c FROM posts WHERE status='p
 $total_users  = (int)($conn->query("SELECT COUNT(*) c FROM users WHERE is_banned=0")->fetch_assoc()['c'] ?? 0);
 $today_posts  = (int)($conn->query("SELECT COUNT(*) c FROM posts WHERE status='published' AND DATE(created_at)=CURDATE()")->fetch_assoc()['c'] ?? 0);
 
+// 从 site_settings 读取 Hero 背景图路径（管理员可在后台上传修改）
+$hero_bg = '';
+$hbr = $conn->query("SELECT `value` FROM site_settings WHERE `key`='hero_bg' LIMIT 1");
+if ($hbr && ($hbr_row = $hbr->fetch_assoc())) $hero_bg = $hbr_row['value'];
+
 include 'includes/header.php';
 ?>
 
@@ -57,29 +69,42 @@ body { overflow-x: hidden; }
     margin-left:  calc(50% - 50vw);
     margin-right: calc(50% - 50vw);
     width: 100vw;
-    background: linear-gradient(120deg, var(--primary) 0%, var(--accent) 55%, #6366f1 100%);
+    background: var(--primary); /* 无背景图时的纯色兜底 */
     padding: 44px 20px;
     margin-bottom: 32px;
     overflow: hidden;
 }
-/* 装饰圆形 */
-.home-hero::before, .home-hero::after {
-    content: ''; position: absolute; border-radius: 50%; pointer-events: none;
+/* 背景大图：绝对定位，比容器略大，留出视差移动空间 */
+.hero-bg-img {
+    position: absolute;
+    inset: -8% -4%;
+    width: calc(100% + 8%);
+    height: 116%;
+    object-fit: cover;
+    display: none; /* 默认隐藏，JS 加载成功后显示 */
+    will-change: transform;
+    z-index: 0;
 }
+.hero-bg-img.loaded { display: block; }
+/* 渐变遮罩：叠在背景图上，保证文字在任何背景下都可读 */
 .home-hero::before {
-    width: 420px; height: 420px;
-    top: -35%; right: 5%;
-    background: rgba(255,255,255,.07);
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(120deg, rgba(37,99,235,.82) 0%, rgba(99,102,241,.72) 100%);
+    z-index: 1; pointer-events: none;
 }
+/* 右侧光晕装饰 */
 .home-hero::after {
-    width: 240px; height: 240px;
-    bottom: -40%; right: 28%;
-    background: rgba(255,255,255,.05);
+    content: ''; position: absolute;
+    width: 400px; height: 400px;
+    top: 50%; right: -60px; transform: translateY(-50%);
+    background: radial-gradient(circle, rgba(255,255,255,.12) 0%, transparent 70%);
+    border-radius: 50%; pointer-events: none;
+    z-index: 1;
 }
 .home-hero-inner {
     max-width: 1200px; margin: 0 auto;
     display: flex; align-items: center; gap: 40px;
-    position: relative; z-index: 1;
+    position: relative; z-index: 2; /* 在遮罩层之上 */
 }
 /* 论坛名字卡片 */
 .hero-name-card {
@@ -268,7 +293,13 @@ body { overflow-x: hidden; }
 </style>
 
 <!-- ══ Hero Banner ══ -->
-<div class="home-hero">
+<div class="home-hero" id="home-hero">
+  <?php if ($hero_bg): ?>
+  <img class="hero-bg-img" id="hero-bg-img"
+       src="<?= h($hero_bg) ?>" alt=""
+       onerror="this.style.display='none'"
+       onload="this.classList.add('loaded')">
+  <?php endif; ?>
   <div class="home-hero-inner">
 
     <!-- 论坛名字卡片 -->
@@ -428,5 +459,35 @@ body { overflow-x: hidden; }
   <a href="pages/publish.php" class="btn btn-primary">立即发帖</a>
 </div>
 <?php endif; ?>
+
+<script>
+/* Hero 背景图视差效果：鼠标水平晃动 + 滚动垂直位移 */
+(function() {
+    var hero = document.getElementById('home-hero');
+    var img  = document.getElementById('hero-bg-img');
+    if (!hero || !img) return;
+    var targetX = 0, curX = 0, curY = 0, rafId = null;
+    function lerp(a, b, t) { return a + (b - a) * t; }
+    function tick() {
+        curX = lerp(curX, targetX, 0.07);
+        img.style.transform = 'translateX(' + curX.toFixed(2) + 'px) translateY(' + curY.toFixed(2) + 'px)';
+        if (Math.abs(curX - targetX) > 0.05) rafId = requestAnimationFrame(tick);
+        else rafId = null;
+    }
+    function startTick() { if (!rafId) rafId = requestAnimationFrame(tick); }
+    /* 鼠标水平偏移，±24px 带平滑插值 */
+    hero.addEventListener('mousemove', function(e) {
+        var rect = hero.getBoundingClientRect();
+        targetX = ((e.clientX - rect.left - rect.width / 2) / rect.width) * -24;
+        startTick();
+    });
+    hero.addEventListener('mouseleave', function() { targetX = 0; startTick(); });
+    /* 滚动视差：页面下滚图片向下偏移，增加层次感 */
+    window.addEventListener('scroll', function() {
+        curY = window.scrollY * 0.35;
+        img.style.transform = 'translateX(' + curX.toFixed(2) + 'px) translateY(' + curY.toFixed(2) + 'px)';
+    }, { passive: true });
+})();
+</script>
 
 <?php include 'includes/footer.php'; ?>

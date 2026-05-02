@@ -17,7 +17,7 @@ include '../includes/header.php';
 
 <!-- 优先入口 -->
 <div class="card mb-20" style="padding:32px;text-align:center">
-  <div style="font-size:40px;margin-bottom:12px">🎧</div>
+  <div style="font-size:40px;margin-bottom:12px"><i data-lucide="headphones" class="lucide"></i></div>
   <h2 style="margin:0 0 8px;font-size:20px">遇到问题？先试试客服中心</h2>
   <p style="color:var(--txt-2);font-size:14px;margin:0 0 20px;max-width:440px;margin-left:auto;margin-right:auto">
     AI 客服 7×24 小时在线，大部分问题即时解决；AI 无法处理时可一键转人工，工作日 24 小时内响应。
@@ -30,14 +30,14 @@ include '../includes/header.php';
 
   <!-- 适用场景 -->
   <div class="card mb-20">
-    <div class="card-header">📋 各类问题对应渠道</div>
+    <div class="card-header"><i data-lucide="clipboard-list" class="lucide"></i> 各类问题对应渠道</div>
     <div class="card-body">
       <?php
       $channels = [
-        ['🤖','AI 客服',    '立即响应','论坛使用问题、功能疑问、账号操作指引',  'support.php','前往咨询'],
-        ['🚩','举报系统',   '24h内',  '违规帖子、违规用户、违规评论',            '../pages/post.php','去举报'],
-        ['📋','人工工单',   '24h内',  '账号封禁申诉、数据错误、功能异常',         'support.php','提交工单'],
-        ['💬','站内私信',   '即时',   '与其他用户交流，寻求社区帮助',             'messages.php','发私信'],
+        ['<i data-lucide="bot" class="lucide"></i>','AI 客服',    '立即响应','论坛使用问题、功能疑问、账号操作指引',  'support.php','前往咨询'],
+        ['<i data-lucide="flag" class="lucide"></i>','举报系统',   '24h内',  '违规帖子、违规用户、违规评论',            '../pages/post.php','去举报'],
+        ['<i data-lucide="clipboard-list" class="lucide"></i>','人工工单',   '24h内',  '账号封禁申诉、数据错误、功能异常',         'support.php','提交工单'],
+        ['<i data-lucide="message-circle" class="lucide"></i>','站内私信',   '即时',   '与其他用户交流，寻求社区帮助',             'messages.php','发私信'],
       ];
       foreach ($channels as $c):
         $logged = !empty($_SESSION['user_id']);
@@ -68,8 +68,8 @@ include '../includes/header.php';
       $faqs = [
         ['账号被封禁了怎么办？', '可通过客服中心提交「账号申诉」工单，说明情况，管理员会在24小时内处理。'],
         ['忘记密码怎么找回？', '点击登录页的「忘记密码」，输入注册邮箱，我们将发送验证码到您邮箱，按提示重置即可。'],
-        ['如何删除自己的帖子？', '进入帖子详情页，点击「✏️ 编辑」，选择删除；或在个人主页的帖子列表操作。'],
-        ['发现他人违规内容怎么办？', '点击帖子/用户主页上的「🚩 举报」按钮，选择原因提交，管理员会审核处理。'],
+        ['如何删除自己的帖子？', '进入帖子详情页，点击「<i data-lucide="pencil" class="lucide"></i> 编辑」，选择删除；或在个人主页的帖子列表操作。'],
+        ['发现他人违规内容怎么办？', '点击帖子/用户主页上的「<i data-lucide="flag" class="lucide"></i> 举报」按钮，选择原因提交，管理员会审核处理。'],
         ['账号注销如何操作？', '目前暂不支持自助注销，如有需要请通过客服工单联系管理员处理。'],
       ];
       foreach ($faqs as $i => $faq): ?>
@@ -100,7 +100,7 @@ include '../includes/header.php';
         <span style="padding-left:20px">周一至周五 9:00–18:00</span>
       </div>
       <div style="padding:10px 0">
-        ⚡ <strong>紧急问题</strong><br>
+        <i data-lucide="zap" class="lucide"></i> <strong>紧急问题</strong><br>
         <span style="padding-left:20px">请在工单中标注「紧急」，我们将优先处理</span>
       </div>
     </div>
@@ -117,10 +117,10 @@ include '../includes/header.php';
   </div>
 
   <div class="card">
-    <div class="card-header">📄 相关页面</div>
+    <div class="card-header"><i data-lucide="file" class="lucide"></i> 相关页面</div>
     <div class="card-body" style="display:flex;flex-direction:column;gap:6px;font-size:13px">
-      <a href="about.php"   style="color:var(--primary)">📖 关于我们</a>
-      <a href="terms.php"   style="color:var(--primary)">📋 使用规则</a>
+      <a href="about.php"   style="color:var(--primary)"><i data-lucide="book-open" class="lucide"></i> 关于我们</a>
+      <a href="terms.php"   style="color:var(--primary)"><i data-lucide="clipboard-list" class="lucide"></i> 使用规则</a>
       <a href="privacy.php" style="color:var(--primary)">🔒 隐私政策</a>
     </div>
   </div>

@@ -36,7 +36,7 @@ include '../includes/header.php';
 
     <!-- 基本信息 -->
     <div class="card mb-20">
-      <div class="card-header">👤 基本信息</div>
+      <div class="card-header"><i data-lucide="user" class="lucide"></i> 基本信息</div>
       <div class="card-body">
         <form action="../actions/settings_save.php" method="post" enctype="multipart/form-data">
           <input type="hidden" name="action" value="profile">
@@ -104,7 +104,7 @@ include '../includes/header.php';
 
   <div class="col-side">
     <div class="card">
-      <div class="card-header">📊 账号信息</div>
+      <div class="card-header"><i data-lucide="bar-chart-2" class="lucide"></i> 账号信息</div>
       <div class="card-body" style="font-size:13px;color:var(--txt-2);line-height:2">
         <div>邮箱：<?= h($user['email']) ?></div>
         <div>角色：<?= role_badge($user['role']) ?></div>

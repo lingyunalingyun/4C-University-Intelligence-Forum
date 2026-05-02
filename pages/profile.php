@@ -90,7 +90,7 @@ include '../includes/header.php';
         <?= level_badge($profile['exp']) ?>
       </div>
       <?php if ($profile['school']): ?>
-        <div style="font-size:13px;color:var(--txt-2);margin-bottom:4px">🏫 <?= h($profile['school']) ?></div>
+        <div style="font-size:13px;color:var(--txt-2);margin-bottom:4px"><i data-lucide="building" class="lucide"></i> <?= h($profile['school']) ?></div>
       <?php endif; ?>
       <?php if ($profile_club): ?>
         <?php
@@ -137,9 +137,9 @@ include '../includes/header.php';
           <?= $is_following ? '✓ 已关注' : '+ 关注' ?>
         </button>
         <button class="btn btn-outline btn-sm" style="color:var(--danger);border-color:var(--danger)"
-                onclick="openReportModal('user',<?= $profile_id ?>)">🚩 举报</button>
+                onclick="openReportModal('user',<?= $profile_id ?>)"><i data-lucide="flag" class="lucide"></i> 举报</button>
       <?php elseif ($uid === $profile_id): ?>
-        <a href="settings.php" class="btn btn-outline btn-sm">⚙️ 设置</a>
+        <a href="settings.php" class="btn btn-outline btn-sm"><i data-lucide="settings" class="lucide"></i> 设置</a>
         <?php if ($_SESSION['role'] === 'admin' || $_SESSION['role'] === 'owner'): ?>
           <a href="../admin/index.php" class="btn btn-outline btn-sm">🛠 后台</a>
         <?php endif; ?>
@@ -192,7 +192,7 @@ include '../includes/header.php';
 <?php else: ?>
   <div class="card"><div class="card-body">
     <?php if (empty($items)): ?>
-      <div class="empty-state"><div class="icon">👤</div><p>暂无数据</p></div>
+      <div class="empty-state"><div class="icon"><i data-lucide="user" class="lucide"></i></div><p>暂无数据</p></div>
     <?php else: foreach ($items as $u): ?>
       <div class="flex-center gap-12" style="padding:10px 0;border-bottom:1px solid var(--border)">
         <img src="<?= avatar_url($u['avatar'], '../') ?>"

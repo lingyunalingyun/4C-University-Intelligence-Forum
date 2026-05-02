@@ -17,7 +17,7 @@ include '../includes/header.php';
 <div class="form-page">
   <div class="form-card">
     <div class="text-center" style="margin-bottom:24px">
-      <div style="font-size:40px">🎓</div>
+      <div style="font-size:40px"><i data-lucide="graduation-cap" class="lucide"></i></div>
       <h1 class="form-title">欢迎回来</h1>
       <p class="form-sub">登录你的高校智慧账号</p>
     </div>

@@ -320,10 +320,10 @@ $check = $conn->query("SELECT COUNT(*) as cnt FROM sections");
 if ($check && $check->fetch_assoc()['cnt'] == 0) {
     $sections = [
         // 一级分区
-        [0, 'academic', '学术交流', '📚', '#4f46e5', '课程互助、考研备考、论文讨论、竞赛交流', 1],
-        [0, 'campus',   '校园生活', '🏫', '#0ea5e9', '活动通知、二手交易、失物招领、美食推荐', 2],
-        [0, 'career',   '职业发展', '💼', '#10b981', '实习内推、求职经验、竞赛组队、简历互评', 3],
-        [0, 'tech',     '技术问答', '💻', '#f59e0b', '编程求助、项目展示、工具分享、Bug求助', 4],
+        [0, 'academic', '学术交流', 'book-open',  '#4f46e5', '课程互助、考研备考、论文讨论、竞赛交流', 1],
+        [0, 'campus',   '校园生活', 'building-2', '#0ea5e9', '活动通知、二手交易、失物招领、美食推荐', 2],
+        [0, 'career',   '职业发展', 'briefcase',  '#10b981', '实习内推、求职经验、竞赛组队、简历互评', 3],
+        [0, 'tech',     '技术问答', 'terminal',   '#f59e0b', '编程求助、项目展示、工具分享、Bug求助', 4],
     ];
     $stmt = $conn->prepare("INSERT INTO sections (parent_id,slug,name,icon,color,description,sort_order) VALUES (?,?,?,?,?,?,?)");
     foreach ($sections as $s) {
@@ -333,10 +333,10 @@ if ($check && $check->fetch_assoc()['cnt'] == 0) {
 
     // 二级子分区
     $subs = [
-        ['academic', [['course','课程互助','📖'],['postgrad','考研备考','✏️'],['paper','论文讨论','📄'],['contest','竞赛交流','🏆']]],
-        ['campus',   [['activity','活动通知','📣'],['trade','二手交易','🛒'],['lost','失物招领','🔍'],['food','美食推荐','🍜']]],
-        ['career',   [['intern','实习内推','🌟'],['job','求职经验','💡'],['team','竞赛组队','🤝'],['resume','简历互评','📋']]],
-        ['tech',     [['code','编程求助','⌨️'],['project','项目展示','🚀'],['tools','工具分享','🔧'],['bug','Bug求助','🐛']]],
+        ['academic', [['course','课程互助','book'],['postgrad','考研备考','pencil'],['paper','论文讨论','file-text'],['contest','竞赛交流','trophy']]],
+        ['campus',   [['activity','活动通知','megaphone'],['trade','二手交易','shopping-cart'],['lost','失物招领','search'],['food','美食推荐','utensils']]],
+        ['career',   [['intern','实习内推','star'],['job','求职经验','lightbulb'],['team','竞赛组队','users'],['resume','简历互评','clipboard-list']]],
+        ['tech',     [['code','编程求助','code-2'],['project','项目展示','rocket'],['tools','工具分享','wrench'],['bug','Bug求助','bug']]],
     ];
     foreach ($subs as $g) {
         $parent_res = $conn->query("SELECT id FROM sections WHERE slug='" . $g[0] . "'");
@@ -350,6 +350,21 @@ if ($check && $check->fetch_assoc()['cnt'] == 0) {
         }
     }
     $stmt->close();
+}
+
+// 一次性迁移：emoji 图标 → Lucide 图标名
+$icon_check = $conn->query("SELECT icon FROM sections WHERE slug='academic' AND parent_id=0 LIMIT 1");
+if ($icon_check && ($icon_val = ($icon_check->fetch_assoc()['icon'] ?? '')) && !preg_match('/^[a-z][a-z0-9-]+$/', $icon_val)) {
+    $icon_map = [
+        'academic' => 'book-open',  'campus'  => 'building-2', 'career'  => 'briefcase',     'tech'    => 'terminal',
+        'course'   => 'book',       'postgrad' => 'pencil',     'paper'   => 'file-text',     'contest' => 'trophy',
+        'activity' => 'megaphone',  'trade'   => 'shopping-cart','lost'   => 'search',        'food'    => 'utensils',
+        'intern'   => 'star',       'job'     => 'lightbulb',  'team'    => 'users',          'resume'  => 'clipboard-list',
+        'code'     => 'code-2',     'project' => 'rocket',     'tools'   => 'wrench',         'bug'     => 'bug',
+    ];
+    $upd = $conn->prepare("UPDATE sections SET icon=? WHERE slug=?");
+    foreach ($icon_map as $slug => $icon) { $upd->bind_param("ss", $icon, $slug); $upd->execute(); }
+    $upd->close();
 }
 
 // 客服工单系统

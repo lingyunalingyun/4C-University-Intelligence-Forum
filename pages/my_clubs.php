@@ -60,7 +60,7 @@ include '../includes/header.php';
 
 <?php if (empty($my_clubs)): ?>
 <div class="empty-state">
-  <div class="icon">🏛️</div>
+  <div class="icon"><i data-lucide="building-2" class="lucide"></i></div>
   <p>您还未加入任何社团</p>
   <a href="clubs.php" class="btn btn-primary btn-sm">浏览社团</a>
 </div>
@@ -96,7 +96,7 @@ foreach ($my_clubs as $c):
           <span style="font-size:11px;color:#ef4444">[已停用]</span>
         <?php endif; ?>
       </div>
-      <div style="font-size:13px;color:var(--txt-2);margin-top:2px">🏫 <?= h($c['school']) ?> &nbsp;·&nbsp; 👥 <?= $c['member_count'] ?> 人</div>
+      <div style="font-size:13px;color:var(--txt-2);margin-top:2px"><i data-lucide="building" class="lucide"></i> <?= h($c['school']) ?> &nbsp;·&nbsp; <i data-lucide="users" class="lucide"></i> <?= $c['member_count'] ?> 人</div>
       <div style="font-size:13px;color:var(--txt-3);margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
         <?= h(mb_substr($c['description'] ?? '', 0, 60)) ?>
       </div>

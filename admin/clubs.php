@@ -55,7 +55,7 @@ include '../includes/header.php';
 
 <div class="admin-page-hd">
   <div>
-    <h2>🏛️ 社团管理</h2>
+    <h2><i data-lucide="building-2" class="lucide"></i> 社团管理</h2>
     <div class="sub">待审核
       <strong style="color:<?= count($pending)?'#ef4444':'inherit' ?>"><?= count($pending) ?></strong> 个申请
     </div>
@@ -86,7 +86,7 @@ include '../includes/header.php';
 <!-- ── 待审核申请 ── -->
 <?php if ($tab === 'pending'): ?>
   <?php if (empty($pending)): ?>
-    <div class="empty-state"><div class="icon">✅</div><p>暂无待审核的社团申请</p></div>
+    <div class="empty-state"><div class="icon"><i data-lucide="check-circle" class="lucide"></i></div><p>暂无待审核的社团申请</p></div>
   <?php else: ?>
     <?php foreach ($pending as $a): ?>
     <div class="card" style="margin-bottom:14px">
@@ -121,7 +121,7 @@ include '../includes/header.php';
 <!-- ── 改名申请 ── -->
 <?php elseif ($tab === 'names'): ?>
   <?php if (empty($pending_names)): ?>
-    <div class="empty-state"><div class="icon">✅</div><p>暂无待审核的改名申请</p></div>
+    <div class="empty-state"><div class="icon"><i data-lucide="check-circle" class="lucide"></i></div><p>暂无待审核的改名申请</p></div>
   <?php else: ?>
     <?php foreach ($pending_names as $nc): ?>
     <div class="card" style="margin-bottom:14px">
@@ -153,7 +153,7 @@ include '../includes/header.php';
 <!-- ── 全部社团 ── -->
 <?php elseif ($tab === 'clubs'): ?>
   <?php if (empty($clubs)): ?>
-    <div class="empty-state"><div class="icon">🏛️</div><p>暂无社团</p></div>
+    <div class="empty-state"><div class="icon"><i data-lucide="building-2" class="lucide"></i></div><p>暂无社团</p></div>
   <?php else: ?>
   <div class="card" style="overflow-x:auto">
     <table class="data-table">
@@ -195,7 +195,7 @@ include '../includes/header.php';
 <!-- ── 审核记录 ── -->
 <?php elseif ($tab === 'history'): ?>
   <?php if (empty($history)): ?>
-    <div class="empty-state"><div class="icon">📋</div><p>暂无审核记录</p></div>
+    <div class="empty-state"><div class="icon"><i data-lucide="clipboard-list" class="lucide"></i></div><p>暂无审核记录</p></div>
   <?php else: ?>
   <div class="card" style="overflow-x:auto">
     <table class="data-table">

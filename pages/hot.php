@@ -43,7 +43,7 @@ include '../includes/header.php';
 
 <div class="card mb-16" style="padding:16px 20px">
   <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
-    <div style="font-size:18px;font-weight:700">🔥 热帖榜</div>
+    <div style="font-size:18px;font-weight:700;display:flex;align-items:center;gap:6px"><i data-lucide="trending-up" class="lucide" style="width:20px;height:20px"></i> 热帖榜</div>
     <div class="flex-center gap-8">
       <?php foreach (['week'=>'本周','month'=>'本月','all'=>'全部时间'] as $k=>$v): ?>
         <a href="hot.php?range=<?= $k ?>" class="sub-section-tag <?= $range===$k?'active':'' ?>"><?= $v ?></a>
@@ -55,7 +55,7 @@ include '../includes/header.php';
 
 <div class="post-list">
   <?php if (empty($posts)): ?>
-    <div class="empty-state"><div class="icon">📭</div><p>暂无热帖</p></div>
+    <div class="empty-state"><div class="icon"><i data-lucide="inbox" class="lucide" style="width:36px;height:36px"></i></div><p>暂无热帖</p></div>
   <?php else: ?>
     <?php foreach ($posts as $idx => $p): ?>
     <div class="post-item" style="position:relative">
@@ -69,7 +69,7 @@ include '../includes/header.php';
       <div class="post-meta-left" style="margin-left:28px">
         <a href="post.php?id=<?= $p['id'] ?>" class="post-title-link">
           <?= h($p['title']) ?>
-          <?= $p['is_solved'] ? ' <span style="font-size:11px;background:#dcfce7;color:#166534;padding:2px 6px;border-radius:4px">✅ 已解决</span>' : '' ?>
+          <?= $p['is_solved'] ? ' <span style="font-size:11px;background:#dcfce7;color:#166534;padding:2px 6px;border-radius:4px"><i data-lucide="check-circle" class="lucide"></i> 已解决</span>' : '' ?>
         </a>
         <?php if (!empty($p['summary'])): ?>
           <div class="post-summary"><?= h($p['summary']) ?></div>
@@ -82,9 +82,9 @@ include '../includes/header.php';
           <span><?= time_ago($p['created_at']) ?></span>
           <span style="font-size:12px;color:var(--txt-3)"><?= h($p['section_name']) ?></span>
           <div class="post-stats">
-            <span>👁 <?= $p['views'] ?></span>
-            <span>👍 <?= $p['like_count'] ?></span>
-            <span>💬 <?= $p['comment_count'] ?></span>
+            <span><i data-lucide="eye" class="lucide"></i> <?= $p['views'] ?></span>
+            <span><i data-lucide="thumbs-up" class="lucide"></i> <?= $p['like_count'] ?></span>
+            <span><i data-lucide="message-circle" class="lucide"></i> <?= $p['comment_count'] ?></span>
           </div>
         </div>
       </div>

@@ -33,12 +33,12 @@ if ($slug === '') {
         $all_sections[] = $r;
     }
     ?>
-    <h2 style="margin:0 0 20px">🗂️ 全部分区</h2>
+    <h2 style="margin:0 0 20px"><i data-lucide="folder" class="lucide"></i> 全部分区</h2>
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px">
       <?php foreach ($all_sections as $sec): ?>
       <div class="card" style="border-top:4px solid <?= h($sec['color']) ?>;padding:0">
         <a href="section.php?slug=<?= h($sec['slug']) ?>" style="display:flex;align-items:center;gap:12px;padding:16px 20px;text-decoration:none">
-          <span style="font-size:32px"><?= h($sec['icon']) ?></span>
+          <?= render_icon($sec['icon'], 'lucide', 32) ?>
           <div>
             <div style="font-size:16px;font-weight:700;color:var(--txt)"><?= h($sec['name']) ?></div>
             <div style="font-size:12px;color:var(--txt-2);margin-top:2px"><?= h(mb_substr($sec['description'],0,30)) ?></div>
@@ -49,7 +49,7 @@ if ($slug === '') {
         <div style="padding:8px 20px 14px;display:flex;flex-wrap:wrap;gap:6px;border-top:1px solid var(--border)">
           <?php foreach ($sec['subs'] as $s2): ?>
             <a href="section.php?slug=<?= h($sec['slug']) ?>&sub=<?= h($s2['slug']) ?>"
-               class="tag" style="font-size:12px"><?= h($s2['icon']) ?> <?= h($s2['name']) ?></a>
+               class="tag" style="font-size:12px;display:inline-flex;align-items:center;gap:4px"><?= render_icon($s2['icon'], 'lucide') ?> <?= h($s2['name']) ?></a>
           <?php endforeach; ?>
         </div>
         <?php endif; ?>
@@ -119,13 +119,13 @@ include '../includes/header.php';
 <!-- 分区头 -->
 <div class="card mb-16" style="padding:20px 24px;border-top:4px solid <?= h($section['color']) ?>">
   <div style="display:flex;align-items:center;gap:12px">
-    <span style="font-size:36px"><?= h($section['icon']) ?></span>
+    <?= render_icon($section['icon'], 'lucide', 36) ?>
     <div>
       <div style="font-size:20px;font-weight:700"><?= h($section['name']) ?></div>
       <div style="font-size:13px;color:var(--txt-2);margin-top:4px"><?= h($section['description']) ?></div>
     </div>
     <?php if ($is_logged_in): ?>
-      <a href="publish.php?section=<?= h($slug) ?><?= $sub ? '&sub='.$sub : '' ?>" class="btn btn-primary btn-sm" style="margin-left:auto">✏️ 发帖</a>
+      <a href="publish.php?section=<?= h($slug) ?><?= $sub ? '&sub='.$sub : '' ?>" class="btn btn-primary btn-sm" style="margin-left:auto"><i data-lucide="pencil" class="lucide"></i> 发帖</a>
     <?php endif; ?>
   </div>
 </div>
@@ -156,7 +156,7 @@ include '../includes/header.php';
     <!-- 帖子列表 -->
     <div class="post-list">
       <?php if (empty($posts)): ?>
-        <div class="empty-state"><div class="icon">📭</div><p>暂无帖子，快来发第一帖！</p></div>
+        <div class="empty-state"><div class="icon"><i data-lucide="inbox" class="lucide" style="width:36px;height:36px"></i></div><p>暂无帖子，快来发第一帖！</p></div>
       <?php else: ?>
         <?php foreach ($posts as $p): echo render_post_item($p, '../'); endforeach; ?>
       <?php endif; ?>
@@ -175,7 +175,7 @@ include '../includes/header.php';
 
   <div class="col-side">
     <div class="card">
-      <div class="card-header">📌 分区规则</div>
+      <div class="card-header" style="display:flex;align-items:center;gap:6px"><i data-lucide="pin" class="lucide"></i> 分区规则</div>
       <div class="card-body" style="font-size:13px;color:var(--txt-2);line-height:1.8">
         <p>1. 发帖请选择合适的子分区</p>
         <p>2. 标题清晰，描述具体</p>

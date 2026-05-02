@@ -65,7 +65,7 @@ include '../includes/header.php';
 </div>
 
 <div class="card mb-16" style="padding:16px 20px;display:flex;align-items:center;gap:12px">
-  <span style="font-size:24px">🔭</span>
+  <i data-lucide="compass" class="lucide" style="width:24px;height:24px;flex-shrink:0"></i>
   <div>
     <div style="font-weight:700;font-size:16px">发现好帖</div>
     <div style="font-size:13px;color:var(--txt-2)">
@@ -78,7 +78,7 @@ include '../includes/header.php';
   <div class="col-main">
     <div class="post-list">
       <?php if (empty($posts)): ?>
-        <div class="empty-state"><div class="icon">📭</div><p>暂无内容</p></div>
+        <div class="empty-state"><div class="icon"><i data-lucide="inbox" class="lucide" style="width:36px;height:36px"></i></div><p>暂无内容</p></div>
       <?php else: ?>
         <?php foreach ($posts as $p): echo render_post_item($p, '../'); endforeach; ?>
       <?php endif; ?>
@@ -96,7 +96,7 @@ include '../includes/header.php';
   <div class="col-side">
     <!-- 分区导航 -->
     <div class="card">
-      <div class="card-header">🗂️ 全部分区</div>
+      <div class="card-header"><i data-lucide="folder" class="lucide"></i> 全部分区</div>
       <div class="card-body">
         <?php
         $sr = $conn->query("SELECT s.*,p.slug as parent_slug FROM sections s LEFT JOIN sections p ON p.id=s.parent_id ORDER BY p.sort_order,s.sort_order");

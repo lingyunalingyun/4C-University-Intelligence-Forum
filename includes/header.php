@@ -52,6 +52,7 @@ if ($is_logged_in && isset($conn)) {
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title><?= isset($page_title) ? h($page_title).' - ' : '' ?><?= SITE_NAME ?></title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.css">
 <link rel="stylesheet" href="<?= $base ?>style.css">
 <script>
   (function(){
@@ -62,51 +63,64 @@ if ($is_logged_in && isset($conn)) {
 <link rel="icon" href="<?= $base ?>assets/logo.svg" type="image/svg+xml">
 </head>
 <body>
+<div id="flip-veil"></div>
+
+<div id="nav-backdrop" class="nav-backdrop"></div>
+<nav id="nav-drawer" class="nav-drawer">
+  <div class="nav-drawer-inner">
+    <div class="nav-drawer-label">导航</div>
+    <a href="<?= $base ?>index.php">首页</a>
+    <a href="<?= $base ?>square.php">广场</a>
+    <a href="<?= $base ?>pages/explore.php">发现</a>
+    <a href="<?= $base ?>pages/section.php">分区</a>
+    <a href="<?= $base ?>pages/hot.php">热榜</a>
+    <a href="<?= $base ?>pages/clubs.php">社团</a>
+    <?php if ($is_logged_in): ?>
+    <div class="nav-drawer-label">我的</div>
+    <a href="<?= $base ?>pages/my_clubs.php">我的社团</a>
+    <a href="<?= $base ?>pages/ai_assistant.php">AI 助手</a>
+    <a href="<?= $base ?>pages/messages.php">私信<?php if (!empty($msg_unread) && $msg_unread > 0): ?> (<?= $msg_unread > 99 ? '99+' : $msg_unread ?>)<?php endif; ?></a>
+    <a href="<?= $base ?>pages/notifications.php">通知</a>
+    <a href="<?= $base ?>pages/support.php">客服</a>
+    <?php if ($current_role === 'admin' || $current_role === 'owner'): ?>
+    <div class="nav-drawer-label">管理</div>
+    <a href="<?= $base ?>admin/index.php">管理后台</a>
+    <?php endif; ?>
+    <?php endif; ?>
+  </div>
+</nav>
 
 <!-- ── 顶部导航 ── -->
 <header class="top-nav">
   <div class="nav-inner">
+    <!-- 汉堡菜单 -->
+    <button class="hamburger" id="menu-btn" aria-label="菜单">
+      <span></span><span></span><span></span>
+    </button>
+
     <!-- Logo -->
-    <a href="<?= $base ?>index.php" class="nav-logo">
-      <span class="logo-icon">🎓</span>
-      <span class="logo-text"><?= SITE_NAME ?></span>
-    </a>
+    <a href="<?= $base ?>index.php" class="nav-logo"><?= SITE_NAME ?></a>
 
     <!-- 搜索框 -->
     <form class="nav-search" action="<?= $base ?>pages/search.php" method="get">
       <input type="text" name="q" placeholder="搜索帖子、用户、板块..." value="<?= h($_GET['q'] ?? '') ?>">
-      <button type="submit">🔍</button>
+      <button type="submit"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
     </form>
 
-    <!-- 导航链接 -->
+    <!-- 导航链接（精简） -->
     <nav class="nav-links">
       <a href="<?= $base ?>index.php">首页</a>
       <a href="<?= $base ?>square.php">广场</a>
-      <a href="<?= $base ?>pages/explore.php">发现</a>
-      <a href="<?= $base ?>pages/section.php">分区</a>
-      <a href="<?= $base ?>pages/hot.php">热榜</a>
-      <a href="<?= $base ?>pages/clubs.php">社团</a>
-      <?php if ($is_logged_in): ?>
-        <a href="<?= $base ?>pages/my_clubs.php">我的社团</a>
-        <a href="<?= $base ?>pages/ai_assistant.php">AI助手</a>
-        <a href="<?= $base ?>pages/support.php">客服</a>
-        <a href="<?= $base ?>pages/messages.php" style="position:relative">
-          私信<?php if (!empty($msg_unread) && $msg_unread > 0): ?><span class="badge" style="top:-6px;right:-10px"><?= $msg_unread > 99 ? '99+' : $msg_unread ?></span><?php endif; ?>
-        </a>
-        <?php if ($current_role === 'admin' || $current_role === 'owner'): ?>
-          <a href="<?= $base ?>admin/index.php">管理后台</a>
-        <?php endif; ?>
-      <?php endif; ?>
     </nav>
 
     <!-- 右侧用户区 -->
     <div class="nav-user">
-      <button id="theme-toggle" class="theme-btn" onclick="toggleTheme()" title="切换主题">🌙</button>
+      <button id="theme-toggle" class="theme-btn" onclick="toggleTheme()" title="切换主题">暗</button>
       <?php if ($is_logged_in): ?>
-        <a href="<?= $base ?>pages/publish.php" class="btn-publish">✏️ 发帖</a>
+        <a href="<?= $base ?>pages/publish.php" class="btn-publish">发帖</a>
 
         <a href="<?= $base ?>pages/notifications.php" class="nav-bell">
-          🔔<?php if ($unread_count > 0): ?><span class="badge"><?= $unread_count > 99 ? '99+' : $unread_count ?></span><?php endif; ?>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><?php if ($unread_count > 0): ?><span class="badge"><?= $unread_count > 99 ? '99+' : $unread_count ?></span><?php endif; ?>
         </a>
 
         <a href="<?= $base ?>pages/profile.php?id=<?= intval($_SESSION['user_id']) ?>">
@@ -125,7 +139,7 @@ if ($is_logged_in && isset($conn)) {
 
 <?php if (!empty($_SESSION['is_banned'])): ?>
 <div class="ban-banner">
-  ⛔ 您的账号已被封禁：<?= h($_SESSION['ban_reason']) ?>  &nbsp;|&nbsp; 如有疑问请联系管理员
+  × 您的账号已被封禁：<?= h($_SESSION['ban_reason']) ?> &nbsp;|&nbsp; 如有疑问请联系管理员
 </div>
 <?php endif; ?>
 
@@ -134,23 +148,23 @@ if ($is_logged_in && isset($conn)) {
     $admin_page = basename($_SERVER['PHP_SELF'], '.php');
     $nav_groups = [
         '' => [
-            ['index',    '📊', '数据总览'],
+            ['index',    '统', '数据总览'],
         ],
         '内容管理' => [
-            ['users',    '👥', '用户管理'],
-            ['posts',    '📝', '帖子管理'],
-            ['sections', '🗂️', '板块管理'],
-            ['clubs',    '🏛️', '社团管理'],
+            ['users',    '用', '用户管理'],
+            ['posts',    '帖', '帖子管理'],
+            ['sections', '区', '板块管理'],
+            ['clubs',    '团', '社团管理'],
         ],
         '运营' => [
-            ['homepage', '🖼️', '主页精选'],
-            ['support',  '🎧', '客服工单'],
-            ['reports',  '🚩', '举报管理'],
-            ['messages', '💬', '消息记录'],
-            ['logs',     '📋', '操作日志'],
+            ['homepage', '页', '主页精选'],
+            ['support',  '客', '客服工单'],
+            ['reports',  '报', '举报管理'],
+            ['messages', '消', '消息记录'],
+            ['logs',     '日', '操作日志'],
         ],
         '系统' => [
-            ['settings', '🤖', 'AI 设置'],
+            ['settings', 'AI', 'AI 设置'],
         ],
     ];
 ?>
@@ -167,7 +181,7 @@ if (isset($conn)) {
 <div class="admin-layout">
   <aside class="admin-sidebar">
     <div class="admin-sidebar-brand">
-      <span>⚙️</span><span>管理后台</span>
+      <span>管理后台</span>
     </div>
     <?php foreach ($nav_groups as $group => $items): ?>
       <?php if ($group): ?><div class="admin-sidebar-group"><?= $group ?></div><?php endif; ?>
@@ -188,7 +202,7 @@ if (isset($conn)) {
     <?php endforeach; ?>
     <div class="admin-sidebar-footer">
       <a href="<?= $base ?>index.php" class="admin-nav-item">
-        <span class="admin-nav-icon">🌐</span>返回前台
+        <span class="admin-nav-icon">←</span>返回前台
       </a>
     </div>
   </aside>

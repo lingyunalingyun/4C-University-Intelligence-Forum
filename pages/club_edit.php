@@ -43,7 +43,7 @@ include '../includes/header.php';
   <?php if ($err): ?><div class="alert alert-danger  mb-16"><?= h($err) ?></div><?php endif; ?>
 
   <div class="card">
-    <div class="card-header">🏛️ 管理社团 — <?= h($club['name']) ?></div>
+    <div class="card-header"><i data-lucide="building-2" class="lucide"></i> 管理社团 — <?= h($club['name']) ?></div>
     <div class="card-body">
       <form action="../actions/club_action.php" method="post" enctype="multipart/form-data">
         <input type="hidden" name="action"  value="club_edit">

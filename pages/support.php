@@ -46,12 +46,12 @@ include '../includes/header.php';
 <!-- ── AI 客服 ── -->
 <div class="card mb-20">
   <div class="card-header" style="display:flex;align-items:center;gap:8px">
-    <span>🤖 AI 客服</span>
+    <span><i data-lucide="bot" class="lucide"></i> AI 客服</span>
     <span style="font-size:12px;color:var(--txt-3);font-weight:400">— 遇到问题先问 AI，解决不了再转人工</span>
   </div>
 
   <div id="sc-msg-box" class="sc-msg-box">
-    <div class="sc-bubble ai">你好！我是论坛 AI 客服 🎓 有什么可以帮到你？</div>
+    <div class="sc-bubble ai">你好！我是论坛 AI 客服 <i data-lucide="graduation-cap" class="lucide"></i> 有什么可以帮到你？</div>
   </div>
 
   <div style="padding:12px 16px;border-top:1px solid var(--border)">
@@ -84,7 +84,7 @@ include '../includes/header.php';
 
 <!-- ── 提交工单表单（隐藏，点击转人工后显示） ── -->
 <div id="ticket-form-card" class="card mb-20" style="display:none">
-  <div class="card-header">📋 提交人工工单</div>
+  <div class="card-header"><i data-lucide="clipboard-list" class="lucide"></i> 提交人工工单</div>
   <div class="card-body">
     <div id="ticket-msg" style="font-size:13px;min-height:18px;margin-bottom:8px"></div>
     <div class="form-group">
@@ -113,11 +113,11 @@ include '../includes/header.php';
 
 <!-- ── 我的工单 ── -->
 <div class="card">
-  <div class="card-header">📋 我的工单</div>
+  <div class="card-header"><i data-lucide="clipboard-list" class="lucide"></i> 我的工单</div>
   <?php if (empty($tickets)): ?>
     <div class="card-body">
       <div class="empty-state" style="padding:28px 0">
-        <div class="icon">📋</div>
+        <div class="icon"><i data-lucide="clipboard-list" class="lucide"></i></div>
         <p>暂无工单，有问题先试试 AI 客服吧</p>
       </div>
     </div>
@@ -184,7 +184,7 @@ include '../includes/header.php';
   <div class="card">
     <div class="card-header">⏱ 响应时间</div>
     <div class="card-body" style="font-size:13px;color:var(--txt-2);line-height:2">
-      <div>🤖 AI 客服：即时响应</div>
+      <div><i data-lucide="bot" class="lucide"></i> AI 客服：即时响应</div>
       <div>👨‍💼 人工客服：工作日 24h 内</div>
       <div>🔴 紧急问题：尽快处理</div>
     </div>
@@ -337,7 +337,7 @@ function toggleTicket(id, isAdminView) {
                       + 'background:' + (admin ? 'var(--bg-2)' : 'var(--primary)') + ';'
                       + 'color:'      + (admin ? 'var(--txt)' : '#fff') + '">';
                 html += '<div style="font-size:11px;margin-bottom:3px;color:' + (admin ? 'var(--txt-3)' : 'rgba(255,255,255,.7)') + '">';
-                html += (admin ? '🛡 客服' : '👤 我') + ' · ' + escH(r.created_at.substring(5,16));
+                html += (admin ? '🛡 客服' : '<i data-lucide="user" class="lucide"></i> 我') + ' · ' + escH(r.created_at.substring(5,16));
                 html += '</div><div style="white-space:pre-wrap">' + escH(r.content) + '</div></div></div>';
             });
 

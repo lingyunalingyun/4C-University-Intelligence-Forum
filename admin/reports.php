@@ -100,7 +100,7 @@ include '../includes/header.php';
 <?php if ($err): ?><div class="alert alert-danger  mb-16"><?= h($err) ?></div><?php endif; ?>
 
 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px">
-  <h2 style="margin:0;font-size:18px">🚩 举报管理
+  <h2 style="margin:0;font-size:18px"><i data-lucide="flag" class="lucide"></i> 举报管理
     <?php if ($pending_count): ?><span style="background:var(--danger);color:#fff;font-size:12px;padding:2px 8px;border-radius:12px;margin-left:8px;font-weight:600"><?= $pending_count ?></span><?php endif; ?>
   </h2>
 
@@ -202,7 +202,7 @@ include '../includes/header.php';
             <?php if ($r['type'] === 'post'): ?>
             <form method="post" style="margin:0" onsubmit="return confirm('确认删除该帖子？')">
               <input type="hidden" name="report_id" value="<?= $r['id'] ?>">
-              <button name="action" value="delete_post" class="btn btn-sm" style="width:100%;font-size:11px;background:var(--danger);color:#fff;border:none">🗑 删帖</button>
+              <button name="action" value="delete_post" class="btn btn-sm" style="width:100%;font-size:11px;background:var(--danger);color:#fff;border:none"><i data-lucide="trash-2" class="lucide"></i> 删帖</button>
             </form>
             <?php elseif ($r['type'] === 'user'): ?>
             <button class="btn btn-sm" style="width:100%;font-size:11px;background:var(--danger);color:#fff;border:none"

@@ -46,7 +46,7 @@ include '../includes/header.php';
 ?>
 
 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px">
-  <h2 style="margin:0;font-size:18px">🎧 客服工单
+  <h2 style="margin:0;font-size:18px"><i data-lucide="headphones" class="lucide"></i> 客服工单
     <?php if ($open_count): ?>
       <span style="background:var(--danger);color:#fff;font-size:12px;padding:2px 8px;border-radius:12px;margin-left:8px;font-weight:600"><?= $open_count ?></span>
     <?php endif; ?>
@@ -163,7 +163,7 @@ function toggleTicket(id) {
                     var ctx = JSON.parse(d.ai_context);
                     if (Array.isArray(ctx) && ctx.length > 0) {
                         html += '<details style="margin-bottom:10px">';
-                        html += '<summary style="font-size:12px;color:var(--txt-3);cursor:pointer;padding:4px 0">🤖 AI 对话记录（' + ctx.length + ' 条）</summary>';
+                        html += '<summary style="font-size:12px;color:var(--txt-3);cursor:pointer;padding:4px 0"><i data-lucide="bot" class="lucide"></i> AI 对话记录（' + ctx.length + ' 条）</summary>';
                         html += '<div style="margin-top:6px;padding:8px 12px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);font-size:12px;color:var(--txt-2);max-height:200px;overflow-y:auto">';
                         ctx.forEach(function(m) {
                             html += '<div style="margin-bottom:6px"><strong>' + (m.role==='user'?'用户':'AI') + '：</strong>' + escH(m.content) + '</div>';
@@ -182,7 +182,7 @@ function toggleTicket(id) {
                 var admin = r.is_admin == 1;
                 html += '<div style="padding:7px 0;border-bottom:1px solid var(--border)">';
                 html += '<div style="font-size:11px;color:var(--txt-3);margin-bottom:2px">';
-                html += (admin ? '🛡 客服（' + escH(r.username) + '）' : '👤 用户') + ' · ' + escH(r.created_at.substring(0,16));
+                html += (admin ? '🛡 客服（' + escH(r.username) + '）' : '<i data-lucide="user" class="lucide"></i> 用户') + ' · ' + escH(r.created_at.substring(0,16));
                 html += '</div>';
                 html += '<div style="font-size:13px;white-space:pre-wrap">' + escH(r.content) + '</div>';
                 html += '</div>';

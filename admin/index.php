@@ -58,7 +58,7 @@ include '../includes/header.php';
 
 <div class="admin-page-hd">
   <div>
-    <h2>📊 数据总览</h2>
+    <h2><i data-lucide="bar-chart-2" class="lucide"></i> 数据总览</h2>
     <div class="sub"><?= date('Y年m月d日') ?> &nbsp;·&nbsp;
       AI <?= $ai_ok
         ? '<span style="color:#16a34a">● 运行中</span>'
@@ -67,7 +67,7 @@ include '../includes/header.php';
   </div>
   <div class="actions">
     <?php if (!$ai_ok): ?>
-      <a href="settings.php" class="btn btn-primary btn-sm">🤖 配置 AI</a>
+      <a href="settings.php" class="btn btn-primary btn-sm"><i data-lucide="bot" class="lucide"></i> 配置 AI</a>
     <?php endif; ?>
     <a href="../index.php" target="_blank" class="btn btn-outline btn-sm">访问前台 ↗</a>
   </div>
@@ -77,12 +77,12 @@ include '../includes/header.php';
 <div class="admin-stat-grid">
 <?php
 $cards = [
-  ['👥','注册用户',$stats['users'],  "今日 +{$stats['today_users']}",  '#2563eb','#dbeafe'],
-  ['📝','发布帖子',$stats['posts'],  "今日 +{$stats['today_posts']}",  '#10b981','#d1fae5'],
-  ['💬','评论总数',$stats['comments'],'',                              '#8b5cf6','#ede9fe'],
-  ['🏛️','活跃社团',$stats['clubs'],  '',                              '#f59e0b','#fef3c7'],
-  ['🚫','封禁用户',$stats['banned_users'],'',                         '#ef4444','#fee2e2'],
-  ['🤖','今日AI调用',$stats['ai_calls'],'',                           '#0ea5e9','#e0f2fe'],
+  ['<i data-lucide="users" class="lucide"></i>','注册用户',$stats['users'],  "今日 +{$stats['today_users']}",  '#2563eb','#dbeafe'],
+  ['<i data-lucide="file-text" class="lucide"></i>','发布帖子',$stats['posts'],  "今日 +{$stats['today_posts']}",  '#10b981','#d1fae5'],
+  ['<i data-lucide="message-circle" class="lucide"></i>','评论总数',$stats['comments'],'',                              '#8b5cf6','#ede9fe'],
+  ['<i data-lucide="building-2" class="lucide"></i>','活跃社团',$stats['clubs'],  '',                              '#f59e0b','#fef3c7'],
+  ['<i data-lucide="ban" class="lucide"></i>','封禁用户',$stats['banned_users'],'',                         '#ef4444','#fee2e2'],
+  ['<i data-lucide="bot" class="lucide"></i>','今日AI调用',$stats['ai_calls'],'',                           '#0ea5e9','#e0f2fe'],
 ];
 foreach ($cards as $sc): list($icon,$label,$val,$sub,$color,$bg) = $sc;
 ?>
@@ -103,7 +103,7 @@ foreach ($cards as $sc): list($icon,$label,$val,$sub,$color,$bg) = $sc;
   <!-- 最新用户 -->
   <div class="card">
     <div class="card-header" style="justify-content:space-between">
-      <span>👥 最新注册</span>
+      <span><i data-lucide="users" class="lucide"></i> 最新注册</span>
       <a href="users.php" style="font-size:12px;color:var(--txt-3);font-weight:400">查看全部 →</a>
     </div>
     <div style="padding:0">
@@ -129,16 +129,16 @@ foreach ($cards as $sc): list($icon,$label,$val,$sub,$color,$bg) = $sc;
   <!-- 最新帖子 -->
   <div class="card">
     <div class="card-header" style="justify-content:space-between">
-      <span>📝 最新帖子</span>
+      <span><i data-lucide="file-text" class="lucide"></i> 最新帖子</span>
       <a href="posts.php" style="font-size:12px;color:var(--txt-3);font-weight:400">查看全部 →</a>
     </div>
     <div style="padding:0">
       <?php foreach ($new_posts as $p): ?>
       <div style="display:flex;align-items:center;gap:12px;padding:10px 20px;border-bottom:1px solid var(--border)">
-        <div style="width:34px;height:34px;border-radius:8px;background:var(--primary-lt);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0">📄</div>
+        <div style="width:34px;height:34px;border-radius:8px;background:var(--primary-lt);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0"><i data-lucide="file" class="lucide"></i></div>
         <div style="flex:1;min-width:0">
           <a href="../pages/post.php?id=<?= $p['id'] ?>" target="_blank" style="font-size:13px;font-weight:600;color:var(--txt);display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis"><?= h($p['title']) ?></a>
-          <div style="font-size:11px;color:var(--txt-3);"><?= h($p['username']) ?> · 👁<?= $p['views'] ?> 👍<?= $p['like_count'] ?> 💬<?= $p['comment_count'] ?></div>
+          <div style="font-size:11px;color:var(--txt-3);"><?= h($p['username']) ?> · <i data-lucide="eye" class="lucide"></i><?= $p['views'] ?> <i data-lucide="thumbs-up" class="lucide"></i><?= $p['like_count'] ?> <i data-lucide="message-circle" class="lucide"></i><?= $p['comment_count'] ?></div>
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0">
           <span style="font-size:11px;color:var(--txt-3)"><?= date('m-d H:i',strtotime($p['created_at'])) ?></span>
@@ -153,18 +153,18 @@ foreach ($cards as $sc): list($icon,$label,$val,$sub,$color,$bg) = $sc;
 
 <!-- 快捷操作 -->
 <div class="card">
-  <div class="card-header">⚡ 快捷入口</div>
+  <div class="card-header"><i data-lucide="zap" class="lucide"></i> 快捷入口</div>
   <div class="card-body" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
     <?php
     $shortcuts = [
-      ['users.php',    '👥','用户管理','#dbeafe','#2563eb'],
-      ['posts.php',    '📝','帖子管理','#d1fae5','#10b981'],
-      ['sections.php', '🗂️','板块管理','#ede9fe','#8b5cf6'],
-      ['clubs.php',    '🏛️','社团管理','#fce7f3','#ec4899'],
-      ['homepage.php', '🖼️','主页精选','#fef3c7','#f59e0b'],
-      ['messages.php', '💬','消息记录','#e0f2fe','#0ea5e9'],
-      ['logs.php',     '📋','操作日志','#f1f5f9','#64748b'],
-      ['settings.php', '🤖','AI 设置', '#d1fae5','#10b981'],
+      ['users.php',    '<i data-lucide="users" class="lucide"></i>','用户管理','#dbeafe','#2563eb'],
+      ['posts.php',    '<i data-lucide="file-text" class="lucide"></i>','帖子管理','#d1fae5','#10b981'],
+      ['sections.php', '<i data-lucide="folder" class="lucide"></i>','板块管理','#ede9fe','#8b5cf6'],
+      ['clubs.php',    '<i data-lucide="building-2" class="lucide"></i>','社团管理','#fce7f3','#ec4899'],
+      ['homepage.php', '<i data-lucide="image" class="lucide"></i>','主页精选','#fef3c7','#f59e0b'],
+      ['messages.php', '<i data-lucide="message-circle" class="lucide"></i>','消息记录','#e0f2fe','#0ea5e9'],
+      ['logs.php',     '<i data-lucide="clipboard-list" class="lucide"></i>','操作日志','#f1f5f9','#64748b'],
+      ['settings.php', '<i data-lucide="bot" class="lucide"></i>','AI 设置', '#d1fae5','#10b981'],
     ];
     foreach ($shortcuts as $sc): list($href,$icon,$name,$bg,$color) = $sc;
     ?>

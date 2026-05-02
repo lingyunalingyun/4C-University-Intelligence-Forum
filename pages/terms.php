@@ -26,14 +26,14 @@ include '../includes/header.php';
 
   <?php
   $sections = [
-    ['📝', '一、账号规范', [
+    ['<i data-lucide="file-text" class="lucide"></i>', '一、账号规范', [
       '每位用户只能注册一个账号，禁止多账号注册或绕过封禁。',
       '用户名须符合公序良俗，不得含有侮辱性、歧视性或违法词汇。',
       '请妥善保管账号密码，因账号泄露造成的损失由用户本人承担。',
       '禁止将账号出租、出售或转让给他人使用。',
       '账号头像、昵称、简介等个人信息不得含有违法违规内容。',
     ]],
-    ['📄', '二、内容规范', [
+    ['<i data-lucide="file" class="lucide"></i>', '二、内容规范', [
       '禁止发布违反中华人民共和国相关法律法规的内容。',
       '禁止发布色情、赌博、暴力、恐怖等有害信息。',
       '禁止发布虚假信息、谣言或恶意误导他人的内容。',
@@ -59,7 +59,7 @@ include '../includes/header.php';
       '情节严重：永久封禁账号，保留追究法律责任的权利。',
       '对处理结果有异议，可通过客服中心提交申诉工单。',
     ]],
-    ['📋', '六、免责声明', [
+    ['<i data-lucide="clipboard-list" class="lucide"></i>', '六、免责声明', [
       '本平台为用户提供信息交流服务，不对用户发布内容的真实性、合法性承担责任。',
       '用户因违规行为造成的任何后果由用户本人承担。',
       '本平台有权根据实际情况修改使用规则，修改后将在平台内公告。',
@@ -82,10 +82,10 @@ include '../includes/header.php';
 <div class="col-side">
 
   <div class="card mb-16">
-    <div class="card-header">⚡ 快速导航</div>
+    <div class="card-header"><i data-lucide="zap" class="lucide"></i> 快速导航</div>
     <div class="card-body" style="font-size:13px;line-height:2.5">
-      <a href="#" style="display:block;color:var(--primary)">📝 账号规范</a>
-      <a href="#" style="display:block;color:var(--primary)">📄 内容规范</a>
+      <a href="#" style="display:block;color:var(--primary)"><i data-lucide="file-text" class="lucide"></i> 账号规范</a>
+      <a href="#" style="display:block;color:var(--primary)"><i data-lucide="file" class="lucide"></i> 内容规范</a>
       <a href="#" style="display:block;color:var(--primary)">🤝 互动规范</a>
       <a href="#" style="display:block;color:var(--primary)">🔒 社团规范</a>
       <a href="#" style="display:block;color:var(--primary)">⚖️ 违规处理</a>
@@ -102,12 +102,12 @@ include '../includes/header.php';
   </div>
 
   <div class="card">
-    <div class="card-header">💬 有疑问？</div>
+    <div class="card-header"><i data-lucide="message-circle" class="lucide"></i> 有疑问？</div>
     <div class="card-body" style="font-size:13px;color:var(--txt-2);margin-bottom:10px">
       如对规则有任何疑问，欢迎通过客服中心联系我们。
     </div>
     <div class="card-body" style="padding-top:0">
-      <a href="support.php" class="btn btn-primary" style="display:block;text-align:center">🎧 前往客服中心</a>
+      <a href="support.php" class="btn btn-primary" style="display:block;text-align:center"><i data-lucide="headphones" class="lucide"></i> 前往客服中心</a>
     </div>
   </div>
 

@@ -205,7 +205,7 @@ include '../includes/header.php';
 
   <!-- ── 顶栏 ── -->
   <div class="ai-topbar">
-    <div class="ai-avatar-wrap">🤖</div>
+    <div class="ai-avatar-wrap"><i data-lucide="bot" class="lucide"></i></div>
     <div style="flex:1">
       <div class="ai-topbar-name">校园 AI 助手</div>
       <div class="ai-topbar-sub">
@@ -216,14 +216,14 @@ include '../includes/header.php';
         <?php endif; ?>
       </div>
     </div>
-    <button class="ai-hint-btn" onclick="clearChat()" style="border-radius:8px;padding:6px 12px">🗑 清空对话</button>
+    <button class="ai-hint-btn" onclick="clearChat()" style="border-radius:8px;padding:6px 12px"><i data-lucide="trash-2" class="lucide"></i> 清空对话</button>
   </div>
 
   <!-- ── 消息区 ── -->
   <div class="ai-messages" id="chat-box">
     <?php if ($ai_enabled): ?>
     <div class="ai-msg from-ai">
-      <div class="ai-msg-avatar" style="background:linear-gradient(135deg,#2563eb,#7c3aed)">🤖</div>
+      <div class="ai-msg-avatar" style="background:linear-gradient(135deg,#2563eb,#7c3aed)"><i data-lucide="bot" class="lucide"></i></div>
       <div>
         <div class="ai-bubble">
           你好！我是校园 AI 助手 👋<br><br>
@@ -235,7 +235,7 @@ include '../includes/header.php';
     </div>
     <?php else: ?>
     <div class="ai-disabled-tip">
-      <div style="font-size:40px;margin-bottom:12px">🔑</div>
+      <div style="font-size:40px;margin-bottom:12px"><i data-lucide="key" class="lucide"></i></div>
       <div style="font-weight:600;margin-bottom:6px">AI 功能未启用</div>
       <div>请管理员在后台配置 DeepSeek API Key</div>
       <?php if (in_array($_SESSION['role'] ?? '', ['admin','owner'])): ?>
@@ -324,11 +324,11 @@ function appendBubble(role, content, isHtml, time) {
   if (isUser) {
     const img = document.createElement('img');
     img.src = '<?= $user_avatar ?>';
-    img.onerror = () => { img.style.display='none'; avatarDiv.textContent='👤'; };
+    img.onerror = () => { img.style.display='none'; avatarDiv.textContent='<i data-lucide="user" class="lucide"></i>'; };
     avatarDiv.appendChild(img);
   } else {
     avatarDiv.style.cssText = 'background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;font-size:16px';
-    avatarDiv.textContent = '🤖';
+    avatarDiv.textContent = '<i data-lucide="bot" class="lucide"></i>';
   }
 
   const bodyDiv = document.createElement('div');
@@ -459,7 +459,7 @@ async function sendMsg() {
     msgLog.push({role:'ai', raw:reply, time:rt});
     saveSession();
   } catch(e) {
-    aiBubble.innerHTML = '<span style="color:#ef4444">⚠ 请求失败，请检查网络后重试。</span>';
+    aiBubble.innerHTML = '<span style="color:#ef4444"><i data-lucide="alert-triangle" class="lucide"></i> 请求失败，请检查网络后重试。</span>';
   }
 
   isLoading = false;
@@ -471,7 +471,7 @@ async function sendMsg() {
 function clearChat() {
   clearSession();
   chatBox.innerHTML = '';
-  appendBubble('ai', '对话已清空，有什么新问题吗？😊', false);
+  appendBubble('ai', '对话已清空，有什么新问题吗？', false);
   const bar = document.getElementById('hints-bar');
   if (bar) bar.style.display = 'flex';
 }

@@ -49,7 +49,7 @@ include '../includes/header.php';
 
 <div class="admin-page-hd">
   <div>
-    <h2>🖼️ 主页精选</h2>
+    <h2><i data-lucide="image" class="lucide"></i> 主页精选</h2>
     <div class="sub">配置首页轮播展示的帖子内容</div>
   </div>
   <div class="actions">
@@ -59,7 +59,7 @@ include '../includes/header.php';
 
 <!-- ══ Hero 背景图管理 ══ -->
 <div class="card" style="margin-bottom:20px">
-  <div class="card-header">🖼️ 首页背景大图</div>
+  <div class="card-header"><i data-lucide="image" class="lucide"></i> 首页背景大图</div>
   <div class="card-body">
     <div style="display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap">
 
@@ -92,7 +92,7 @@ include '../includes/header.php';
         <form id="hero-bg-form" onsubmit="uploadHeroBg(event)" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
           <input type="file" id="hero-bg-file" name="hero_bg" accept="image/jpeg,image/png,image/webp"
                  style="font-size:13px;border:1px solid var(--border);border-radius:var(--r);padding:6px 10px;background:var(--bg-2);color:var(--txt);flex:1;min-width:160px">
-          <button type="submit" class="btn btn-primary btn-sm">⬆️ 上传</button>
+          <button type="submit" class="btn btn-primary btn-sm"><i data-lucide="upload" class="lucide"></i> 上传</button>
           <?php if ($hero_bg_current): ?>
           <button type="button" class="btn btn-outline btn-sm" onclick="deleteHeroBg()"
                   style="color:#ef4444;border-color:#ef4444">✕ 删除</button>
@@ -163,7 +163,7 @@ for ($pos = 1; $pos <= 6; $pos++):
     <div class="slot-preview" <?= !$s?'style="border:1.5px dashed var(--border);background:transparent"':'' ?>>
       <?php if ($s): ?>
         <div class="slot-thumb">
-          <?php if ($cover): ?><img src="<?= h($cover) ?>" alt=""><?php else: ?>🎓<?php endif; ?>
+          <?php if ($cover): ?><img src="<?= h($cover) ?>" alt=""><?php else: ?><i data-lucide="graduation-cap" class="lucide"></i><?php endif; ?>
         </div>
         <div style="flex:1;min-width:0">
           <div style="font-size:13px;font-weight:600;overflow:hidden;white-space:nowrap;text-overflow:ellipsis"><?= h($s['title']) ?></div>
@@ -212,9 +212,9 @@ function uploadHeroBg(e) {
   fetch('../actions/hero_bg_upload.php', { method: 'POST', body: fd })
     .then(function(r) { return r.json(); })
     .then(function(d) {
-      if (d.ok) { showHeroMsg('✅ 上传成功，刷新页面预览', 'ok'); setTimeout(function(){ location.reload(); }, 1200); }
-      else       { showHeroMsg('❌ ' + (d.error || '上传失败'), 'error'); }
-    }).catch(function() { showHeroMsg('❌ 请求异常', 'error'); });
+      if (d.ok) { showHeroMsg('<i data-lucide="check-circle" class="lucide"></i> 上传成功，刷新页面预览', 'ok'); setTimeout(function(){ location.reload(); }, 1200); }
+      else       { showHeroMsg('<i data-lucide="x-circle" class="lucide"></i> ' + (d.error || '上传失败'), 'error'); }
+    }).catch(function() { showHeroMsg('<i data-lucide="x-circle" class="lucide"></i> 请求异常', 'error'); });
 }
 function deleteHeroBg() {
   if (!confirm('确认删除首页背景图？删除后恢复为纯色背景。')) return;
@@ -224,7 +224,7 @@ function deleteHeroBg() {
   }).then(function(r) { return r.json(); })
     .then(function(d) {
       if (d.ok) location.reload();
-      else showHeroMsg('❌ ' + (d.error || '删除失败'), 'error');
+      else showHeroMsg('<i data-lucide="x-circle" class="lucide"></i> ' + (d.error || '删除失败'), 'error');
     });
 }
 function showHeroMsg(msg, type) {

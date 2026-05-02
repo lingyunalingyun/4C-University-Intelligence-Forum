@@ -128,8 +128,8 @@ include '../includes/header.php';
     <div style="flex:1;min-width:0">
       <h2 style="margin:0 0 6px"><?= h($club['name']) ?></h2>
       <div style="font-size:13px;color:var(--txt-2);margin-bottom:8px;display:flex;flex-wrap:wrap;gap:12px">
-        <span>🏫 <?= h($club['school']) ?></span>
-        <span>👥 <?= $club['member_count'] ?> 人</span>
+        <span><i data-lucide="building" class="lucide"></i> <?= h($club['school']) ?></span>
+        <span><i data-lucide="users" class="lucide"></i> <?= $club['member_count'] ?> 人</span>
         <span>👑 社长：<?= h($club['president_name']) ?></span>
         <span>📅 <?= date('Y-m-d', strtotime($club['created_at'])) ?> 成立</span>
       </div>
@@ -151,7 +151,7 @@ include '../includes/header.php';
         <?php endif; ?>
 
       <?php elseif ($is_vp): ?>
-        <span style="font-size:13px;color:#7c3aed;font-weight:600">⭐ 你是副社长</span>
+        <span style="font-size:13px;color:#7c3aed;font-weight:600"><i data-lucide="star" class="lucide"></i> 你是副社长</span>
         <form action="../actions/club_action.php" method="post" onsubmit="return confirm('确认退出该社团？')">
           <input type="hidden" name="action"  value="leave">
           <input type="hidden" name="club_id" value="<?= $club_id ?>">
@@ -159,7 +159,7 @@ include '../includes/header.php';
         </form>
 
       <?php elseif ($my_role === 'member'): ?>
-        <span style="font-size:13px;color:var(--txt-2)">✅ 已加入</span>
+        <span style="font-size:13px;color:var(--txt-2)"><i data-lucide="check-circle" class="lucide"></i> 已加入</span>
         <form action="../actions/club_action.php" method="post" onsubmit="return confirm('确认退出该社团？')">
           <input type="hidden" name="action"  value="leave">
           <input type="hidden" name="club_id" value="<?= $club_id ?>">
@@ -176,7 +176,7 @@ include '../includes/header.php';
 
       <?php elseif (!$school_match): ?>
         <div style="font-size:13px;color:var(--txt-3);text-align:right">
-          🚫 此社团仅限<br><?= h($club['school']) ?>学生加入
+          <i data-lucide="ban" class="lucide"></i> 此社团仅限<br><?= h($club['school']) ?>学生加入
         </div>
 
       <?php else: ?>
@@ -215,7 +215,7 @@ include '../includes/header.php';
             background:<?= $tab==='members'?'var(--primary)':'var(--bg-card)' ?>;
             color:<?= $tab==='members'?'#fff':'var(--txt-2)' ?>;
             border:1.5px solid <?= $tab==='members'?'var(--primary)':'var(--border)' ?>">
-    👥 成员（<?= $club['member_count'] ?>）
+    <i data-lucide="users" class="lucide"></i> 成员（<?= $club['member_count'] ?>）
     <?php if (!empty($join_reqs)): ?>
       <span style="background:#ef4444;color:#fff;font-size:10px;padding:1px 5px;border-radius:8px;margin-left:4px"><?= count($join_reqs) ?></span>
     <?php endif; ?>
@@ -227,7 +227,7 @@ include '../includes/header.php';
 
 <?php if ($can_post): ?>
 <div class="card mb-16">
-  <div class="card-header">✏️ 以社团名义发布动态</div>
+  <div class="card-header"><i data-lucide="pencil" class="lucide"></i> 以社团名义发布动态</div>
   <div class="card-body">
     <form action="../actions/club_action.php" method="post" id="club-post-form">
       <input type="hidden" name="action"   value="club_post">
@@ -294,7 +294,7 @@ include '../includes/header.php';
 <!-- 待审核入团申请 -->
 <?php if (!empty($join_reqs)): ?>
 <div class="card mb-16">
-  <div class="card-header">📋 待审核申请
+  <div class="card-header"><i data-lucide="clipboard-list" class="lucide"></i> 待审核申请
     <span style="background:#ef4444;color:#fff;font-size:11px;padding:1px 7px;border-radius:10px;margin-left:6px"><?= count($join_reqs) ?></span>
   </div>
   <div class="card-body">
@@ -328,7 +328,7 @@ include '../includes/header.php';
 
 <!-- 成员列表 -->
 <div class="card">
-  <div class="card-header">👥 全部成员（<?= $club['member_count'] ?>）</div>
+  <div class="card-header"><i data-lucide="users" class="lucide"></i> 全部成员（<?= $club['member_count'] ?>）</div>
   <div class="card-body" style="padding:0 16px">
     <?php if (empty($members)): ?>
       <div class="empty-state" style="padding:24px 0"><p>暂无成员数据</p></div>

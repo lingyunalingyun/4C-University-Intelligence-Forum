@@ -89,7 +89,7 @@ include '../includes/header.php';
 
 <!-- 顶部栏 -->
 <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap">
-  <h2 style="margin:0">🏛️ 社团</h2>
+  <h2 style="margin:0"><i data-lucide="building-2" class="lucide"></i> 社团</h2>
   <?php if ($user_school): ?>
     <span style="font-size:13px;color:var(--txt-2)">· <?= h($user_school) ?></span>
   <?php endif; ?>
@@ -117,7 +117,7 @@ include '../includes/header.php';
             background:<?= $tab==='clubs'?'var(--primary)':'var(--bg-card)' ?>;
             color:<?= $tab==='clubs'?'#fff':'var(--txt-2)' ?>;
             border:1.5px solid <?= $tab==='clubs'?'var(--primary)':'var(--border)' ?>">
-    🏛️ 社团详细
+    <i data-lucide="building-2" class="lucide"></i> 社团详细
   </a>
 </div>
 
@@ -168,7 +168,7 @@ include '../includes/header.php';
 
 <?php if (empty($clubs)): ?>
   <div class="empty-state">
-    <div class="icon">🏛️</div>
+    <div class="icon"><i data-lucide="building-2" class="lucide"></i></div>
     <p><?= $user_school ? '本校暂无社团' : '暂无社团' ?></p>
     <?php if ($uid): ?><a href="club_apply.php" class="btn btn-primary btn-sm">申请创建</a><?php endif; ?>
   </div>
@@ -200,8 +200,8 @@ include '../includes/header.php';
       <div class="club-card-body">
         <div class="club-card-name"><?= h($c['name']) ?></div>
         <div class="club-card-meta">
-          <span>🏫 <?= h($c['school']) ?></span>
-          <span>👥 <?= $c['member_count'] ?> 人</span>
+          <span><i data-lucide="building" class="lucide"></i> <?= h($c['school']) ?></span>
+          <span><i data-lucide="users" class="lucide"></i> <?= $c['member_count'] ?> 人</span>
           <span>👑 <?= h($c['president_name']) ?></span>
         </div>
       </div>

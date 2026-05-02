@@ -45,7 +45,7 @@ include '../includes/header.php';
 
 <div class="admin-page-hd">
   <div>
-    <h2>📋 操作日志</h2>
+    <h2><i data-lucide="clipboard-list" class="lucide"></i> 操作日志</h2>
     <div class="sub">共 <?= number_format($total) ?> 条记录</div>
   </div>
 </div>
@@ -68,7 +68,7 @@ include '../includes/header.php';
 </form>
 
 <?php if (empty($logs)): ?>
-  <div class="empty-state"><div class="icon">📋</div><p>暂无操作记录</p></div>
+  <div class="empty-state"><div class="icon"><i data-lucide="clipboard-list" class="lucide"></i></div><p>暂无操作记录</p></div>
 <?php else: ?>
 
 <div class="card" style="overflow-x:auto">

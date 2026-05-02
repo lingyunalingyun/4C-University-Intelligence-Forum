@@ -19,7 +19,7 @@ include '../includes/header.php';
 
 <div style="max-width:460px;margin:40px auto">
   <div class="card">
-    <div class="card-header" style="text-align:center">🔑 找回密码</div>
+    <div class="card-header" style="text-align:center"><i data-lucide="key" class="lucide"></i> 找回密码</div>
     <div class="card-body">
 
       <?php if ($msg): ?><div class="alert alert-success mb-16"><?= h($msg) ?></div><?php endif; ?>

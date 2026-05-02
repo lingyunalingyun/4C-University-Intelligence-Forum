@@ -255,7 +255,7 @@ include '../includes/header.php';
 <div class="msg-main">
 <?php if (!$cid || !$conv): ?>
   <div class="msg-empty">
-    <div style="font-size:48px">💬</div>
+    <div style="font-size:48px"><i data-lucide="message-circle" class="lucide"></i></div>
     <div style="font-size:15px">选择一个会话开始聊天</div>
     <div style="display:flex;gap:8px">
       <button class="btn btn-primary btn-sm" onclick="openNewPrivate()">发起私信</button>
@@ -334,7 +334,7 @@ include '../includes/header.php';
 <!-- 成员面板（群组） -->
 <?php if ($cid && $conv && $conv['type']==='group'): ?>
 <div class="member-panel" id="member-panel">
-  <div style="font-size:13px;font-weight:600;margin-bottom:10px;color:var(--txt)">👥 群成员 (<?= count($members) ?>)</div>
+  <div style="font-size:13px;font-weight:600;margin-bottom:10px;color:var(--txt)"><i data-lucide="users" class="lucide"></i> 群成员 (<?= count($members) ?>)</div>
   <?php foreach ($members as $m): ?>
   <div class="member-row">
     <?php if (!empty($m['avatar'])): ?>
@@ -377,7 +377,7 @@ include '../includes/header.php';
 <!-- ── 创建群组弹窗 ─────────────────────────────── -->
 <div id="modal-group" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:999;align-items:center;justify-content:center">
   <div class="card" style="width:440px;max-width:94vw;padding:0">
-    <div class="card-header">👥 创建群组</div>
+    <div class="card-header"><i data-lucide="users" class="lucide"></i> 创建群组</div>
     <div class="card-body">
       <div class="form-group">
         <label>群组名称</label>

@@ -117,7 +117,7 @@ include '../includes/header.php';
 <!-- AI 扩词提示 -->
 <?php if ($ai_hint): ?>
 <div style="display:flex;align-items:center;gap:8px;padding:10px 14px;background:var(--bg-2);border:1px solid var(--border);border-radius:var(--r);margin-bottom:14px;font-size:13px">
-  <span style="color:var(--primary);font-size:16px">✨</span>
+  <span style="color:var(--primary);font-size:16px"><i data-lucide="sparkles" class="lucide"></i></span>
   <span style="color:var(--txt-2)">AI 优化搜索：识别到关键词</span>
   <span style="color:var(--primary);font-weight:600"><?= h($ai_hint) ?></span>
 </div>
@@ -127,7 +127,7 @@ include '../includes/header.php';
 <?php if (!empty($users)): ?>
 <div class="card mb-16">
   <div class="card-header" style="display:flex;align-items:center;gap:8px">
-    <span>👤 相关用户</span>
+    <span><i data-lucide="user" class="lucide"></i> 相关用户</span>
     <?php if ($type === 'all' && count($users) >= 3): ?>
       <a href="?q=<?= urlencode($q) ?>&type=user" style="margin-left:auto;font-size:13px;color:var(--primary)">查看全部 →</a>
     <?php endif; ?>
@@ -177,7 +177,7 @@ include '../includes/header.php';
 
 <!-- 仅用户模式的统计 -->
 <?php if ($type === 'user' && empty($users)): ?>
-<div class="empty-state"><div class="icon">👤</div><p>没有找到相关用户</p></div>
+<div class="empty-state"><div class="icon"><i data-lucide="user" class="lucide"></i></div><p>没有找到相关用户</p></div>
 <?php endif; ?>
 
 <!-- 分页 -->

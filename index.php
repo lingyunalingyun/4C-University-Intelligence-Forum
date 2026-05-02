@@ -65,64 +65,59 @@ body { overflow-x: hidden; }
 /* ══ Hero Banner（全宽突破容器）══ */
 .home-hero {
     position: relative;
-    /* 全宽突破 main-wrap 的 max-width 约束 */
     margin-left:  calc(50% - 50vw);
     margin-right: calc(50% - 50vw);
     width: 100vw;
-    background: var(--primary); /* 无背景图时的纯色兜底 */
+    background: var(--bg-card);
     padding: 44px 20px;
     margin-bottom: 32px;
     overflow: hidden;
 }
-/* 背景大图：绝对定位，比容器略大，留出视差移动空间 */
 .hero-bg-img {
     position: absolute;
-    inset: -8% -4%;
-    width: calc(100% + 8%);
-    height: 116%;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
     object-fit: cover;
-    display: none; /* 默认隐藏，JS 加载成功后显示 */
+    display: none;
     will-change: transform;
     z-index: 0;
+    transform: scale(1.14);
+    transform-origin: center center;
 }
 .hero-bg-img.loaded { display: block; }
-/* 渐变遮罩：叠在背景图上，保证文字在任何背景下都可读 */
 .home-hero::before {
     content: ''; position: absolute; inset: 0;
-    background: linear-gradient(120deg, rgba(37,99,235,.82) 0%, rgba(99,102,241,.72) 100%);
+    background: rgba(246, 243, 237, 0.62);
     z-index: 1; pointer-events: none;
 }
-/* 右侧光晕装饰 */
-.home-hero::after {
-    content: ''; position: absolute;
-    width: 400px; height: 400px;
-    top: 50%; right: -60px; transform: translateY(-50%);
-    background: radial-gradient(circle, rgba(255,255,255,.12) 0%, transparent 70%);
-    border-radius: 50%; pointer-events: none;
-    z-index: 1;
+[data-theme="dark"] .home-hero::before {
+    background: rgba(15, 15, 20, 0.65);
 }
+.home-hero::after { display: none; }
 .home-hero-inner {
     max-width: 1200px; margin: 0 auto;
     display: flex; align-items: center; gap: 40px;
-    position: relative; z-index: 2; /* 在遮罩层之上 */
+    position: relative; z-index: 2;
 }
-/* 论坛名字卡片 */
 .hero-name-card {
-    background: rgba(255,255,255,.16);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border: 1px solid rgba(255,255,255,.28);
+    background: rgba(255,255,255,.72);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--border);
     border-radius: 18px;
     padding: 28px 32px;
     min-width: 260px; max-width: 360px;
     flex-shrink: 0;
 }
+[data-theme="dark"] .hero-name-card {
+    background: rgba(20, 20, 28, 0.72);
+}
 .hero-name-card h1 {
     font-size: 22px; font-weight: 800;
-    color: #fff; margin: 0 0 8px; line-height: 1.3;
+    color: var(--txt); margin: 0 0 8px; line-height: 1.3;
 }
 .hero-name-card p {
-    font-size: 13px; color: rgba(255,255,255,.82);
+    font-size: 13px; color: var(--txt-2);
     margin: 0 0 16px; line-height: 1.7;
 }
 .hero-btn-row { display: flex; gap: 10px; flex-wrap: wrap; }
@@ -132,20 +127,19 @@ body { overflow-x: hidden; }
     text-decoration: none; transition: opacity .15s;
 }
 .hero-btn:hover { opacity: .85; }
-.hero-btn-solid { background: #fff; color: var(--primary); }
+.hero-btn-solid { background: var(--txt); color: var(--bg-card); }
 .hero-btn-outline {
-    background: rgba(255,255,255,.18);
-    color: #fff; border: 1px solid rgba(255,255,255,.4);
+    background: transparent;
+    color: var(--txt); border: 1px solid var(--border);
 }
-/* 右侧统计 */
 .hero-stats {
     flex: 1; display: flex; gap: 32px;
     justify-content: flex-end; align-items: center;
     flex-wrap: wrap;
 }
 .hero-stat { text-align: center; }
-.hero-stat-num { font-size: 30px; font-weight: 800; color: #fff; line-height: 1; }
-.hero-stat-lbl { font-size: 12px; color: rgba(255,255,255,.76); margin-top: 5px; }
+.hero-stat-num { font-size: 30px; font-weight: 800; color: var(--txt); line-height: 1; }
+.hero-stat-lbl { font-size: 12px; color: var(--txt-2); margin-top: 5px; }
 
 /* ══ 中部 2-col ══ */
 .home-mid {
@@ -166,7 +160,6 @@ body { overflow-x: hidden; }
 .home-block-hd-more  { font-size: 12px; color: var(--txt-3); text-decoration: none; }
 .home-block-hd-more:hover { color: var(--primary); }
 
-/* 编辑推荐列表 */
 .ep-list { display: flex; flex-direction: column; }
 .ep-item {
     display: flex; align-items: flex-start; gap: 11px;
@@ -202,7 +195,6 @@ body { overflow-x: hidden; }
 }
 .ep-meta { font-size: 11px; color: var(--txt-3); margin-top: 4px; }
 
-/* 算法推荐卡片网格 */
 .rec-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -272,13 +264,11 @@ body { overflow-x: hidden; }
 }
 .sec-post-meta { font-size: 11px; color: var(--txt-3); display: flex; gap: 8px; flex-wrap: wrap; }
 
-/* 空状态 */
 .home-empty-state {
     text-align: center; padding: 40px 0; color: var(--txt-3);
 }
 .home-empty-state .icon { font-size: 36px; margin-bottom: 8px; }
 
-/* Responsive */
 @media (max-width: 1024px) {
     .home-sec-posts { grid-template-columns: repeat(3, 1fr); }
 }
@@ -290,6 +280,40 @@ body { overflow-x: hidden; }
 @media (max-width: 520px) {
     .rec-grid { grid-template-columns: 1fr; }
 }
+/* ── Editor Picks Carousel ── */
+.ep-carousel { position: relative; border-radius: var(--r-lg); overflow: hidden; background: var(--bg-2); }
+.ep-slides { display: flex; will-change: transform; transition: transform .4s cubic-bezier(.4,0,.2,1); }
+.ep-slide { min-width: 100%; text-decoration: none; display: block; }
+.ep-slide-img {
+    aspect-ratio: 16/9; position: relative;
+    background: var(--bg-2) center/cover no-repeat;
+    display: flex; align-items: flex-end;
+}
+.ep-slide-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,.78) 0%, rgba(0,0,0,.08) 55%, transparent 100%);
+}
+.ep-slide-info { position: relative; z-index: 1; padding: 14px 16px; width: 100%; box-sizing: border-box; }
+.ep-slide-tag {
+    display: inline-block; font-size: 10px; font-weight: 700;
+    padding: 1px 7px; border-radius: 3px; color: #fff; margin-bottom: 6px;
+}
+.ep-slide-title { color: #fff; font-size: 15px; font-weight: 700; line-height: 1.4; margin-bottom: 5px; }
+.ep-slide-meta { color: rgba(255,255,255,.6); font-size: 11px; display: flex; gap: 10px; align-items: center; }
+.ep-btn {
+    position: absolute; top: calc(50% - 16px); transform: translateY(-50%);
+    width: 30px; height: 30px; border-radius: 50%;
+    background: rgba(0,0,0,.38); backdrop-filter: blur(4px);
+    border: none; color: #fff; cursor: pointer; z-index: 10;
+    display: flex; align-items: center; justify-content: center;
+    transition: background .2s; padding: 0;
+}
+.ep-btn:hover { background: rgba(0,0,0,.62); }
+.ep-prev { left: 8px; }
+.ep-next { right: 8px; }
+.ep-dots { position: absolute; bottom: 9px; right: 12px; display: flex; gap: 5px; z-index: 10; }
+.ep-dot { width: 6px; height: 6px; border-radius: 3px; background: rgba(255,255,255,.32); cursor: pointer; transition: all .25s; border: none; padding: 0; }
+.ep-dot.on { background: #fff; width: 16px; }
 </style>
 
 <!-- ══ Hero Banner ══ -->
@@ -302,34 +326,32 @@ body { overflow-x: hidden; }
   <?php endif; ?>
   <div class="home-hero-inner">
 
-    <!-- 论坛名字卡片 -->
     <div class="hero-name-card">
-      <h1>🎓 <?= h(SITE_NAME) ?></h1>
+      <h1><i data-lucide="graduation-cap" class="lucide"></i> <?= h(SITE_NAME) ?></h1>
       <p>高校学生的智慧交流平台<br>分享知识 · 互助成长 · 探索未来</p>
       <div class="hero-btn-row">
         <?php if (!$uid): ?>
           <a href="pages/register.php" class="hero-btn hero-btn-solid">立即注册</a>
           <a href="pages/login.php"    class="hero-btn hero-btn-outline">登录</a>
         <?php else: ?>
-          <a href="pages/publish.php"  class="hero-btn hero-btn-solid">✏️ 发帖</a>
+          <a href="pages/publish.php"  class="hero-btn hero-btn-solid"><i data-lucide="pencil" class="lucide"></i> 发帖</a>
           <a href="square.php"         class="hero-btn hero-btn-outline">浏览广场</a>
         <?php endif; ?>
       </div>
     </div>
 
-    <!-- 统计数字 -->
     <div class="hero-stats">
       <div class="hero-stat">
         <div class="hero-stat-num"><?= number_format($total_posts) ?></div>
-        <div class="hero-stat-lbl">📝 帖子总数</div>
+        <div class="hero-stat-lbl"><i data-lucide="file-text" class="lucide"></i> 帖子总数</div>
       </div>
       <div class="hero-stat">
         <div class="hero-stat-num"><?= number_format($total_users) ?></div>
-        <div class="hero-stat-lbl">👥 注册用户</div>
+        <div class="hero-stat-lbl"><i data-lucide="users" class="lucide"></i> 注册用户</div>
       </div>
       <div class="hero-stat">
         <div class="hero-stat-num"><?= number_format($today_posts) ?></div>
-        <div class="hero-stat-lbl">🌅 今日新帖</div>
+        <div class="hero-stat-lbl"><i data-lucide="sunrise" class="lucide"></i> 今日新帖</div>
       </div>
     </div>
 
@@ -343,7 +365,7 @@ body { overflow-x: hidden; }
   <div>
     <div class="home-block-hd">
       <div class="home-block-hd-left">
-        <span style="font-size:18px">✨</span>
+        <span style="font-size:18px"><i data-lucide="sparkles" class="lucide"></i></span>
         <span class="home-block-hd-title">编辑推荐</span>
       </div>
       <?php if (!empty($_SESSION['role']) && in_array($_SESSION['role'],['admin','owner'])): ?>
@@ -354,31 +376,48 @@ body { overflow-x: hidden; }
     </div>
 
     <?php if (!empty($editor_picks)): ?>
-    <div class="ep-list">
-      <?php foreach ($editor_picks as $i => $ep):
-        $thumb = extract_cover_image($ep['content']);
-        $rank_class = $i===0 ? 'top1' : ($i===1 ? 'top2' : ($i===2 ? 'top3' : ''));
-      ?>
-      <a href="pages/post.php?id=<?= $ep['id'] ?>" class="ep-item">
-        <div class="ep-rank <?= $rank_class ?>"><?= $i + 1 ?></div>
-        <div class="ep-thumb">
-          <?php if ($thumb): ?>
-            <img src="<?= h($thumb) ?>" alt="">
-          <?php else: ?>
-            <?= h($ep['section_icon'] ?? '📄') ?>
-          <?php endif; ?>
-        </div>
-        <div class="ep-info">
-          <span class="ep-tag" style="background:<?= h($ep['section_color']) ?>"><?= h($ep['section_name']) ?></span>
-          <div class="ep-title"><?= h($ep['title']) ?></div>
-          <div class="ep-meta"><?= h($ep['username']) ?> · <?= time_ago($ep['created_at']) ?> · 👍 <?= $ep['like_count'] ?></div>
-        </div>
-      </a>
-      <?php endforeach; ?>
+    <div class="ep-carousel" id="epCarousel">
+      <div class="ep-slides" id="epSlides">
+        <?php foreach ($editor_picks as $i => $ep):
+          $thumb = extract_cover_image($ep['content']);
+          $bg = $thumb
+            ? "background-image:url('" . h($thumb) . "')"
+            : "background:linear-gradient(135deg," . h($ep['section_color']) . "55," . h($ep['section_color']) . "22)";
+        ?>
+        <a href="pages/post.php?id=<?= $ep['id'] ?>" class="ep-slide">
+          <div class="ep-slide-img" style="<?= $bg ?>">
+            <?php if (!$thumb): ?>
+              <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:.22">
+                <?= render_icon($ep['section_icon'] ?? '', 'lucide', 52) ?>
+              </div>
+            <?php endif; ?>
+            <div class="ep-slide-overlay"></div>
+            <div class="ep-slide-info">
+              <span class="ep-slide-tag" style="background:<?= h($ep['section_color']) ?>"><?= h($ep['section_name']) ?></span>
+              <div class="ep-slide-title"><?= h($ep['title']) ?></div>
+              <div class="ep-slide-meta">
+                <span><?= h($ep['username']) ?></span>
+                <span><i data-lucide="thumbs-up" class="lucide"></i> <?= $ep['like_count'] ?></span>
+                <span><i data-lucide="eye" class="lucide"></i> <?= $ep['views'] ?></span>
+              </div>
+            </div>
+          </div>
+        </a>
+        <?php endforeach; ?>
+      </div>
+      <?php if (count($editor_picks) > 1): ?>
+      <button class="ep-btn ep-prev" id="epPrev"><i data-lucide="chevron-left" class="lucide"></i></button>
+      <button class="ep-btn ep-next" id="epNext"><i data-lucide="chevron-right" class="lucide"></i></button>
+      <div class="ep-dots" id="epDots">
+        <?php foreach ($editor_picks as $i => $_): ?>
+          <button class="ep-dot <?= $i===0?'on':'' ?>"></button>
+        <?php endforeach; ?>
+      </div>
+      <?php endif; ?>
     </div>
     <?php else: ?>
     <div class="home-empty-state">
-      <div class="icon">📋</div>
+      <div class="icon"><i data-lucide="clipboard-list" class="lucide"></i></div>
       <p style="font-size:13px;margin:0">管理员尚未配置推荐内容</p>
     </div>
     <?php endif; ?>
@@ -388,8 +427,8 @@ body { overflow-x: hidden; }
   <div>
     <div class="home-block-hd">
       <div class="home-block-hd-left">
-        <span style="font-size:18px">🤖</span>
-        <span class="home-block-hd-title">算法推荐</span>
+        <span style="font-size:18px"><i data-lucide="heart" class="lucide"></i></span>
+        <span class="home-block-hd-title">猜你喜欢</span>
         <span class="home-block-hd-sub"><?= $uid ? '基于你的兴趣' : '热度排行' ?></span>
       </div>
       <a href="square.php" class="home-block-hd-more">查看全部 →</a>
@@ -402,15 +441,15 @@ body { overflow-x: hidden; }
       <a href="pages/post.php?id=<?= $p['id'] ?>" class="rec-card">
         <div class="rec-thumb"
              style="background:linear-gradient(135deg,<?= h($p['section_color']) ?>22,<?= h($p['section_color']) ?>08)">
-          <?php if ($thumb): ?><img src="<?= h($thumb) ?>" alt=""><?php else: ?>📄<?php endif; ?>
+          <?php if ($thumb): ?><img src="<?= h($thumb) ?>" alt=""><?php else: ?><i data-lucide="file" class="lucide"></i><?php endif; ?>
         </div>
         <div class="rec-body">
           <span class="rec-tag" style="background:<?= h($p['section_color']) ?>"><?= h($p['section_name']) ?></span>
           <div class="rec-title"><?= h($p['title']) ?></div>
           <div class="rec-meta">
             <span><?= h($p['username']) ?></span>
-            <span>👍 <?= $p['like_count'] ?></span>
-            <span>💬 <?= $p['comment_count'] ?></span>
+            <span><i data-lucide="thumbs-up" class="lucide"></i> <?= $p['like_count'] ?></span>
+            <span><i data-lucide="message-circle" class="lucide"></i> <?= $p['comment_count'] ?></span>
           </div>
         </div>
       </a>
@@ -418,7 +457,7 @@ body { overflow-x: hidden; }
     </div>
     <?php else: ?>
     <div class="home-empty-state">
-      <div class="icon">📭</div>
+      <div class="icon"><i data-lucide="inbox" class="lucide"></i></div>
       <p style="font-size:13px;margin:0">暂无推荐内容</p>
     </div>
     <?php endif; ?>
@@ -431,7 +470,7 @@ body { overflow-x: hidden; }
 <div class="home-sec-block">
   <div class="home-sec-hd">
     <div class="home-sec-hd-title">
-      <span><?= h($sec['icon'] ?? '📂') ?></span>
+      <span><?= render_icon($sec['icon'] ?? '', 'lucide', 20) ?></span>
       <span><?= h($sec['name']) ?></span>
     </div>
     <a href="pages/section.php?slug=<?= h($sec['slug'] ?? '') ?>" class="home-sec-hd-more">查看更多 →</a>
@@ -443,8 +482,8 @@ body { overflow-x: hidden; }
       <div class="sec-post-title"><?= h($p['title']) ?></div>
       <div class="sec-post-meta">
         <span><?= h($p['username']) ?></span>
-        <span>👁 <?= $p['views'] ?></span>
-        <span>👍 <?= $p['like_count'] ?></span>
+        <span><i data-lucide="eye" class="lucide"></i> <?= $p['views'] ?></span>
+        <span><i data-lucide="thumbs-up" class="lucide"></i> <?= $p['like_count'] ?></span>
       </div>
     </a>
     <?php endforeach; ?>
@@ -454,14 +493,14 @@ body { overflow-x: hidden; }
 
 <?php if (empty($sections_data)): ?>
 <div class="home-empty-state" style="padding:60px 0">
-  <div class="icon">🏗️</div>
+  <div class="icon"><i data-lucide="hammer" class="lucide"></i></div>
   <p style="font-size:14px;margin:0 0 14px;color:var(--txt-2)">暂无帖子，快来发第一帖</p>
   <a href="pages/publish.php" class="btn btn-primary">立即发帖</a>
 </div>
 <?php endif; ?>
 
 <script>
-/* Hero 背景图视差效果：鼠标水平晃动 + 滚动垂直位移 */
+/* Hero 背景图视差效果 */
 (function() {
     var hero = document.getElementById('home-hero');
     var img  = document.getElementById('hero-bg-img');
@@ -470,23 +509,44 @@ body { overflow-x: hidden; }
     function lerp(a, b, t) { return a + (b - a) * t; }
     function tick() {
         curX = lerp(curX, targetX, 0.07);
-        img.style.transform = 'translateX(' + curX.toFixed(2) + 'px) translateY(' + curY.toFixed(2) + 'px)';
+        img.style.transform = 'scale(1.14) translateX(' + curX.toFixed(2) + 'px) translateY(' + curY.toFixed(2) + 'px)';
         if (Math.abs(curX - targetX) > 0.05) rafId = requestAnimationFrame(tick);
         else rafId = null;
     }
     function startTick() { if (!rafId) rafId = requestAnimationFrame(tick); }
-    /* 鼠标水平偏移，±24px 带平滑插值 */
     hero.addEventListener('mousemove', function(e) {
         var rect = hero.getBoundingClientRect();
         targetX = ((e.clientX - rect.left - rect.width / 2) / rect.width) * -24;
         startTick();
     });
     hero.addEventListener('mouseleave', function() { targetX = 0; startTick(); });
-    /* 滚动视差：页面下滚图片向下偏移，增加层次感 */
     window.addEventListener('scroll', function() {
         curY = window.scrollY * 0.35;
-        img.style.transform = 'translateX(' + curX.toFixed(2) + 'px) translateY(' + curY.toFixed(2) + 'px)';
+        img.style.transform = 'scale(1.14) translateX(' + curX.toFixed(2) + 'px) translateY(' + curY.toFixed(2) + 'px)';
     }, { passive: true });
+})();
+</script>
+
+<script>
+/* Editor Picks Carousel */
+(function() {
+    var slides = document.getElementById('epSlides');
+    if (!slides || slides.children.length <= 1) return;
+    var total = slides.children.length;
+    var cur = 0;
+    var dots = document.querySelectorAll('#epDots .ep-dot');
+    function go(n) {
+        cur = (n + total) % total;
+        slides.style.transform = 'translateX(-' + (cur * 100) + '%)';
+        dots.forEach(function(d, i) { d.classList.toggle('on', i === cur); });
+    }
+    document.getElementById('epPrev').addEventListener('click', function(e) { e.preventDefault(); go(cur - 1); });
+    document.getElementById('epNext').addEventListener('click', function(e) { e.preventDefault(); go(cur + 1); });
+    dots.forEach(function(d, i) { d.addEventListener('click', function() { go(i); }); });
+    var timer = setInterval(function() { go(cur + 1); }, 5000);
+    var car = document.getElementById('epCarousel');
+    car.addEventListener('mouseenter', function() { clearInterval(timer); });
+    car.addEventListener('mouseleave', function() { timer = setInterval(function() { go(cur + 1); }, 5000); });
 })();
 </script>
 

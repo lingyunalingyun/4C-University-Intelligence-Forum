@@ -72,7 +72,7 @@ include '../includes/header.php';
 
 <div class="admin-page-hd">
   <div>
-    <h2>📝 帖子管理</h2>
+    <h2><i data-lucide="file-text" class="lucide"></i> 帖子管理</h2>
     <div class="sub">共 <?= number_format($total) ?> 篇帖子</div>
   </div>
 </div>
@@ -138,7 +138,7 @@ include '../includes/header.php';
           <?php endif; ?>
         </td>
         <td style="font-size:12px;color:var(--txt-3)">
-          👁 <?= $p['views'] ?> &nbsp; 👍 <?= $p['like_count'] ?> &nbsp; 💬 <?= $p['comment_count'] ?>
+          <i data-lucide="eye" class="lucide"></i> <?= $p['views'] ?> &nbsp; <i data-lucide="thumbs-up" class="lucide"></i> <?= $p['like_count'] ?> &nbsp; <i data-lucide="message-circle" class="lucide"></i> <?= $p['comment_count'] ?>
         </td>
         <td style="font-size:12px;color:var(--txt-3)"><?= date('m-d H:i', strtotime($p['created_at'])) ?></td>
         <td>

@@ -40,7 +40,7 @@ include '../includes/header.php';
       '发送站内通知（如新评论、被关注、客服回复等）。',
       '管理员依据规则对违规内容和账号进行处理。',
     ]],
-    ['🤖', '三、AI 功能与第三方服务', [
+    ['<i data-lucide="bot" class="lucide"></i>', '三、AI 功能与第三方服务', [
       '本平台使用 DeepSeek API 提供 AI 摘要、内容推荐和 AI 助手功能。',
       '您与 AI 助手或客服的对话内容（脱敏后）可能传输至 DeepSeek 服务端处理。',
       '请勿在 AI 对话中输入真实姓名、身份证号、银行卡号等敏感信息。',
@@ -52,7 +52,7 @@ include '../includes/header.php';
       '管理员操作均有日志记录（admin_logs），可追溯审查。',
       '我们不会将您的个人信息出售给任何第三方。',
     ]],
-    ['👤', '五、您的权利', [
+    ['<i data-lucide="user" class="lucide"></i>', '五、您的权利', [
       '访问权：您可以在「个人主页」查看您公开的所有数据。',
       '修改权：在「账号设置」中随时修改昵称、头像、简介、密码等。',
       '删除权：您可以删除自己发布的帖子和评论。',
@@ -64,7 +64,7 @@ include '../includes/header.php';
       '浏览器 localStorage 仅存储深/浅色主题偏好，不含任何个人信息。',
       '您可随时通过浏览器设置清除 Session 和 localStorage 数据。',
     ]],
-    ['📝', '七、政策更新', [
+    ['<i data-lucide="file-text" class="lucide"></i>', '七、政策更新', [
       '本政策可能随功能迭代而更新，更新后将在平台内公告。',
       '继续使用本平台视为您接受更新后的隐私政策。',
       '如有重大变更，我们将通过站内通知方式告知您。',
@@ -122,7 +122,7 @@ include '../includes/header.php';
       对隐私政策有疑问？请联系我们。
     </div>
     <div class="card-body" style="padding-top:0">
-      <a href="support.php" class="btn btn-primary" style="display:block;text-align:center">🎧 联系客服</a>
+      <a href="support.php" class="btn btn-primary" style="display:block;text-align:center"><i data-lucide="headphones" class="lucide"></i> 联系客服</a>
     </div>
   </div>
 

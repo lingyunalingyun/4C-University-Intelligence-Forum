@@ -30,7 +30,7 @@ include '../includes/header.php';
   <?php if ($err): ?><div class="alert alert-danger  mb-16"><?= h($err) ?></div><?php endif; ?>
 
   <div class="card">
-    <div class="card-header">🏛️ 申请创建社团</div>
+    <div class="card-header"><i data-lucide="building-2" class="lucide"></i> 申请创建社团</div>
     <div class="card-body">
       <div style="background:var(--bg-2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:13px;color:var(--txt-2)">
         申请提交后由管理员审核，通过后社团自动创建，您成为社长。
@@ -67,7 +67,7 @@ include '../includes/header.php';
         <div class="form-group">
           <label>附属学校</label>
           <div style="padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--bg-2);color:var(--txt);font-size:14px">
-            🏫 <?= h($user_school) ?>
+            <i data-lucide="building" class="lucide"></i> <?= h($user_school) ?>
           </div>
           <div style="font-size:12px;color:var(--txt-3);margin-top:4px">
             自动读取您的账号学校。社团与学校绑定，仅该校学生可加入。

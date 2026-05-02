@@ -88,8 +88,8 @@ include '../includes/header.php';
         <?= level_badge($post['exp']) ?>
         <?php if ($post['school']): ?><span><?= h($post['school']) ?></span><?php endif; ?>
         <span><?= date('Y-m-d H:i', strtotime($post['created_at'])) ?></span>
-        <span>👁 <?= $post['views'] ?></span>
-        <?php if ($post['is_solved']): ?><span style="background:#dcfce7;color:#166634;padding:2px 8px;border-radius:4px;font-size:12px">✅ 已解决</span><?php endif; ?>
+        <span><i data-lucide="eye" class="lucide"></i> <?= $post['views'] ?></span>
+        <?php if ($post['is_solved']): ?><span style="background:#dcfce7;color:#166634;padding:2px 8px;border-radius:4px;font-size:12px"><i data-lucide="check-circle" class="lucide"></i> 已解决</span><?php endif; ?>
       </div>
 
       <?php if (!empty($tags_arr)): ?>
@@ -106,20 +106,20 @@ include '../includes/header.php';
       <!-- 操作栏 -->
       <div class="post-actions">
         <button class="action-btn <?= $liked?'active':'' ?>" id="like-btn" onclick="toggleLike()">
-          👍 <span id="like-count"><?= $post['like_count'] ?></span>
+          <i data-lucide="thumbs-up" class="lucide"></i> <span id="like-count"><?= $post['like_count'] ?></span>
         </button>
         <button class="action-btn <?= $faved?'active':'' ?>" id="fav-btn" onclick="toggleFav()">
-          ⭐ <span id="fav-count"><?= $post['fav_count'] ?></span>
+          <i data-lucide="star" class="lucide"></i> <span id="fav-count"><?= $post['fav_count'] ?></span>
         </button>
-        <button class="action-btn" id="share-trigger" onclick="openShare()">🔗 分享</button>
+        <button class="action-btn" id="share-trigger" onclick="openShare()"><i data-lucide="link-2" class="lucide"></i> 分享</button>
         <?php if ($uid && $uid !== $post['user_id']): ?>
-          <button class="action-btn" onclick="openReportModal('post',<?= $post_id ?>)" style="color:var(--danger)">🚩 举报</button>
+          <button class="action-btn" onclick="openReportModal('post',<?= $post_id ?>)" style="color:var(--danger)"><i data-lucide="flag" class="lucide"></i> 举报</button>
         <?php endif; ?>
         <?php if ($uid === $post['user_id'] && !$post['is_solved']): ?>
-          <button class="action-btn" onclick="markSolved()">✅ 标记已解决</button>
+          <button class="action-btn" onclick="markSolved()"><i data-lucide="check-circle" class="lucide"></i> 标记已解决</button>
         <?php endif; ?>
         <?php if ($uid === $post['user_id'] || in_array($_SESSION['role']??'', ['admin','owner'])): ?>
-          <a href="publish.php?edit=<?= $post_id ?>" class="action-btn">✏️ 编辑</a>
+          <a href="publish.php?edit=<?= $post_id ?>" class="action-btn"><i data-lucide="pencil" class="lucide"></i> 编辑</a>
         <?php endif; ?>
       </div>
     </div>
@@ -127,7 +127,7 @@ include '../includes/header.php';
     <!-- 评论区 -->
     <div class="comment-section card mt-24" style="padding:20px">
       <div class="card-header" style="padding:0 0 14px;border-bottom:1px solid var(--border);margin-bottom:16px">
-        💬 评论 <span style="color:var(--txt-2);font-size:14px">(<?= count($comments) ?>)</span>
+        <i data-lucide="message-circle" class="lucide"></i> 评论 <span style="color:var(--txt-2);font-size:14px">(<?= count($comments) ?>)</span>
       </div>
 
       <?php if ($uid): ?>
@@ -232,7 +232,7 @@ include '../includes/header.php';
         <?php endforeach; ?>
 
         <?php if (empty($comments)): ?>
-          <div class="empty-state"><div class="icon">💬</div><p>还没有评论，来说第一句话吧</p></div>
+          <div class="empty-state"><div class="icon"><i data-lucide="message-circle" class="lucide"></i></div><p>还没有评论，来说第一句话吧</p></div>
         <?php endif; ?>
       </div>
     </div>
@@ -248,7 +248,7 @@ include '../includes/header.php';
 
     <!-- 作者信息 -->
     <div class="card mb-16">
-      <div class="card-header">👤 发帖人</div>
+      <div class="card-header"><i data-lucide="user" class="lucide"></i> 发帖人</div>
       <div class="card-body" style="text-align:center">
         <img src="<?= avatar_url($post['avatar'], '../') ?>"
              style="width:60px;height:60px;border-radius:50%;object-fit:cover;margin:0 auto 10px">
@@ -282,7 +282,7 @@ include '../includes/header.php';
         <?php foreach ($related as $r): ?>
         <div style="padding:6px 0;border-bottom:1px solid var(--border)">
           <a href="post.php?id=<?= $r['id'] ?>" style="font-size:13px;color:var(--txt);display:block"><?= h(mb_substr($r['title'],0,30)) ?></a>
-          <span style="font-size:12px;color:var(--txt-3)">👍 <?= $r['like_count'] ?></span>
+          <span style="font-size:12px;color:var(--txt-3)"><i data-lucide="thumbs-up" class="lucide"></i> <?= $r['like_count'] ?></span>
         </div>
         <?php endforeach; ?>
       </div>
@@ -295,14 +295,14 @@ include '../includes/header.php';
 <div id="share-modal" style="display:none;position:fixed;top:0;right:0;bottom:0;left:0;background:rgba(0,0,0,.45);z-index:1000;align-items:center;justify-content:center;padding:20px;box-sizing:border-box">
   <div class="modal-box" style="width:420px">
     <div class="modal-hd">
-      <span class="modal-title">🔗 分享帖子</span>
+      <span class="modal-title"><i data-lucide="link-2" class="lucide"></i> 分享帖子</span>
       <button class="modal-close" onclick="closeShare()">×</button>
     </div>
     <div class="modal-bd" style="padding:0">
 
       <!-- 复制链接 -->
       <div style="padding:16px 22px;border-bottom:1px solid var(--border)">
-        <div style="font-size:12px;font-weight:700;color:var(--txt-3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">🔗 复制链接</div>
+        <div style="font-size:12px;font-weight:700;color:var(--txt-3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px"><i data-lucide="link-2" class="lucide"></i> 复制链接</div>
         <div style="display:flex;gap:8px">
           <input id="share-url" type="text" readonly
                  style="flex:1;padding:8px 12px;border:1px solid var(--border);border-radius:var(--r);font-size:13px;font-family:monospace;outline:none">
@@ -313,7 +313,7 @@ include '../includes/header.php';
       <!-- 私信关注的人 -->
       <?php if ($uid): ?>
       <div style="padding:16px 22px;border-bottom:1px solid var(--border)">
-        <div style="font-size:12px;font-weight:700;color:var(--txt-3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">💬 私信给关注的人</div>
+        <div style="font-size:12px;font-weight:700;color:var(--txt-3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px"><i data-lucide="message-circle" class="lucide"></i> 私信给关注的人</div>
         <div style="position:relative;margin-bottom:8px">
           <input type="text" id="friend-search" placeholder="搜索关注的人…"
                  oninput="filterFriends(this.value)"
@@ -325,9 +325,9 @@ include '../includes/header.php';
 
       <!-- 分享给 AI -->
       <div style="padding:16px 22px">
-        <div style="font-size:12px;font-weight:700;color:var(--txt-3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">🤖 AI 分析</div>
+        <div style="font-size:12px;font-weight:700;color:var(--txt-3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px"><i data-lucide="bot" class="lucide"></i> AI 分析</div>
         <button onclick="shareToAI()" class="btn btn-outline btn-sm" style="width:100%;justify-content:center;gap:8px">
-          🤖 让 AI 帮我分析这篇帖子
+          <i data-lucide="bot" class="lucide"></i> 让 AI 帮我分析这篇帖子
         </button>
       </div>
       <?php else: ?>

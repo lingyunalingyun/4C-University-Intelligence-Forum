@@ -5,6 +5,14 @@
  *       DeepSeek AI调用（摘要/标签/扩词）、帖子渲染、兴趣推荐等公共函数。
  * 权限：全局 include，无直接访问限制
  */
+function render_icon($icon, $class = 'lucide', $size = 0) {
+    if ($icon && preg_match('/^[a-z][a-z0-9-]+$/', $icon)) {
+        $s = $size ? " style=\"width:{$size}px;height:{$size}px\"" : '';
+        return '<i data-lucide="' . htmlspecialchars($icon, ENT_QUOTES) . '" class="' . $class . '"' . $s . '></i>';
+    }
+    return '<span>' . htmlspecialchars($icon, ENT_QUOTES, 'UTF-8') . '</span>';
+}
+
 function get_level($exp) {
     if ($exp >= 50000) return 6;
     if ($exp >= 30000) return 5;
@@ -149,40 +157,45 @@ function extract_cover_image($content) {
     return '';
 }
 
-// 渲染帖子列表条目（广场/推荐列表共用）
+// 渲染帖子列表条目（广场/推荐列表共用，撕纸卡片风格）
 function render_post_item($p, $base, $kw = '') {
-    $tags_arr = array_filter(array_map('trim', explode(',', $p['tags'])));
+    $tags_arr = array_filter(array_map('trim', explode(',', $p['tags'] ?? '')));
+    $thumb = extract_cover_image($p['content'] ?? '');
     ob_start(); ?>
-    <div class="post-item <?= $p['is_pinned'] ? 'post-pinned' : ($p['is_featured'] ? 'post-featured' : '') ?>">
-      <div class="post-item-top">
-        <div class="post-meta-left">
-          <a href="<?= $base ?>pages/post.php?id=<?= $p['id'] ?>" class="post-title-link">
-            <?= $p['is_pinned'] ? '<span style="color:var(--warning)">📌 </span>' : '' ?>
-            <?= h($p['title']) ?>
-            <?= $p['is_solved'] ? '<span class="post-solved"></span>' : '' ?>
-          </a>
-          <?php if (!empty($p['summary'])): ?>
-            <div class="post-summary"><?= h($p['summary']) ?></div>
-          <?php endif; ?>
-          <div class="post-tags">
-            <span class="tag tag-section"><?= h($p['section_name']) ?></span>
-            <?php foreach (array_slice($tags_arr, 0, 3) as $tag): ?>
-              <span class="tag"><?= h($tag) ?></span>
-            <?php endforeach; ?>
-          </div>
-          <div class="post-footer">
-            <span class="author">
-              <img src="<?= avatar_url($p['avatar'], $base) ?>"
-                   onerror="this.src='<?= $base ?>assets/default_avatar.svg'" alt="">
-              <?= h($p['username']) ?>
-            </span>
-            <span><?= time_ago($p['created_at']) ?></span>
-            <div class="post-stats">
-              <span>👁 <?= $p['views'] ?></span>
-              <span>👍 <?= $p['like_count'] ?></span>
-              <span>💬 <?= $p['comment_count'] ?></span>
+    <div class="post-wrap">
+      <div class="post-item <?= !empty($p['is_pinned']) ? 'post-pinned' : '' ?>">
+        <div class="pt">
+          <div class="pm">
+            <div class="p-title-row">
+              <a href="<?= $base ?>pages/post.php?id=<?= $p['id'] ?>" class="p-title"><?= h($p['title']) ?></a>
+              <?php if (!empty($p['is_pinned'])): ?><span class="p-badge b-pin">置顶</span><?php endif; ?>
+              <?php if (!empty($p['is_solved'])): ?><span class="p-badge b-done">已解决</span><?php endif; ?>
+            </div>
+            <?php if (!empty($p['summary'])): ?>
+              <div class="p-sum"><?= h($p['summary']) ?></div>
+            <?php endif; ?>
+            <div class="p-tags">
+              <?php foreach (array_slice($tags_arr, 0, 3) as $tag): ?>
+                <span class="tag"><?= h($tag) ?></span>
+              <?php endforeach; ?>
+            </div>
+            <div class="p-foot">
+              <span class="p-auth">
+                <span class="p-av"><img src="<?= avatar_url($p['avatar'] ?? '', $base) ?>" onerror="this.src='<?= $base ?>assets/default_avatar.svg'" alt=""></span>
+                <?= h($p['username'] ?? '') ?>
+              </span>
+              <span class="p-sect"><?= h($p['section_name'] ?? '') ?></span>
+              <span class="p-time"><?= time_ago($p['created_at']) ?></span>
+              <div class="p-stats">
+                <span><i data-lucide="eye" class="lucide"></i><?= intval($p['views'] ?? 0) ?></span>
+                <span><i data-lucide="heart" class="lucide"></i><?= intval($p['like_count'] ?? 0) ?></span>
+                <span><i data-lucide="message-circle" class="lucide"></i><?= intval($p['comment_count'] ?? 0) ?></span>
+              </div>
             </div>
           </div>
+          <?php if ($thumb): ?>
+            <div class="p-thumb" style="background-image:url('<?= h($thumb) ?>');"></div>
+          <?php endif; ?>
         </div>
       </div>
     </div>

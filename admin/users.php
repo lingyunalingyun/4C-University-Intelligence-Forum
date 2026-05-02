@@ -75,7 +75,7 @@ include '../includes/header.php';
 
 <div class="admin-page-hd">
   <div>
-    <h2>👥 用户管理</h2>
+    <h2><i data-lucide="users" class="lucide"></i> 用户管理</h2>
     <div class="sub">共 <?= number_format($total) ?> 名用户</div>
   </div>
 </div>
@@ -195,7 +195,7 @@ include '../includes/header.php';
             <label>封禁原因</label>
             <input type="text" name="reason" value="违规" maxlength="100">
           </div>
-          <button type="submit" name="act" value="ban" class="btn btn-danger btn-sm">🚫 确认封禁</button>
+          <button type="submit" name="act" value="ban" class="btn btn-danger btn-sm"><i data-lucide="ban" class="lucide"></i> 确认封禁</button>
         </div>
 
         <!-- 解封 -->

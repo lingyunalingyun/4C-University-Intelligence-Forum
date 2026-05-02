@@ -75,7 +75,7 @@ include '../includes/header.php';
 
 <div class="admin-page-hd">
   <div>
-    <h2>🗂️ 板块管理</h2>
+    <h2><i data-lucide="folder" class="lucide"></i> 板块管理</h2>
     <div class="sub">共 <?= count($sections) ?> 个板块</div>
   </div>
   <div class="actions">
@@ -88,7 +88,7 @@ include '../includes/header.php';
 
 <!-- 板块树 -->
 <?php if (empty($sections)): ?>
-<div class="empty-state"><div class="icon">🗂️</div><p>还没有板块，点击右上角新建</p></div>
+<div class="empty-state"><div class="icon"><i data-lucide="folder" class="lucide"></i></div><p>还没有板块，点击右上角新建</p></div>
 <?php else: ?>
 
 <?php

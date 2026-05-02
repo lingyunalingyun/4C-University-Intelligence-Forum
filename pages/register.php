@@ -16,7 +16,7 @@ include '../includes/header.php';
 <div class="form-page">
   <div class="form-card">
     <div class="text-center" style="margin-bottom:24px">
-      <div style="font-size:40px">✨</div>
+      <div style="font-size:40px"><i data-lucide="sparkles" class="lucide"></i></div>
       <h1 class="form-title">创建账号</h1>
       <p class="form-sub">加入高校智慧，开始交流</p>
     </div>

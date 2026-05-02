@@ -89,7 +89,7 @@ include '../includes/header.php';
 </style>
 
 <div class="admin-page-hd">
-  <div><h2>💬 消息记录</h2><div class="sub">群组 & 私信查询</div></div>
+  <div><h2><i data-lucide="message-circle" class="lucide"></i> 消息记录</h2><div class="sub">群组 & 私信查询</div></div>
 </div>
 
 <!-- Tab -->
@@ -101,7 +101,7 @@ include '../includes/header.php';
 <!-- ── 群组列表 ── -->
 <?php if ($tab === 'groups'): ?>
   <?php if (empty($groups)): ?>
-    <div class="empty-state"><div class="icon">👥</div><p>暂无群组</p></div>
+    <div class="empty-state"><div class="icon"><i data-lucide="users" class="lucide"></i></div><p>暂无群组</p></div>
   <?php else: ?>
   <div class="card" style="overflow-x:auto">
     <table class="data-table">
@@ -219,9 +219,9 @@ include '../includes/header.php';
     </div>
 
     <?php if (!$lookup_cid): ?>
-      <div class="empty-state"><div class="icon">💬</div><p>这两位用户之间暂无私信记录</p></div>
+      <div class="empty-state"><div class="icon"><i data-lucide="message-circle" class="lucide"></i></div><p>这两位用户之间暂无私信记录</p></div>
     <?php elseif (empty($lookup_msgs)): ?>
-      <div class="empty-state"><div class="icon">💬</div><p>会话存在，但暂无消息</p></div>
+      <div class="empty-state"><div class="icon"><i data-lucide="message-circle" class="lucide"></i></div><p>会话存在，但暂无消息</p></div>
     <?php else: ?>
       <?php $uid1 = (int)$lookup_users[0]['id']; ?>
       <div class="chat-log">

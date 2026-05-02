@@ -56,11 +56,11 @@ include '../includes/header.php';
 ?>
 
 <div class="admin-page-hd">
-  <div><h2>🤖 AI 设置</h2><div class="sub">DeepSeek API 配置与使用统计</div></div>
+  <div><h2><i data-lucide="bot" class="lucide"></i> AI 设置</h2><div class="sub">DeepSeek API 配置与使用统计</div></div>
 </div>
 
 <?php if ($saved): ?>
-<div class="alert-success">✅ 设置已保存，API Key 已更新。</div>
+<div class="alert-success"><i data-lucide="check-circle" class="lucide"></i> 设置已保存，API Key 已更新。</div>
 <?php endif; ?>
 
 <div class="layout-2col" style="gap:20px">
@@ -70,7 +70,7 @@ include '../includes/header.php';
 
     <!-- Key 状态 -->
     <div class="card" style="margin-bottom:16px">
-      <div class="card-header">🔑 DeepSeek API Key</div>
+      <div class="card-header"><i data-lucide="key" class="lucide"></i> DeepSeek API Key</div>
       <div class="card-body">
         <!-- 当前状态条 -->
         <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--bg-2);border:1px solid var(--border);border-radius:var(--r);margin-bottom:18px">
@@ -96,13 +96,13 @@ include '../includes/header.php';
                      placeholder="sk-xxxxxxxxxxxxxxxx"
                      style="width:100%;padding:9px 44px 9px 12px;border:1px solid var(--border);border-radius:var(--r);font-size:13px;font-family:monospace;box-sizing:border-box;background:var(--bg-2);color:var(--txt);outline:none">
               <button type="button" onclick="toggleShow()"
-                      style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:14px;color:var(--txt-3)">👁</button>
+                      style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:14px;color:var(--txt-3)"><i data-lucide="eye" class="lucide"></i></button>
             </div>
             <div style="font-size:12px;color:var(--txt-3);margin-top:5px">留空并保存将清除已配置的 Key</div>
           </div>
           <div style="display:flex;gap:8px;flex-wrap:wrap">
             <button type="submit" class="btn btn-primary btn-sm">💾 保存</button>
-            <button type="button" class="btn btn-outline btn-sm" onclick="testKey()">🔗 测试连接</button>
+            <button type="button" class="btn btn-outline btn-sm" onclick="testKey()"><i data-lucide="link-2" class="lucide"></i> 测试连接</button>
           </div>
         </form>
         <div id="test-result" style="display:none;margin-top:14px;padding:10px 14px;border-radius:var(--r);font-size:13px"></div>
@@ -114,15 +114,15 @@ include '../includes/header.php';
 
     <!-- AI 功能列表 -->
     <div class="card" style="margin-bottom:16px">
-      <div class="card-header">📋 功能状态</div>
+      <div class="card-header"><i data-lucide="clipboard-list" class="lucide"></i> 功能状态</div>
       <div style="padding:0">
         <?php
         $features = [
-          ['📝','摘要生成',  '发帖时自动生成50字摘要',     true],
-          ['🏷️','标签提取',  '发帖时自动识别3-5个关键标签', true],
+          ['<i data-lucide="file-text" class="lucide"></i>','摘要生成',  '发帖时自动生成50字摘要',     true],
+          ['<i data-lucide="tag" class="lucide"></i>','标签提取',  '发帖时自动识别3-5个关键标签', true],
           ['🔍','AI搜索扩词','搜索时语义扩展关键词',        true],
-          ['🤖','AI助手',    '多轮对话，解答学习求职问题',  true],
-          ['⭐','个性化推荐', '基于兴趣标签，纯算法无需API',false],
+          ['<i data-lucide="bot" class="lucide"></i>','AI助手',    '多轮对话，解答学习求职问题',  true],
+          ['<i data-lucide="star" class="lucide"></i>','个性化推荐', '基于兴趣标签，纯算法无需API',false],
         ];
         foreach ($features as $idx => $f):
           list($icon,$name,$desc,$need_key) = $f;
@@ -155,7 +155,7 @@ include '../includes/header.php';
           <li>点击「测试连接」确认可用后保存</li>
         </ol>
         <div style="margin-top:10px;padding:8px 12px;background:var(--bg-2);border-radius:var(--r);color:var(--txt-3);font-size:12px">
-          ⚠️ Key 保存在数据库中，请确保数据库访问安全。
+          <i data-lucide="alert-triangle" class="lucide"></i> Key 保存在数据库中，请确保数据库访问安全。
         </div>
       </div>
     </div>
@@ -166,16 +166,16 @@ include '../includes/header.php';
 
     <!-- 统计数字 -->
     <div class="card" style="margin-bottom:16px">
-      <div class="card-header">📊 调用统计</div>
+      <div class="card-header"><i data-lucide="bar-chart-2" class="lucide"></i> 调用统计</div>
       <div class="card-body">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
           <?php
           $stat_cards = [
             ['今日调用','🌅',$today_cnt,'#2563eb','#dbeafe'],
             ['累计调用','📈',$ai_stats['total'],'#10b981','#d1fae5'],
-            ['AI助手','🤖',$ai_stats['chat'],'#8b5cf6','#ede9fe'],
-            ['摘要生成','📝',$ai_stats['summary'],'#f59e0b','#fef3c7'],
-            ['标签提取','🏷️',$ai_stats['tags'],'#ec4899','#fce7f3'],
+            ['AI助手','<i data-lucide="bot" class="lucide"></i>',$ai_stats['chat'],'#8b5cf6','#ede9fe'],
+            ['摘要生成','<i data-lucide="file-text" class="lucide"></i>',$ai_stats['summary'],'#f59e0b','#fef3c7'],
+            ['标签提取','<i data-lucide="tag" class="lucide"></i>',$ai_stats['tags'],'#ec4899','#fce7f3'],
             ['搜索扩词','🔍',$ai_stats['search'],'#0ea5e9','#e0f2fe'],
           ];
           foreach ($stat_cards as $sc): list($label,$icon,$val,$color,$bg) = $sc;
@@ -234,9 +234,9 @@ function testKey() {
     method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},
     body:'key='+encodeURIComponent(key)
   }).then(function(r){return r.json();}).then(function(data){
-    if (data.ok) showResult('ok','✅ 连接成功！模型回复：'+data.reply);
-    else         showResult('error','❌ 失败：'+(data.error||'未知错误'));
-  }).catch(function(){ showResult('error','❌ 请求异常，请检查网络'); });
+    if (data.ok) showResult('ok','<i data-lucide="check-circle" class="lucide"></i> 连接成功！模型回复：'+data.reply);
+    else         showResult('error','<i data-lucide="x-circle" class="lucide"></i> 失败：'+(data.error||'未知错误'));
+  }).catch(function(){ showResult('error','<i data-lucide="x-circle" class="lucide"></i> 请求异常，请检查网络'); });
 }
 function showResult(type, msg) {
   var el = document.getElementById('test-result');

@@ -48,7 +48,7 @@ include '../includes/header.php';
   <!-- ── 左：主表单 ── -->
   <div>
     <div class="card">
-      <div class="card-header"><?= $edit_id ? '✏️ 编辑帖子' : '✏️ 发布帖子' ?></div>
+      <div class="card-header"><?= $edit_id ? '<i data-lucide="pencil" class="lucide"></i> 编辑帖子' : '<i data-lucide="pencil" class="lucide"></i> 发布帖子' ?></div>
       <div class="card-body">
 
         <?php if (!empty($_GET['error'])): ?>
@@ -81,13 +81,13 @@ include '../includes/header.php';
                    placeholder="如：Python,求助,算法"
                    value="<?= $edit_post ? h($edit_post['tags']) : '' ?>">
             <div class="form-hint" style="margin-top:6px">
-              <button type="button" class="btn btn-outline btn-sm" onclick="aiTags()">🤖 AI生成标签</button>
+              <button type="button" class="btn btn-outline btn-sm" onclick="aiTags()"><i data-lucide="bot" class="lucide"></i> AI生成标签</button>
             </div>
           </div>
 
           <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
             <button type="submit" class="btn btn-primary"><?= $edit_id ? '💾 保存修改' : '🚀 发布帖子' ?></button>
-            <button type="button" class="btn btn-outline" onclick="aiSummaryPreview()">🤖 预览AI摘要</button>
+            <button type="button" class="btn btn-outline" onclick="aiSummaryPreview()"><i data-lucide="bot" class="lucide"></i> 预览AI摘要</button>
             <a href="javascript:history.back()" class="btn btn-outline">取消</a>
           </div>
         </form>
@@ -244,7 +244,7 @@ async function aiTags() {
     var data = await res.json();
     if (data.result) document.getElementById('post-tags').value = data.result;
   } catch(e) {}
-  btn.disabled = false; btn.textContent = '🤖 AI生成标签';
+  btn.disabled = false; btn.textContent = '<i data-lucide="bot" class="lucide"></i> AI生成标签';
 }
 
 async function aiSummaryPreview() {

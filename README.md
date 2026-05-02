@@ -13,7 +13,7 @@
 **面向高校学生的全功能智慧社区论坛平台**
 
 集帖子发布、社团管理、AI 助手、个性化推荐、举报审核、客服工单于一体  
-原生 PHP + MySQL 构建，暗色 / 亮色双主题，无前端框架，支持 Docker 一键部署
+原生 PHP + MySQL 构建，Academic Monochrome 学术风格主题，暗色 / 亮色双模式，无前端框架，支持 Docker 一键部署
 
 > 最后更新：2026-05-02
 
@@ -316,8 +316,10 @@
 
 ### 🎨 界面与体验
 
-- **暗色 / 亮色主题切换**：localStorage 持久化，`<head>` 内立即执行防闪屏
+- **Academic Monochrome 主题**：羊皮纸米黄底色（`#edeae2`）+ 深棕主色，字体采用 Playfair Display、EB Garamond、思源宋体，营造学术期刊质感
+- **暗色 / 亮色模式切换**：localStorage 持久化，`<head>` 内立即执行防闪屏；暗色模式切换为深海军蓝（`#0c0d14`）
 - 全站 CSS 变量驱动（`--primary / --bg-card / --border / --txt` 等），`color-scheme: dark` 确保浏览器原生控件跟随主题
+- **Lucide Icons**：全站统一 SVG 图标，`stroke-width: 1.8` 细线风格与学术主题呼应
 - 导航栏铺满全宽（无 max-width 限制），搜索框 `flex:1` 自适应
 - 响应式布局，`layout-2col` 网格在移动端自动折叠
 
@@ -333,7 +335,8 @@
 | 富文本 | Quill.js 1.3.7 | 发帖 + 社团动态编辑器 |
 | AI | DeepSeek API | 摘要 / 标签 / 对话 / 客服 |
 | 部署 | Docker + Apache | PHP 8.2-apache 镜像 |
-| 主题 | CSS Variables | 暗色 / 亮色双主题 |
+| 主题 | Academic Monochrome | 羊皮纸配色 + Playfair Display / EB Garamond / 思源宋体，暗色 / 亮色双模式 |
+| 图标 | Lucide Icons | SVG 内联图标库 |
 
 ---
 
